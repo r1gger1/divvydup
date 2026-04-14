@@ -375,6 +375,60 @@ function getTips(advisorName,ledgerName){
 }
 
 // ═══════════════════════════════════════════════════════════
+// TRIAL HELPERS
+// ═══════════════════════════════════════════════════════════
+const TRIAL_DAYS = 3;
+const TRIAL_MAX_PAGES = 4;
+const TRIAL_MAX_ENTRIES = 2;
+
+function getTrialInfo(session){
+  // No session = localStorage-only user, no trial enforcement
+  if(!session) return {active:false,expired:false,daysLeft:null};
+  const created = new Date(session.user.created_at);
+  const now = new Date();
+  const diffMs = now - created;
+  const diffDays = diffMs / (1000 * 60 * 60 * 24);
+  const daysLeft = Math.max(0, Math.ceil(TRIAL_DAYS - diffDays));
+  const expired = diffDays >= TRIAL_DAYS;
+  return {active:true, expired, daysLeft};
+}
+
+// ─── TRIAL EXPIRED SCREEN ───────────────────────────────────
+function TrialExpiredScreen({onSignOut}){
+  return(
+    <div style={{fontFamily:"'Instrument Sans','Helvetica Neue',sans-serif",background:'#F2E8D9',minHeight:'100vh',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'32px 20px'}}>
+      <div style={{maxWidth:'480px',width:'100%',textAlign:'center'}}>
+
+        {/* Brand */}
+        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'28px',fontWeight:600,color:'#1C1208',marginBottom:'4px'}}>DivvyDup</p>
+        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontStyle:'italic',fontSize:'14px',color:'#A08060',marginBottom:'48px'}}>The Book, reimagined.</p>
+
+        {/* Card */}
+        <div style={{background:'#fff',border:'1px solid #E4D7C4',borderRadius:'20px',padding:'40px 36px'}}>
+          <div style={{fontSize:'36px',marginBottom:'20px'}}>📒</div>
+          <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'24px',fontWeight:600,color:'#1C1208',marginBottom:'12px',lineHeight:1.3}}>Your free trial has ended.</h2>
+          <p style={{fontSize:'15px',color:'#5C4428',lineHeight:1.75,fontWeight:300,marginBottom:'28px'}}>
+            Thanks for giving DivvyDup a look. Paid plans are on their way — and when they arrive, your ledger will be right where you left it.
+          </p>
+
+          <div style={{background:'#FDF0DC',border:'1px solid #E4D7C4',borderRadius:'14px',padding:'20px 24px',marginBottom:'28px',textAlign:'left'}}>
+            <p style={{fontSize:'13px',fontWeight:600,color:'#7A3E14',marginBottom:'6px',letterSpacing:'0.04em',textTransform:'uppercase'}}>Want early access?</p>
+            <p style={{fontSize:'14px',color:'#5C4428',lineHeight:1.65,fontWeight:300,marginBottom:'14px'}}>Drop us a line and we'll let you know the moment plans are available — and make sure your data is waiting for you.</p>
+            <a href="mailto:hello@startinglinehq.com?subject=DivvyDup Early Access" style={{display:'inline-block',background:'#C4820F',color:'#fff',borderRadius:'999px',padding:'11px 28px',fontSize:'14px',fontWeight:600,textDecoration:'none',boxShadow:'0 3px 14px rgba(180,110,10,0.42)'}}>
+              Email us for early access
+            </a>
+          </div>
+
+          <button onClick={onSignOut} style={{background:'none',border:'none',color:'#A08060',fontSize:'13px',cursor:'pointer',textDecoration:'underline',fontFamily:"'Instrument Sans',sans-serif"}}>
+            Sign out
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
 // MAIN APP
 // ═══════════════════════════════════════════════════════════
 export default function App() {
@@ -495,11 +549,22 @@ export default function App() {
   if(screen==='auth') return <AuthScreen onAuth={(session)=>{setAuthSession(session);const saved=loadState();if(saved&&saved.ready){setS(saved);setScreen('app');}else{setScreen('setup');}}} onBack={()=>{setAuthError('');setScreen('landing');}} initialError={authError}/>;
   if(screen==='setup') return <SetupScreen onLaunch={launch} showToast={showToast}/>;
 
+  // Trial enforcement — only for authenticated users (localStorage-only users bypass)
+  const trial = getTrialInfo(authSession);
+  if(trial.expired) return <TrialExpiredScreen onSignOut={async()=>{await supabase.auth.signOut();setAuthSession(null);setScreen('landing');setS(DEFAULT_STATE);}}/>;
+
   const displayName = S.name.charAt(0).toUpperCase()+S.name.slice(1);
   const activePage = pgById(S.activePage);
 
   return (
     <div className="main-app">
+      {/* TRIAL BANNER */}
+      {trial.active&&!trial.expired&&(
+        <div style={{background:'#1C1208',borderBottom:'1px solid rgba(196,130,15,0.3)',padding:'8px 24px',display:'flex',alignItems:'center',justifyContent:'center',gap:'12px',fontSize:'13px',color:'#B8A48C',fontFamily:"'Instrument Sans',sans-serif"}}>
+          <span style={{color:'#C4820F',fontWeight:600}}>⏱ Free trial</span>
+          <span>{trial.daysLeft===1?'1 day left':trial.daysLeft===0?'Last day':`${trial.daysLeft} days left`} · {TRIAL_MAX_PAGES} pages · {TRIAL_MAX_ENTRIES} entries per page</span>
+        </div>
+      )}
       {/* HEADER */}
       <header className="app-header">
         <div className="hdr-brand">
@@ -549,7 +614,7 @@ export default function App() {
         {/* CONTENT */}
         <div className="content">
           {view==='dashboard' && <DashboardView S={S} updateS={updateS} setModal={setModal} onSelectPage={(id)=>{updateS(s=>({...s,activePage:id}));setView('ledger');}} advSay={advSay}/>}
-          {view==='ledger' && <LedgerView S={S} updateS={updateS} activePage={activePage} pgById={pgById} showToast={showToast} advSay={advSay} setModal={setModal}/>}
+          {view==='ledger' && <LedgerView S={S} updateS={updateS} activePage={activePage} pgById={pgById} showToast={showToast} advSay={advSay} setModal={setModal} trial={trial}/>}
           {view==='charts' && <ChartsView S={S}/>}
         </div>
       </div>
@@ -557,7 +622,7 @@ export default function App() {
       {/* MODALS */}
       {modal==='dep' && <DepositModal S={S} updateS={updateS} onClose={()=>setModal(null)} showToast={showToast} advSay={advSay}/>}
       {modal==='xfr' && <TransferModal S={S} updateS={updateS} onClose={()=>setModal(null)} showToast={showToast} advSay={advSay}/>}
-      {modal==='edit' && <EditModal S={S} updateS={updateS} onClose={()=>setModal(null)} showToast={showToast} advSay={advSay}/>}
+      {modal==='edit' && <EditModal S={S} updateS={updateS} onClose={()=>setModal(null)} showToast={showToast} advSay={advSay} trial={trial}/>}
       {modal==='recon' && <ReconModal S={S} updateS={updateS} onClose={()=>setModal(null)} showToast={showToast} advSay={advSay}/>}
       {modal==='overflow' && <OverflowModal S={S} updateS={updateS} onClose={()=>setModal(null)} showToast={showToast} advSay={advSay}/>}
       {modal==='bailout' && <BailoutModal S={S} updateS={updateS} onClose={()=>setModal(null)} showToast={showToast} advSay={advSay}/>}
@@ -596,7 +661,11 @@ function SetupScreen({onLaunch,showToast}){
   const selectedList = CATALOG.filter(p=>selected.has(p.id));
 
   function togglePage(id){
-    setSelected(prev=>{const n=new Set(prev);n.has(id)?n.delete(id):n.add(id);return n;});
+    setSelected(prev=>{
+      const n=new Set(prev);
+      if(!n.has(id)&&n.size>=TRIAL_MAX_PAGES){showToast(`Trial limit: ${TRIAL_MAX_PAGES} pages max. You can add more after upgrading.`,"tw");return prev;}
+      n.has(id)?n.delete(id):n.add(id);return n;
+    });
   }
 
   function goStep(n){
@@ -685,7 +754,7 @@ function SetupScreen({onLaunch,showToast}){
 
           {step===2&&(
             <div>
-              <p style={{fontFamily:"'Lora',serif",fontStyle:'italic',fontSize:'.83rem',color:'var(--ink3)',marginBottom:'13px'}}>Each page is a pocket reserved for that purpose. Check the ones that belong in your household's ledger.</p>
+              <p style={{fontFamily:"'Lora',serif",fontStyle:'italic',fontSize:'.83rem',color:'var(--ink3)',marginBottom:'13px'}}>Each page is a pocket reserved for that purpose. Check the ones that belong in your household's ledger. <strong>Free trial: up to {TRIAL_MAX_PAGES} pages.</strong></p>
               <div className="pages-grid">
                 {CATALOG.map(p=>(
                   <label key={p.id} className={`po${selected.has(p.id)?' sel':''}`}>
@@ -899,7 +968,7 @@ function DashBar({pages}){
 // ═══════════════════════════════════════════════════════════
 // LEDGER VIEW
 // ═══════════════════════════════════════════════════════════
-function LedgerView({S,updateS,activePage,pgById,showToast,advSay,setModal}){
+function LedgerView({S,updateS,activePage,pgById,showToast,advSay,setModal,trial}){
   const [txType,setTxType]=useState('deposit');
   const [txDate,setTxDate]=useState(today());
   const [txAmt,setTxAmt]=useState('');
@@ -950,6 +1019,7 @@ function LedgerView({S,updateS,activePage,pgById,showToast,advSay,setModal}){
   }
 
   function addTx(){
+    if(trial&&trial.active&&p&&p.tx.length>=TRIAL_MAX_ENTRIES)return showToast(`Trial limit: ${TRIAL_MAX_ENTRIES} entries per page. Upgrade to add more.`,"tw");
     if(!txAmt||parseFloat(txAmt)<=0)return showToast("Enter a valid amount.","tw");
     if(!txDesc.trim())return showToast("Please add a description.","tw");
     const amt=parseFloat(txAmt);
@@ -1605,7 +1675,7 @@ function CustomizeModal({S,updateS,onClose,showToast}){
 // ═══════════════════════════════════════════════════════════
 // EDIT PAGE MODAL
 // ═══════════════════════════════════════════════════════════
-function EditModal({S,updateS,onClose,showToast,advSay}){
+function EditModal({S,updateS,onClose,showToast,advSay,trial}){
   const [tab,setTab]=useState('page');
   const [advisorInput,setAdvisorInput]=useState(S.advisorName||'Floyd');
   const p=S.pages.find(x=>x.id===S.activePage);
@@ -1649,6 +1719,7 @@ function EditModal({S,updateS,onClose,showToast,advSay}){
   }
 
   function addNewPage(){
+    if(trial&&trial.active&&S.pages.length>=TRIAL_MAX_PAGES)return showToast(`Trial limit: ${TRIAL_MAX_PAGES} pages max. Upgrade to add more.`,"tw");
     if(!npName.trim())return showToast("Enter a page name.","tw");
     const icon=npIcon.trim()||'📄';
     const monthly=parseFloat(npMonthly)||0;
