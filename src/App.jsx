@@ -150,7 +150,7 @@ function LandingPage({onGetStarted}){
 
 
 // ─── AUTH SCREEN ───────────────────────────────────────────
-function AuthScreen({onAuth,onBack}){
+function AuthScreen({onAuth,onBack,initialError}){
   const [mode,setMode]=useState('signup'); // 'signup'|'signin'
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
@@ -195,6 +195,13 @@ function AuthScreen({onAuth,onBack}){
           <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'28px',fontWeight:600,color:'#1C1208',marginBottom:'4px'}}>DivvyDup</p>
           <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontStyle:'italic',fontSize:'14px',color:'#A08060'}}>The Book, reimagined.</p>
         </div>
+
+        {initialError&&(
+          <div style={{background:'#FFF8E6',border:'1.5px solid #C4820F',borderRadius:'12px',padding:'16px 20px',marginBottom:'20px',textAlign:'center'}}>
+            <p style={{fontSize:'15px',fontWeight:600,color:'#7A3E14',marginBottom:'6px'}}>That confirmation link has expired.</p>
+            <p style={{fontSize:'13px',color:'#5C4428',lineHeight:1.6,fontWeight:300}}>Sign in below and we'll send you a fresh one — or create a new account if you haven't confirmed yet.</p>
+          </div>
+        )}
 
         {done?(
           <div style={{background:'#fff',border:'1px solid #E4D7C4',borderRadius:'18px',padding:'36px 32px',textAlign:'center'}}>
@@ -378,11 +385,23 @@ export default function App() {
   const [modal, setModal] = useState(null); // 'dep'|'xfr'|'edit'|'recon'|'overflow'|'bailout'|'customize'|'reset'
   const [screen, setScreen] = useState('loading'); // 'loading'|'landing'|'auth'|'setup'|'app'
   const [authSession, setAuthSession] = useState(null);
+  const [authError, setAuthError] = useState('');
   const toastTimer = useRef(null);
   const advTimer = useRef(null);
 
   // Load on mount — check Supabase session first, then fall back to localStorage
   useEffect(()=>{
+    // Check for Supabase error params in URL (e.g. expired confirmation link)
+    const hash = window.location.hash;
+    const params = new URLSearchParams(hash.replace('#',''));
+    const urlError = params.get('error_description') || params.get('error');
+    if(urlError){
+      setAuthError(urlError.replace(/\+/g,' '));
+      setScreen('auth');
+      window.history.replaceState(null,'',window.location.pathname);
+      return;
+    }
+
     supabase.auth.getSession().then(({data:{session}})=>{
       if(session){
         setAuthSession(session);
@@ -473,7 +492,7 @@ export default function App() {
 
   if(screen==='loading') return null;
   if(screen==='landing') return <LandingPage onGetStarted={()=>setScreen('auth')}/>;
-  if(screen==='auth') return <AuthScreen onAuth={(session)=>{setAuthSession(session);const saved=loadState();if(saved&&saved.ready){setS(saved);setScreen('app');}else{setScreen('setup');}}} onBack={()=>setScreen('landing')}/>;
+  if(screen==='auth') return <AuthScreen onAuth={(session)=>{setAuthSession(session);const saved=loadState();if(saved&&saved.ready){setS(saved);setScreen('app');}else{setScreen('setup');}}} onBack={()=>{setAuthError('');setScreen('landing');}} initialError={authError}/>;
   if(screen==='setup') return <SetupScreen onLaunch={launch} showToast={showToast}/>;
 
   const displayName = S.name.charAt(0).toUpperCase()+S.name.slice(1);
