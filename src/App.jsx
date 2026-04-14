@@ -1,6 +1,258 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Chart, registerables } from 'chart.js';
+import { supabase } from './supabase';
 Chart.register(...registerables);
+
+// ─── LANDING PAGE ───────────────────────────────────────────
+function LandingPage({onGetStarted}){
+  return(
+    <div style={{fontFamily:"'Instrument Sans','Helvetica Neue',sans-serif",background:'#F2E8D9',color:'#1C1208',minHeight:'100vh',WebkitFontSmoothing:'antialiased'}}>
+
+      {/* NAV */}
+      <nav style={{background:'#16100A',position:'sticky',top:0,zIndex:100,borderBottom:'1px solid rgba(255,255,255,0.07)'}}>
+        <div style={{maxWidth:'1100px',margin:'0 auto',padding:'0 32px',height:'64px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+          <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'21px',fontWeight:600,background:'linear-gradient(to right, #E8D8C0 68%, #C89040 68%)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text'}}>DivvyDup</span>
+          <div style={{display:'flex',alignItems:'center',gap:'28px'}}>
+            <a href="#features" style={{color:'#B8A48C',fontSize:'14px',textDecoration:'none'}}>Features</a>
+            <a href="#pricing" style={{color:'#B8A48C',fontSize:'14px',textDecoration:'none'}}>Pricing</a>
+            <button onClick={onGetStarted} style={{background:'#C4820F',color:'#fff',border:'none',borderRadius:'999px',padding:'9px 22px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'14px',fontWeight:600,cursor:'pointer',boxShadow:'0 3px 14px rgba(180,110,10,0.42)'}}>Start free trial</button>
+          </div>
+        </div>
+      </nav>
+
+      {/* HERO */}
+      <section style={{background:'#16100A',padding:'100px 32px 110px',textAlign:'center',position:'relative',overflow:'hidden'}}>
+        <svg style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:0.035,pointerEvents:'none'}} viewBox="0 0 1100 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          {[50,100,150,200,250,300,350,400,450].map(y=><line key={y} x1="0" y1={y} x2="1100" y2={y} stroke="#fff" strokeWidth="1"/>)}
+          {[100,260,420,580,740,900,1060].map(x=><line key={x} x1={x} y1="0" x2={x} y2="500" stroke="#fff" strokeWidth="0.5"/>)}
+        </svg>
+        <div style={{width:'56px',height:'2px',background:'#C4820F',margin:'0 auto 32px'}}></div>
+        <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'clamp(40px,6vw,62px)',fontWeight:700,color:'#F0E8DC',lineHeight:1.12,marginBottom:'12px',position:'relative',zIndex:1}}>Your money,<br/>finally organized.</h1>
+        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontStyle:'italic',fontSize:'22px',color:'#C89040',marginBottom:'28px',position:'relative',zIndex:1}}>The Book, reimagined.</p>
+        <p style={{fontSize:'17px',color:'#B8A48C',maxWidth:'560px',margin:'0 auto 48px',lineHeight:1.75,fontWeight:300,position:'relative',zIndex:1}}>DivvyDup brings the quiet discipline of a paper ledger into the digital age — envelope budgeting, paycheck distribution, and a no-nonsense advisor named Floyd. No spreadsheets. No guesswork.</p>
+        <div style={{display:'flex',gap:'14px',justifyContent:'center',flexWrap:'wrap',position:'relative',zIndex:1}}>
+          <button onClick={onGetStarted} style={{background:'#C4820F',color:'#fff',border:'none',borderRadius:'999px',padding:'13px 34px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'15px',fontWeight:600,cursor:'pointer',boxShadow:'0 3px 14px rgba(180,110,10,0.42)'}}>Start free trial</button>
+          <a href="#features" style={{background:'transparent',border:'1.5px solid rgba(255,255,255,0.18)',color:'#F0E8DC',borderRadius:'999px',padding:'12px 30px',fontSize:'15px',textDecoration:'none',display:'inline-block'}}>See how it works</a>
+        </div>
+        <p style={{marginTop:'18px',fontSize:'13px',color:'#5C4428',position:'relative',zIndex:1}}>No credit card required · 4 pages · 2 entries each · 3 days free</p>
+      </section>
+
+      {/* ORIGIN */}
+      <section style={{background:'#EDE0CB',padding:'80px 32px',borderBottom:'1px solid #D9C9B0'}}>
+        <div style={{maxWidth:'820px',margin:'0 auto',display:'flex',gap:'56px',alignItems:'flex-start'}}>
+          <div style={{flexShrink:0,width:'84px',height:'104px',background:'#16100A',borderRadius:'3px 14px 14px 3px',borderLeft:'9px solid #C4820F',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'12px 12px 14px'}}>
+            {[1,2,3,4,5].map(i=><div key={i} style={{height:'1.5px',background:'rgba(255,255,255,0.12)',marginBottom:'7px',borderRadius:'1px',width:i%2===0?'55%':'100%'}}></div>)}
+          </div>
+          <div>
+            <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'30px',fontWeight:600,color:'#1C1208',marginBottom:'16px',lineHeight:1.25}}>Born from a ledger kept for sixty years.</h2>
+            <p style={{fontSize:'16px',color:'#5C4428',lineHeight:1.8,fontWeight:300}}>Tony’s father tracked every dollar in a paper columnar ledger — methodical, honest, and unfailing. That book was the family’s financial backbone for six decades. DivvyDup is its digital heir: the same discipline, without the pencil.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* FEATURES */}
+      <section id="features" style={{background:'#F2E8D9',padding:'88px 32px'}}>
+        <p style={{textAlign:'center',fontSize:'11px',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color:'#A08060',marginBottom:'14px'}}>What’s inside</p>
+        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'34px',fontWeight:600,textAlign:'center',marginBottom:'56px',color:'#1C1208'}}>Everything the ledger had. Then some.</h2>
+        <div style={{maxWidth:'1100px',margin:'0 auto',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))',gap:'20px'}}>
+          {[
+            {title:"Envelope budgeting",desc:"Assign every dollar a job. Budget pages work like real envelopes - money goes in, gets spent down, and you always know exactly what's left."},
+            {title:"Paycheck distribution",desc:"Drop in a paycheck and DivvyDup splits it across your pages automatically, weighted by your monthly targets. One step, done."},
+            {title:"Auto-Balance",desc:"Flush overages out of donor pages and into the ones that need it - with a full preview before anything moves. No surprises."},
+            {title:"Savings targets",desc:"Set a goal. Watch the progress bar fill. Temporary pages close automatically when they hit their target - vacation, car repair, anything."},
+            {title:"Floyd, your advisor",desc:"Dry, direct, and old-school. Floyd speaks up when something's worth saying - and stays quiet when it's not. Not Clippy. Never Clippy."},
+            {title:"Dashboard view",desc:"Customizable summary cards show the numbers that matter - balances, totals, progress - at a glance. Your ledger, at 30,000 feet."},
+          ].map(f=>(
+            <div key={f.title} style={{background:'#fff',border:'1px solid #E4D7C4',borderRadius:'18px',padding:'28px 24px 30px'}}>
+              <div style={{width:'42px',height:'42px',borderRadius:'12px',background:'#FDF0DC',marginBottom:'18px'}}></div>
+              <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'18px',fontWeight:600,marginBottom:'10px',color:'#1C1208'}}>{f.title}</h3>
+              <p style={{fontSize:'14px',color:'#5C4428',lineHeight:1.7,fontWeight:300}}>{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* PRICING */}
+      <section id="pricing" style={{background:'#1C1208',padding:'88px 32px',textAlign:'center'}}>
+        <p style={{fontSize:'11px',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color:'#A08060',marginBottom:'14px'}}>Pricing</p>
+        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'34px',fontWeight:600,color:'#F0E8DC',marginBottom:'12px'}}>Simple. No tricks.</h2>
+        <p style={{fontSize:'16px',color:'#B8A48C',marginBottom:'56px',fontWeight:300}}>Pick a plan after your trial. Cancel anytime.</p>
+        <div style={{maxWidth:'680px',margin:'0 auto',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'20px',textAlign:'left'}}>
+          <div style={{background:'#231710',border:'1px solid rgba(255,255,255,0.07)',borderRadius:'20px',padding:'32px 28px 28px'}}>
+            <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:'#A08060',marginBottom:'10px'}}>Monthly</p>
+            <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'44px',fontWeight:700,color:'#F0E8DC',lineHeight:1,marginBottom:'4px'}}><sup style={{fontSize:'22px',fontWeight:400,verticalAlign:'super'}}>$</sup>5<sub style={{fontSize:'16px',fontWeight:300,verticalAlign:'baseline',color:'#B8A48C'}}>/mo</sub></p>
+            <p style={{fontSize:'13px',color:'#A08060',marginBottom:'28px',fontWeight:300}}>Billed monthly</p>
+            <ul style={{listStyle:'none',marginBottom:'28px',padding:0}}>
+              {['Full ledger access','Cloud sync across devices','Floyd advisor','Unlimited pages & entries'].map(item=>(
+                <li key={item} style={{fontSize:'14px',color:'#B8A48C',padding:'7px 0',borderBottom:'1px solid rgba(255,255,255,0.05)',display:'flex',alignItems:'center',gap:'10px',fontWeight:300}}>
+                  <span style={{width:'5px',height:'5px',background:'#C4820F',borderRadius:'50%',flexShrink:0,display:'inline-block'}}></span>{item}
+                </li>
+              ))}
+            </ul>
+            <button onClick={onGetStarted} style={{width:'100%',background:'transparent',border:'1.5px solid rgba(255,255,255,0.14)',color:'#F0E8DC',borderRadius:'999px',padding:'12px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'14px',fontWeight:400,cursor:'pointer'}}>Get started</button>
+          </div>
+          <div style={{background:'#231710',border:'2px solid #C4820F',borderRadius:'20px',padding:'32px 28px 28px',position:'relative'}}>
+            <div style={{position:'absolute',top:'-13px',left:'50%',transform:'translateX(-50%)',background:'#C4820F',color:'#fff',fontSize:'11px',fontWeight:600,padding:'4px 16px',borderRadius:'999px',letterSpacing:'0.07em',whiteSpace:'nowrap'}}>Best value</div>
+            <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:'#A08060',marginBottom:'10px'}}>Annual</p>
+            <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'44px',fontWeight:700,color:'#F0E8DC',lineHeight:1,marginBottom:'4px'}}><sup style={{fontSize:'22px',fontWeight:400,verticalAlign:'super'}}>$</sup>50<sub style={{fontSize:'16px',fontWeight:300,verticalAlign:'baseline',color:'#B8A48C'}}>/yr</sub></p>
+            <p style={{fontSize:'13px',color:'#A08060',marginBottom:'28px',fontWeight:300}}>Save $10 vs monthly</p>
+            <ul style={{listStyle:'none',marginBottom:'28px',padding:0}}>
+              {['Everything in Monthly','Priority support','Early access to new features','Data export'].map(item=>(
+                <li key={item} style={{fontSize:'14px',color:'#B8A48C',padding:'7px 0',borderBottom:'1px solid rgba(255,255,255,0.05)',display:'flex',alignItems:'center',gap:'10px',fontWeight:300}}>
+                  <span style={{width:'5px',height:'5px',background:'#C4820F',borderRadius:'50%',flexShrink:0,display:'inline-block'}}></span>{item}
+                </li>
+              ))}
+            </ul>
+            <button onClick={onGetStarted} style={{width:'100%',background:'#C4820F',color:'#fff',border:'none',borderRadius:'999px',padding:'12px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'14px',fontWeight:600,cursor:'pointer',boxShadow:'0 3px 14px rgba(180,110,10,0.42)'}}>Get started</button>
+          </div>
+        </div>
+        <div style={{maxWidth:'680px',margin:'36px auto 0',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.07)',borderRadius:'14px',padding:'22px 28px',display:'flex',alignItems:'center',gap:'16px',textAlign:'left'}}>
+          <div style={{width:'40px',height:'40px',borderRadius:'10px',background:'rgba(196,130,15,0.15)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:'18px'}}>⏱</div>
+          <div>
+            <h4 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'15px',fontWeight:600,color:'#F0E8DC',marginBottom:'4px'}}>Free trial — no card required</h4>
+            <p style={{fontSize:'13px',color:'#B8A48C',fontWeight:300,lineHeight:1.5}}>Try DivvyDup for 3 days with 4 pages and 2 entries each. Enough to feel it. Then decide.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* FLOYD */}
+      <section style={{background:'#EDE0CB',padding:'88px 32px',borderTop:'1px solid #D9C9B0'}}>
+        <div style={{maxWidth:'640px',margin:'0 auto',textAlign:'center'}}>
+          <p style={{fontSize:'11px',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color:'#A08060',marginBottom:'14px'}}>Meet Floyd</p>
+          <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'30px',fontWeight:600,color:'#1C1208',marginBottom:'40px'}}>The advisor who won’t let you off easy.</h2>
+          <div style={{background:'#16100A',borderRadius:'18px 18px 18px 4px',padding:'24px 28px',marginBottom:'12px',textAlign:'left'}}>
+            <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontStyle:'italic',fontSize:'16px',lineHeight:1.7,color:'#F0E8DC'}}>“You’ve overspent Dining Out three months running. That’s not bad luck — that’s a budget that needs adjusting. Want to fix it, or are we going to have this conversation again next month?”</p>
+          </div>
+          <p style={{fontSize:'12px',fontWeight:500,letterSpacing:'0.07em',textTransform:'uppercase',color:'#A08060',textAlign:'left',paddingLeft:'4px'}}>Floyd — your DivvyDup advisor</p>
+          <p style={{marginTop:'36px',fontSize:'15px',color:'#5C4428',fontWeight:300,lineHeight:1.7}}>Floyd is built into every account. His name is yours to change. His opinion is not.</p>
+        </div>
+      </section>
+
+      {/* FOOTER CTA */}
+      <section style={{background:'#F2E8D9',padding:'88px 32px',textAlign:'center',borderTop:'1px solid #E4D7C4'}}>
+        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'36px',fontWeight:600,color:'#1C1208',marginBottom:'16px'}}>Ready to open The Book?</h2>
+        <p style={{fontSize:'16px',color:'#5C4428',marginBottom:'36px',fontWeight:300}}>Start your free trial today. No card, no commitment.</p>
+        <button onClick={onGetStarted} style={{background:'#C4820F',color:'#fff',border:'none',borderRadius:'999px',padding:'13px 34px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'15px',fontWeight:600,cursor:'pointer',boxShadow:'0 3px 14px rgba(180,110,10,0.42)'}}>Start free trial</button>
+      </section>
+
+      {/* FOOTER */}
+      <footer style={{background:'#1E140C',padding:'40px 32px',textAlign:'center',borderTop:'1px solid rgba(255,255,255,0.07)'}}>
+        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'18px',fontWeight:600,background:'linear-gradient(to right, #D4C4A8 68%, #C89040 68%)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text',marginBottom:'6px'}}>DivvyDup</p>
+        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontStyle:'italic',fontSize:'13px',color:'#A08060',marginBottom:'20px'}}>The Book, reimagined.</p>
+        <p style={{fontSize:'13px',color:'#3A2A1A'}}><a href="https://startinglinehq.com" style={{color:'#A08060',textDecoration:'none'}}>StartinglineHQ</a>{' · '}<a href="/privacy" style={{color:'#A08060',textDecoration:'none'}}>Privacy</a>{' · '}<a href="/terms" style={{color:'#A08060',textDecoration:'none'}}>Terms</a></p>
+        <p style={{fontSize:'12px',color:'#2E1E10',marginTop:'8px'}}>{'©'} 2026 StartinglineHQ. All rights reserved.</p>
+      </footer>
+
+    </div>
+  );
+}
+
+
+
+// ─── AUTH SCREEN ───────────────────────────────────────────
+function AuthScreen({onAuth,onBack}){
+  const [mode,setMode]=useState('signup'); // 'signup'|'signin'
+  const [email,setEmail]=useState('');
+  const [password,setPassword]=useState('');
+  const [confirm,setConfirm]=useState('');
+  const [error,setError]=useState('');
+  const [loading,setLoading]=useState(false);
+  const [done,setDone]=useState(false);
+
+  async function handleSignUp(){
+    if(!email.trim()||!password)return setError('Email and password are required.');
+    if(password.length<6)return setError('Password must be at least 6 characters.');
+    if(password!==confirm)return setError('Passwords do not match.');
+    setError('');setLoading(true);
+    const{error:err}=await supabase.auth.signUp({email:email.trim(),password});
+    setLoading(false);
+    if(err)return setError(err.message);
+    setDone(true);
+  }
+
+  async function handleSignIn(){
+    if(!email.trim()||!password)return setError('Email and password are required.');
+    setError('');setLoading(true);
+    const{data,error:err}=await supabase.auth.signInWithPassword({email:email.trim(),password});
+    setLoading(false);
+    if(err)return setError(err.message);
+    if(data?.session)onAuth(data.session);
+  }
+
+  const inp={background:'#fff',border:'1.5px solid #D9C9B0',borderRadius:'10px',padding:'11px 14px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'15px',color:'#1C1208',width:'100%',boxSizing:'border-box',outline:'none'};
+  const btn={background:'#C4820F',color:'#fff',border:'none',borderRadius:'999px',padding:'13px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'15px',fontWeight:600,cursor:'pointer',width:'100%',boxShadow:'0 3px 14px rgba(180,110,10,0.42)'};
+  const ghost={background:'transparent',border:'1.5px solid #D9C9B0',borderRadius:'999px',padding:'11px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'14px',color:'#5C4428',cursor:'pointer',width:'100%'};
+
+  return(
+    <div style={{fontFamily:"'Instrument Sans','Helvetica Neue',sans-serif",background:'#F2E8D9',minHeight:'100vh',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'32px 20px'}}>
+      <div style={{maxWidth:'420px',width:'100%'}}>
+
+        {/* Back */}
+        <button onClick={onBack} style={{background:'none',border:'none',color:'#A08060',fontSize:'14px',cursor:'pointer',padding:'0 0 24px',display:'flex',alignItems:'center',gap:'6px'}}>← Back</button>
+
+        {/* Brand */}
+        <div style={{textAlign:'center',marginBottom:'36px'}}>
+          <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'28px',fontWeight:600,color:'#1C1208',marginBottom:'4px'}}>DivvyDup</p>
+          <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontStyle:'italic',fontSize:'14px',color:'#A08060'}}>The Book, reimagined.</p>
+        </div>
+
+        {done?(
+          <div style={{background:'#fff',border:'1px solid #E4D7C4',borderRadius:'18px',padding:'36px 32px',textAlign:'center'}}>
+            <div style={{fontSize:'32px',marginBottom:'16px'}}>📬</div>
+            <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'22px',fontWeight:600,color:'#1C1208',marginBottom:'12px'}}>Check your email</h2>
+            <p style={{fontSize:'15px',color:'#5C4428',lineHeight:1.7,fontWeight:300}}>We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account, then come back here to sign in.</p>
+            <button style={{...ghost,marginTop:'24px'}} onClick={()=>{setMode('signin');setDone(false);setPassword('');setConfirm('');}}>Go to Sign In</button>
+          </div>
+        ):(
+          <div style={{background:'#fff',border:'1px solid #E4D7C4',borderRadius:'18px',padding:'36px 32px'}}>
+
+            {/* Tabs */}
+            <div style={{display:'flex',background:'#F2E8D9',borderRadius:'999px',padding:'4px',marginBottom:'28px'}}>
+              {['signup','signin'].map(m=>(
+                <button key={m} onClick={()=>{setMode(m);setError('');}} style={{flex:1,background:mode===m?'#fff':'transparent',border:'none',borderRadius:'999px',padding:'9px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'14px',fontWeight:mode===m?600:400,color:mode===m?'#1C1208':'#A08060',cursor:'pointer',transition:'all .15s',boxShadow:mode===m?'0 1px 4px rgba(0,0,0,.1)':'none'}}>
+                  {m==='signup'?'Create Account':'Sign In'}
+                </button>
+              ))}
+            </div>
+
+            {/* Fields */}
+            <div style={{display:'flex',flexDirection:'column',gap:'14px'}}>
+              <div>
+                <label style={{display:'block',fontSize:'12px',fontWeight:600,color:'#5C4428',marginBottom:'6px',letterSpacing:'0.05em'}}>Email</label>
+                <input style={inp} type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com" autoComplete="email"/>
+              </div>
+              <div>
+                <label style={{display:'block',fontSize:'12px',fontWeight:600,color:'#5C4428',marginBottom:'6px',letterSpacing:'0.05em'}}>Password</label>
+                <input style={inp} type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder={mode==='signup'?'At least 6 characters':'Your password'} autoComplete={mode==='signup'?'new-password':'current-password'}/>
+              </div>
+              {mode==='signup'&&(
+                <div>
+                  <label style={{display:'block',fontSize:'12px',fontWeight:600,color:'#5C4428',marginBottom:'6px',letterSpacing:'0.05em'}}>Confirm Password</label>
+                  <input style={inp} type="password" value={confirm} onChange={e=>setConfirm(e.target.value)} placeholder="Repeat password" autoComplete="new-password"/>
+                </div>
+              )}
+            </div>
+
+            {error&&<div style={{marginTop:'14px',background:'#FFE5E8',border:'1px solid #9B2335',borderRadius:'10px',padding:'10px 14px',fontSize:'13px',color:'#9B2335'}}>{error}</div>}
+
+            <button style={{...btn,marginTop:'22px',opacity:loading?.6:1}} onClick={mode==='signup'?handleSignUp:handleSignIn} disabled={loading}>
+              {loading?'Please wait…':mode==='signup'?'Create My Account':'Sign In to My Ledger'}
+            </button>
+
+            <p style={{textAlign:'center',marginTop:'16px',fontSize:'13px',color:'#A08060',fontWeight:300}}>
+              {mode==='signup'?'Already have an account? ':'New here? '}
+              <button onClick={()=>{setMode(mode==='signup'?'signin':'signup');setError('');}} style={{background:'none',border:'none',color:'#7A3E14',fontSize:'13px',fontWeight:600,cursor:'pointer',textDecoration:'underline',padding:0}}>
+                {mode==='signup'?'Sign in':'Create one'}
+              </button>
+            </p>
+          </div>
+        )}
+
+        <p style={{textAlign:'center',marginTop:'20px',fontSize:'12px',color:'#A08060',fontWeight:300}}>No credit card required · 3-day free trial</p>
+      </div>
+    </div>
+  );
+}
 
 // ─── CATALOG ───────────────────────────────────────────────
 const CATALOG = [
@@ -124,15 +376,50 @@ export default function App() {
   const [toast, setToast] = useState({msg:'',cls:'',show:false});
   const [advMsg, setAdvMsg] = useState({msg:'',lvl:'normal',show:false,name:''});
   const [modal, setModal] = useState(null); // 'dep'|'xfr'|'edit'|'recon'|'overflow'|'bailout'|'customize'|'reset'
+  const [screen, setScreen] = useState('loading'); // 'loading'|'landing'|'auth'|'setup'|'app'
+  const [authSession, setAuthSession] = useState(null);
   const toastTimer = useRef(null);
   const advTimer = useRef(null);
 
-  // Load on mount
+  // Load on mount — check Supabase session first, then fall back to localStorage
   useEffect(()=>{
-    const saved = loadState();
-    if(saved && saved.ready){
-      setS(saved);
-    }
+    supabase.auth.getSession().then(({data:{session}})=>{
+      if(session){
+        setAuthSession(session);
+        const saved = loadState();
+        if(saved && saved.ready){
+          setS(saved);
+          setScreen('app');
+        } else {
+          setScreen('setup');
+        }
+      } else {
+        // No session — check localStorage for legacy users who haven't signed up yet
+        const saved = loadState();
+        if(saved && saved.ready){
+          setS(saved);
+          setScreen('app');
+        } else {
+          setScreen('landing');
+        }
+      }
+    });
+
+    // Listen for auth state changes (e.g. after email confirmation)
+    const{data:{subscription}}=supabase.auth.onAuthStateChange((_event,session)=>{
+      if(session&&!authSession){
+        setAuthSession(session);
+        const saved = loadState();
+        if(saved && saved.ready){
+          setS(saved);
+          setScreen('app');
+        } else {
+          setScreen('setup');
+        }
+      }
+    });
+    return()=>subscription.unsubscribe();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
   // Save whenever S changes (and is ready)
@@ -175,6 +462,7 @@ export default function App() {
   // ── Launch ──
   function launch(newS){
     setS({...newS,ready:true});
+    setScreen('app');
     setView('dashboard');
     setTimeout(()=>{
       const n=newS.advisorName||'Floyd';
@@ -183,7 +471,10 @@ export default function App() {
     },400);
   }
 
-  if(!S.ready) return <SetupScreen onLaunch={launch} showToast={showToast}/>;
+  if(screen==='loading') return null;
+  if(screen==='landing') return <LandingPage onGetStarted={()=>setScreen('auth')}/>;
+  if(screen==='auth') return <AuthScreen onAuth={(session)=>{setAuthSession(session);const saved=loadState();if(saved&&saved.ready){setS(saved);setScreen('app');}else{setScreen('setup');}}} onBack={()=>setScreen('landing')}/>;
+  if(screen==='setup') return <SetupScreen onLaunch={launch} showToast={showToast}/>;
 
   const displayName = S.name.charAt(0).toUpperCase()+S.name.slice(1);
   const activePage = pgById(S.activePage);
@@ -211,6 +502,7 @@ export default function App() {
           <button className="btn-xfr" onClick={()=>setModal('overflow')}>🌊 Overflow</button>
           <button className="btn-xfr" onClick={()=>setModal('xfr')}>⇄ Move Money</button>
           <button className="btn-xfr" style={{fontSize:'.68rem',color:'var(--red-light)',borderColor:'rgba(200,64,64,.3)'}} onClick={()=>setModal('reset')}>↺ Reset</button>
+          {authSession&&<button className="btn-xfr" style={{fontSize:'.68rem',color:'var(--inkl)',borderColor:'rgba(160,128,96,.3)'}} onClick={async()=>{await supabase.auth.signOut();setAuthSession(null);setScreen('landing');setS(DEFAULT_STATE);}}>Sign Out</button>}
           <button className="btn-dep" onClick={()=>setModal('dep')}>+ Deposit Paycheck</button>
         </div>
       </header>
