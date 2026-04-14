@@ -354,7 +354,7 @@ const DEFAULT_STATE = {
   pages:[],activePage:null,ready:false,
   lastBalanced:null,overflowRules:[],donorPages:[],dashCards:[],advisorName:'Floyd'
 };
-const DEFAULT_SELECTED = ['rent','electric','groceries','gas_fuel','savings','emergency','misc'];
+const DEFAULT_SELECTED = ['rent','electric','groceries','gas_fuel']; // capped at TRIAL_MAX_PAGES (4)
 
 // ─── TIPS ──────────────────────────────────────────────────
 function getTips(advisorName,ledgerName){
