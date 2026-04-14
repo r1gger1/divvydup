@@ -627,7 +627,7 @@ export default function App() {
       {modal==='overflow' && <OverflowModal S={S} updateS={updateS} onClose={()=>setModal(null)} showToast={showToast} advSay={advSay}/>}
       {modal==='bailout' && <BailoutModal S={S} updateS={updateS} onClose={()=>setModal(null)} showToast={showToast} advSay={advSay}/>}
       {modal==='customize' && <CustomizeModal S={S} updateS={updateS} onClose={()=>setModal(null)} showToast={showToast}/>}
-      {modal==='reset' && <ResetModal onClose={()=>setModal(null)}/>}
+      {modal==='reset' && <ResetModal onClose={()=>setModal(null)} onReset={async()=>{await supabase.auth.signOut();window.location.reload();}}/>}
 
       {/* ADVISOR */}
       <div id="advisor">
@@ -1945,14 +1945,14 @@ function EditModal({S,updateS,onClose,showToast,advSay,trial}){
 // ═══════════════════════════════════════════════════════════
 // RESET MODAL
 // ═══════════════════════════════════════════════════════════
-function ResetModal({onClose}){
+function ResetModal({onClose,onReset}){
   const [input,setInput]=useState('');
   const ok=input.trim().toUpperCase()==='RESET';
 
   function execute(){
     if(!ok)return;
     ['famLedger','famLedger_v5','famLedger_v4','famLedger_v3','famLedger_v2','famLedger_v1'].forEach(k=>{try{localStorage.removeItem(k);}catch(e){}});
-    window.location.reload();
+    onReset();
   }
 
   return(
