@@ -97,9 +97,18 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .btn-next:hover{background:var(--slhq-amber-mid);transform:translateY(-1px);}
 .btn-next:active{transform:translateY(1px);box-shadow:0 1px 0 var(--slhq-accent);}
 
+/* ── SUITE NAV BAR ── */
+#suite-nav{background:#111;border-bottom:1px solid rgba(255,255,255,.09);padding:0 24px;height:36px;display:none;align-items:center;justify-content:flex-end;gap:0;position:sticky;top:0;z-index:201;}
+.snav-group{display:flex;align-items:center;gap:0;}
+.snav-sep{width:1px;height:14px;background:rgba(255,255,255,.15);margin:0 10px;}
+.snav-link{background:transparent;border:none;color:rgba(255,255,255,.55);font-family:'Instrument Sans','Helvetica Neue',sans-serif;font-size:.72rem;padding:4px 9px;cursor:pointer;transition:color .15s;text-decoration:none;letter-spacing:.01em;}
+.snav-link:hover{color:#fff;}
+.snav-link--signout{color:rgba(255,255,255,.4);}
+.snav-link--signout:hover{color:#fff;}
+
 /* ── MAIN APP ── */
 #main-app{display:none;min-height:100vh;}
-#app-header{background:var(--g1);border-bottom:3px double var(--g4);padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 20px var(--shadow);}
+#app-header{background:var(--g1);border-bottom:3px double var(--g4);padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:36px;z-index:200;box-shadow:0 4px 20px var(--shadow);}
 .hdr-brand{font-family:var(--slhq-fh);font-weight:600;font-size:1.15rem;letter-spacing:-0.01em;display:flex;align-items:center;gap:8px;}
 .hdr-product{background:linear-gradient(to right,#E8D8C0 65%,#C4820F 65%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .hdr-divider{color:rgba(255,255,255,.25);font-weight:300;-webkit-text-fill-color:rgba(255,255,255,.25);}
@@ -488,6 +497,24 @@ table.lt td:last-child{border-right:none;}
 </div>
 
 <!-- ═══ MAIN APP ═══ -->
+<nav id="suite-nav">
+  <div class="snav-group">
+    <a href="mailto:hello@startinglinehq.com" class="snav-link">Help</a>
+    <a href="mailto:hello@startinglinehq.com" class="snav-link">FAQ</a>
+    <a href="#" class="snav-link" onclick="openEditModal('manage');return false;">Settings</a>
+    <a href="mailto:hello@startinglinehq.com" class="snav-link">Contact Us</a>
+  </div>
+  <div class="snav-sep"></div>
+  <div class="snav-group">
+    <a href="https://startinglinehq.com" class="snav-link">About</a>
+    <a href="https://startinglinehq.com" class="snav-link">Privacy</a>
+  </div>
+  <div class="snav-sep"></div>
+  <div class="snav-group">
+    <a href="https://startinglinehq.com" class="snav-link snav-link--signout">Sign out</a>
+  </div>
+</nav>
+
 <div id="main-app">
   <header id="app-header">
     <div class="hdr-brand">
@@ -1114,6 +1141,7 @@ function finishSetup(){
 // ═══════════════════════════════════════════════════
 function launch(){
   document.getElementById('setup-screen').style.display='none';
+  document.getElementById('suite-nav').style.display='flex';
   document.getElementById('main-app').style.display='block';
   const displayName = S.name.charAt(0).toUpperCase() + S.name.slice(1);
   document.getElementById('hdr-name').textContent = displayName;
