@@ -98,7 +98,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .btn-next:active{transform:translateY(1px);box-shadow:0 1px 0 var(--slhq-accent);}
 
 /* ── SUITE NAV BAR ── */
-#suite-nav{background:#111;border-bottom:1px solid rgba(255,255,255,.09);padding:0 24px;height:36px;display:none;align-items:center;justify-content:flex-end;gap:0;position:sticky;top:0;z-index:201;}
+#suite-nav{background:#111;border-bottom:1px solid rgba(255,255,255,.09);padding:0 24px;height:36px;display:flex;align-items:center;justify-content:flex-end;gap:0;position:sticky;top:0;z-index:201;}
 .snav-group{display:flex;align-items:center;gap:0;}
 .snav-sep{width:1px;height:14px;background:rgba(255,255,255,.15);margin:0 10px;}
 .snav-link{background:transparent;border:none;color:rgba(255,255,255,.55);font-family:'Instrument Sans','Helvetica Neue',sans-serif;font-size:.72rem;padding:4px 9px;cursor:pointer;transition:color .15s;text-decoration:none;letter-spacing:.01em;}
@@ -499,19 +499,13 @@ table.lt td:last-child{border-right:none;}
 <!-- ═══ MAIN APP ═══ -->
 <nav id="suite-nav">
   <div class="snav-group">
-    <a href="mailto:hello@startinglinehq.com" class="snav-link">Help</a>
-    <a href="mailto:hello@startinglinehq.com" class="snav-link">FAQ</a>
-    <a href="#" class="snav-link" onclick="openEditModal('manage');return false;">Settings</a>
+    <button class="snav-link" onclick="openFeedbackModal();return false;">✏️ Beta Feedback</button>
+    <a href="https://www.startinglinehq.com/settings" class="snav-link">Settings</a>
     <a href="mailto:hello@startinglinehq.com" class="snav-link">Contact Us</a>
   </div>
   <div class="snav-sep"></div>
   <div class="snav-group">
-    <a href="https://startinglinehq.com" class="snav-link">About</a>
-    <a href="https://startinglinehq.com" class="snav-link">Privacy</a>
-  </div>
-  <div class="snav-sep"></div>
-  <div class="snav-group">
-    <a href="https://startinglinehq.com" class="snav-link snav-link--signout">Sign out</a>
+    <button class="snav-link snav-link--signout" onclick="handleSignOut()">Sign out</button>
   </div>
 </nav>
 
@@ -920,6 +914,27 @@ table.lt td:last-child{border-right:none;}
       onmouseleave="this.style.background='var(--red-light)'">
       ↺ Erase Everything
     </button>
+  </div>
+</div>
+</div>
+
+<!-- FEEDBACK MODAL -->
+<div id="feedback-modal" style="display:none;position:fixed;inset:0;background:rgba(14,26,14,.82);z-index:500;align-items:center;justify-content:center;padding:20px;">
+<div class="mbook" style="max-width:520px;">
+  <div class="mhdr">
+    <h3>✏️ Beta Feedback</h3>
+    <p>Help us improve DivvyDup</p>
+  </div>
+  <div class="mbody">
+    <p style="font-family:'Lora',serif;font-size:.88rem;color:var(--ink2);line-height:1.65;margin-bottom:16px;">
+      We'd love to hear your thoughts on DivvyDup. What's working? What could be better? What features would you like to see?
+    </p>
+    <textarea id="feedback-text" class="mi" placeholder="Share your feedback here..." 
+      style="width:100%;min-height:140px;resize:vertical;font-family:'Lora',serif;font-size:.88rem;line-height:1.6;padding:12px;"></textarea>
+  </div>
+  <div class="mfooter">
+    <button class="btn-cancel" onclick="closeFeedbackModal()">Cancel</button>
+    <button class="btn-ok" onclick="submitFeedback()">Send Feedback</button>
   </div>
 </div>
 </div>
@@ -2330,6 +2345,40 @@ function executeReset(){
 }
 
 // ═══════════════════════════════════════════════════
+// FEEDBACK & AUTH
+// ═══════════════════════════════════════════════════
+function openFeedbackModal(){
+  document.getElementById('feedback-text').value='';
+  document.getElementById('feedback-modal').style.display='flex';
+}
+
+function closeFeedbackModal(){
+  document.getElementById('feedback-modal').style.display='none';
+}
+
+function submitFeedback(){
+  const feedback=document.getElementById('feedback-text').value.trim();
+  if(!feedback){
+    alert('Please enter your feedback before submitting.');
+    return;
+  }
+  
+  // Send feedback via mailto for now (can be upgraded to API later)
+  const subject=encodeURIComponent('DivvyDup Beta Feedback');
+  const body=encodeURIComponent(feedback);
+  window.location.href=`mailto:hello@startinglinehq.com?subject=${subject}&body=${body}`;
+  
+  closeFeedbackModal();
+  toast('Thank you for your feedback!');
+}
+
+function handleSignOut(){
+  // For now, redirect to StartinglineHQ
+  // TODO: Add proper Supabase auth.signOut() when auth is integrated
+  window.location.href='https://www.startinglinehq.com';
+}
+
+// ═══════════════════════════════════════════════════
 // UTILS
 // ═══════════════════════════════════════════════════
 function fmt(n){if(n===undefined||n===null)return'—';return(n<0?'-$':'$')+Math.abs(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
@@ -2350,6 +2399,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('ovfl-modal').addEventListener('click',e=>{if(e.target===document.getElementById('ovfl-modal'))closeOverflow();});
   document.getElementById('bailout-modal').addEventListener('click',e=>{if(e.target===document.getElementById('bailout-modal'))closeBailoutModal();});
   document.getElementById('customize-modal').addEventListener('click',e=>{if(e.target===document.getElementById('customize-modal'))closeCustomize();});
+  document.getElementById('feedback-modal').addEventListener('click',e=>{if(e.target===document.getElementById('feedback-modal'))closeFeedbackModal();});
   document.getElementById('reset-confirm-input').addEventListener('input',function(){
     const btn=document.getElementById('reset-execute-btn');
     const ok=this.value.trim().toUpperCase()==='RESET';
