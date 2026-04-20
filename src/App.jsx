@@ -558,7 +558,7 @@ export default function App() {
   const activePage = pgById(S.activePage);
 
   return (
-    <div className="main-app">
+    <>
       {/* SUITE NAV */}
       <nav id="suite-nav">
         <div className="snav-group">
@@ -581,6 +581,8 @@ export default function App() {
           </button>
         </div>
       </nav>
+      
+      <div className="main-app">
       {/* TRIAL BANNER */}
       {trial.active&&!trial.expired&&(
         <div style={{background:'#1C1208',borderBottom:'1px solid rgba(196,130,15,0.3)',padding:'8px 24px',display:'flex',alignItems:'center',justifyContent:'center',gap:'12px',fontSize:'13px',color:'#B8A48C',fontFamily:"'Instrument Sans',sans-serif"}}>
@@ -661,70 +663,71 @@ export default function App() {
 
       {/* TOAST */}
       <div className={`toast${toast.show?' show':''} ${toast.cls}`}>{toast.msg}</div>
+    </div>
 
-      {/* FEEDBACK MODAL */}
-      {feedbackModal && (
-        <div 
-          style={{
-            position:'fixed',
-            inset:0,
-            background:'rgba(14,26,14,.82)',
-            zIndex:500,
-            display:'flex',
-            alignItems:'center',
-            justifyContent:'center',
-            padding:'20px'
-          }}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setFeedbackModal(false);
-          }}
-        >
-          <div className="modal-book" style={{maxWidth:'520px'}}>
-            <div className="modal-header">
-              <h3>✏️ Beta Feedback</h3>
-              <p>Help us improve DivvyDup</p>
-            </div>
-            <div className="modal-body">
-              <p style={{fontSize:'.88rem',color:'var(--ink2)',lineHeight:1.65,marginBottom:'16px'}}>
-                We'd love to hear your thoughts on DivvyDup. What's working? What could be better? What features would you like to see?
-              </p>
-              <textarea 
-                id="feedback-text"
-                className="modal-input"
-                placeholder="Share your feedback here..." 
-                style={{
-                  width:'100%',
-                  minHeight:'140px',
-                  resize:'vertical',
-                  fontSize:'.88rem',
-                  lineHeight:1.6,
-                  padding:'12px'
-                }}
-              />
-            </div>
-            <div className="modal-footer">
-              <button className="btn-cancel" onClick={() => setFeedbackModal(false)}>Cancel</button>
-              <button 
-                className="btn-ok" 
-                onClick={() => {
-                  const feedback = document.getElementById('feedback-text').value.trim();
-                  if (!feedback) {
-                    alert('Please enter your feedback before submitting.');
-                    return;
-                  }
-                  const subject = encodeURIComponent('DivvyDup Beta Feedback');
-                  const body = encodeURIComponent(feedback);
-                  window.location.href = `mailto:hello@startinglinehq.com?subject=${subject}&body=${body}`;
-                  setFeedbackModal(false);
-                }}
-              >
-                Send Feedback
-              </button>
-            </div>
+    {/* FEEDBACK MODAL */}
+    {feedbackModal && (
+      <div 
+        style={{
+          position:'fixed',
+          inset:0,
+          background:'rgba(14,26,14,.82)',
+          zIndex:500,
+          display:'flex',
+          alignItems:'center',
+          justifyContent:'center',
+          padding:'20px'
+        }}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) setFeedbackModal(false);
+        }}
+      >
+        <div className="modal-book" style={{maxWidth:'520px'}}>
+          <div className="modal-header">
+            <h3>✏️ Beta Feedback</h3>
+            <p>Help us improve DivvyDup</p>
+          </div>
+          <div className="modal-body">
+            <p style={{fontSize:'.88rem',color:'var(--ink2)',lineHeight:1.65,marginBottom:'16px'}}>
+              We'd love to hear your thoughts on DivvyDup. What's working? What could be better? What features would you like to see?
+            </p>
+            <textarea 
+              id="feedback-text"
+              className="modal-input"
+              placeholder="Share your feedback here..." 
+              style={{
+                width:'100%',
+                minHeight:'140px',
+                resize:'vertical',
+                fontSize:'.88rem',
+                lineHeight:1.6,
+                padding:'12px'
+              }}
+            />
+          </div>
+          <div className="modal-footer">
+            <button className="btn-cancel" onClick={() => setFeedbackModal(false)}>Cancel</button>
+            <button 
+              className="btn-ok" 
+              onClick={() => {
+                const feedback = document.getElementById('feedback-text').value.trim();
+                if (!feedback) {
+                  alert('Please enter your feedback before submitting.');
+                  return;
+                }
+                const subject = encodeURIComponent('DivvyDup Beta Feedback');
+                const body = encodeURIComponent(feedback);
+                window.location.href = `mailto:hello@startinglinehq.com?subject=${subject}&body=${body}`;
+                setFeedbackModal(false);
+              }}
+            >
+              Send Feedback
+            </button>
           </div>
         </div>
-      )}
-    </div>
+      </div>
+    )}
+    </>
   );
 }
 
