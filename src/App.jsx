@@ -563,25 +563,9 @@ export default function App() {
       <nav id="suite-nav">
         <div className="snav-group">
           <button className="snav-link" onClick={() => setFeedbackModal(true)}>✏️ Beta Feedback</button>
-          <a href="mailto:hello@startinglinehq.com" className="snav-link">? Help</a>
-          <a href="https://www.startinglinehq.com/#faq" className="snav-link">FAQ</a>
           <a href="https://www.divvydup.com/settings" className="snav-link">⚙ Settings</a>
-          <a href="mailto:hello@startinglinehq.com" className="snav-link">Contact Us</a>
         </div>
         <div className="snav-sep"></div>
-        <div className="snav-group">
-          <a href="https://www.startinglinehq.com/#about" className="snav-link">About</a>
-          <a href="https://www.startinglinehq.com/privacy" className="snav-link">Privacy</a>
-        </div>
-        <div className="snav-sep"></div>
-        {authSession?.user?.user_metadata?.is_admin && (
-          <>
-            <div className="snav-group">
-              <a href="https://www.startinglinehq.com/admin" className="snav-link">🟢 Admin</a>
-            </div>
-            <div className="snav-sep"></div>
-          </>
-        )}
         <div className="snav-group">
           <button
             className="snav-link snav-link--signout"
