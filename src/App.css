@@ -11,6 +11,9 @@
   position:sticky;
   top:0;
   z-index:201;
+  width:100%;
+  box-sizing:border-box;
+  margin:0;
 }
 .snav-group{display:flex;align-items:center;gap:0;}
 .snav-sep{width:1px;height:14px;background:rgba(255,255,255,.15);margin:0 10px;}
@@ -25,6 +28,7 @@
   transition:color .15s;
   text-decoration:none;
   letter-spacing:.01em;
+  white-space:nowrap;
 }
 .snav-link:hover{color:#fff;}
 .snav-link--signout{color:rgba(255,255,255,.65);}
