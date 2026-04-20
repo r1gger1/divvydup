@@ -562,9 +562,26 @@ export default function App() {
       {/* SUITE NAV */}
       <nav id="suite-nav">
         <div className="snav-group">
-          <a href="https://www.startinglinehq.com/settings" className="snav-link">⚙ Settings</a>
+          <button className="snav-link" onClick={() => setFeedbackModal(true)}>✏️ Beta Feedback</button>
+          <a href="mailto:hello@startinglinehq.com" className="snav-link">? Help</a>
+          <a href="https://www.startinglinehq.com/#faq" className="snav-link">FAQ</a>
+          <a href="https://www.divvydup.com/settings" className="snav-link">⚙ Settings</a>
+          <a href="mailto:hello@startinglinehq.com" className="snav-link">Contact Us</a>
         </div>
         <div className="snav-sep"></div>
+        <div className="snav-group">
+          <a href="https://www.startinglinehq.com/#about" className="snav-link">About</a>
+          <a href="https://www.startinglinehq.com/privacy" className="snav-link">Privacy</a>
+        </div>
+        <div className="snav-sep"></div>
+        {authSession?.user?.user_metadata?.is_admin && (
+          <>
+            <div className="snav-group">
+              <a href="https://www.startinglinehq.com/admin" className="snav-link">🟢 Admin</a>
+            </div>
+            <div className="snav-sep"></div>
+          </>
+        )}
         <div className="snav-group">
           <button
             className="snav-link snav-link--signout"
@@ -651,6 +668,7 @@ export default function App() {
       {modal==='bailout' && <BailoutModal S={S} updateS={updateS} onClose={()=>setModal(null)} showToast={showToast} advSay={advSay}/>}
       {modal==='customize' && <CustomizeModal S={S} updateS={updateS} onClose={()=>setModal(null)} showToast={showToast}/>}
       {modal==='reset' && <ResetModal onClose={()=>setModal(null)} onReset={async()=>{await supabase.auth.signOut();window.location.reload();}}/>}
+      {feedbackModal && <BetaFeedbackModal onClose={()=>setFeedbackModal(false)}/>}
 
       {/* ADVISOR */}
       <div id="advisor">
@@ -2023,6 +2041,39 @@ function EditModal({S,updateS,onClose,showToast,advSay,trial}){
         <div className="mfooter" style={{display:tab==='add'||tab==='donors'?'none':'flex'}}>
           <button className="btn-cancel" onClick={onClose}>Cancel</button>
           {tab==='page'&&<button className="btn-ok" onClick={savePageEdit}>Save Changes</button>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+// BETA FEEDBACK MODAL
+// ═══════════════════════════════════════════════════════════
+function BetaFeedbackModal({onClose}){
+  const [feedback,setFeedback]=useState('');
+  const [sent,setSent]=useState(false);
+
+  function sendFeedback(){
+    if(!feedback.trim())return;
+    window.location.href=`mailto:hello@startinglinehq.com?subject=DivvyDup%20Beta%20Feedback&body=${encodeURIComponent(feedback)}`;
+    setSent(true);
+    setTimeout(()=>{setSent(false);onClose();},500);
+  }
+
+  return(
+    <div className="modal-overlay open" onClick={e=>{if(e.target.className.includes('modal-overlay'))onClose();}}>
+      <div className="mbook" style={{maxWidth:'460px'}}>
+        <div className="mhdr">
+          <h3>✏️ Send us feedback</h3>
+          <p>Your thoughts help us build better tools.</p>
+        </div>
+        <div className="mbody">
+          <textarea value={feedback} onChange={e=>setFeedback(e.target.value)} placeholder="What's working? What's not? Any ideas?" style={{width:'100%',height:'120px',fontFamily:"'Lora',serif",fontSize:'.88rem',color:'var(--ink)',padding:'10px',border:'1px solid var(--border)',borderRadius:'8px',resize:'none'}}/>
+        </div>
+        <div className="mfooter">
+          <button className="btn-cancel" onClick={onClose}>Cancel</button>
+          <button className="btn-ok" disabled={!feedback.trim()||sent} onClick={sendFeedback}>{sent?'✓ Sent':'Send Feedback'}</button>
         </div>
       </div>
     </div>
