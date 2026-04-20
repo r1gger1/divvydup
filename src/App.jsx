@@ -574,6 +574,14 @@ export default function App() {
           <a href="https://www.startinglinehq.com/privacy" className="snav-link">Privacy</a>
         </div>
         <div className="snav-sep"></div>
+        {authSession?.user?.user_metadata?.is_admin && (
+          <>
+            <div className="snav-group">
+              <a href="https://www.startinglinehq.com/admin" className="snav-link">🟢 Admin</a>
+            </div>
+            <div className="snav-sep"></div>
+          </>
+        )}
         <div className="snav-group">
           <button
             className="snav-link snav-link--signout"
