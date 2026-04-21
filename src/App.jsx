@@ -5,56 +5,56 @@ Chart.register(...registerables);
 
 // ─── LANDING PAGE ───────────────────────────────────────────
 function LandingPage({onGetStarted}){
+  const C = { bg:'#1E3530', bgAlt:'#243D37', black:'#0D1C18', sage:'#B5D4A8', sageHover:'#A2C295', cream:'#E8E2C8', white:'#FFFFFF', muted:'#9FB5A8', border:'rgba(255,255,255,0.08)', borderStrong:'rgba(255,255,255,0.14)' };
+  const fh = "'Fraunces','Playfair Display',Georgia,serif";
+  const fb = "'Inter','Helvetica Neue',sans-serif";
   return(
-    <div style={{fontFamily:"'Instrument Sans','Helvetica Neue',sans-serif",background:'#F2E8D9',color:'#1C1208',minHeight:'100vh',WebkitFontSmoothing:'antialiased'}}>
+    <div style={{fontFamily:fb,background:C.bg,color:C.white,minHeight:'100vh',WebkitFontSmoothing:'antialiased'}}>
+
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap');`}</style>
 
       {/* NAV */}
-      <nav style={{background:'#16100A',position:'sticky',top:0,zIndex:100,borderBottom:'1px solid rgba(255,255,255,0.07)'}}>
-        <div style={{maxWidth:'1100px',margin:'0 auto',padding:'0 32px',height:'64px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-          <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'21px',fontWeight:600,background:'linear-gradient(to right, #E8D8C0 68%, #C89040 68%)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text'}}>DivvyDup</span>
+      <nav style={{background:C.black,position:'sticky',top:0,zIndex:100,borderBottom:`1px solid ${C.border}`}}>
+        <div style={{maxWidth:'1200px',margin:'0 auto',padding:'0 40px',height:'64px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+          <span style={{fontFamily:fh,fontSize:'22px',fontWeight:700,color:C.cream,letterSpacing:'-0.01em'}}>DivvyDup</span>
           <div style={{display:'flex',alignItems:'center',gap:'28px'}}>
-            <a href="#features" style={{color:'#B8A48C',fontSize:'14px',textDecoration:'none'}}>Features</a>
-            <a href="#pricing" style={{color:'#B8A48C',fontSize:'14px',textDecoration:'none'}}>Pricing</a>
-            <button onClick={onGetStarted} style={{background:'#C4820F',color:'#fff',border:'none',borderRadius:'999px',padding:'9px 22px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'14px',fontWeight:600,cursor:'pointer',boxShadow:'0 3px 14px rgba(180,110,10,0.42)'}}>Start free trial</button>
+            <a href="#features" style={{color:C.cream,fontSize:'14px',textDecoration:'none'}}>Features</a>
+            <a href="#pricing" style={{color:C.cream,fontSize:'14px',textDecoration:'none'}}>Pricing</a>
+            <button onClick={onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'10px 22px',fontFamily:fb,fontSize:'14px',fontWeight:600,cursor:'pointer'}}>Start free trial</button>
           </div>
         </div>
       </nav>
 
       {/* HERO */}
-      <section style={{background:'#16100A',padding:'100px 32px 110px',textAlign:'center',position:'relative',overflow:'hidden'}}>
-        <svg style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:0.035,pointerEvents:'none'}} viewBox="0 0 1100 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          {[50,100,150,200,250,300,350,400,450].map(y=><line key={y} x1="0" y1={y} x2="1100" y2={y} stroke="#fff" strokeWidth="1"/>)}
-          {[100,260,420,580,740,900,1060].map(x=><line key={x} x1={x} y1="0" x2={x} y2="500" stroke="#fff" strokeWidth="0.5"/>)}
-        </svg>
-        <div style={{width:'56px',height:'2px',background:'#C4820F',margin:'0 auto 32px'}}></div>
-        <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'clamp(40px,6vw,62px)',fontWeight:700,color:'#F0E8DC',lineHeight:1.12,marginBottom:'12px',position:'relative',zIndex:1}}>Your money,<br/>finally organized.</h1>
-        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontStyle:'italic',fontSize:'22px',color:'#C89040',marginBottom:'28px',position:'relative',zIndex:1}}>The Book, reimagined.</p>
-        <p style={{fontSize:'17px',color:'#B8A48C',maxWidth:'560px',margin:'0 auto 48px',lineHeight:1.75,fontWeight:300,position:'relative',zIndex:1}}>DivvyDup brings the quiet discipline of a paper ledger into the digital age — envelope budgeting, paycheck distribution, and a no-nonsense advisor named Floyd. No spreadsheets. No guesswork.</p>
-        <div style={{display:'flex',gap:'14px',justifyContent:'center',flexWrap:'wrap',position:'relative',zIndex:1}}>
-          <button onClick={onGetStarted} style={{background:'#C4820F',color:'#fff',border:'none',borderRadius:'999px',padding:'13px 34px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'15px',fontWeight:600,cursor:'pointer',boxShadow:'0 3px 14px rgba(180,110,10,0.42)'}}>Start free trial</button>
-          <a href="#features" style={{background:'transparent',border:'1.5px solid rgba(255,255,255,0.18)',color:'#F0E8DC',borderRadius:'999px',padding:'12px 30px',fontSize:'15px',textDecoration:'none',display:'inline-block'}}>See how it works</a>
+      <section style={{background:C.bg,padding:'100px 32px 80px',textAlign:'center'}}>
+        <h1 style={{fontFamily:fh,fontSize:'clamp(56px,9vw,104px)',fontWeight:800,color:C.cream,lineHeight:1,marginBottom:'24px',letterSpacing:'-0.015em'}}>Your money,<br/>finally organized.</h1>
+        <p style={{fontFamily:fh,fontWeight:500,fontSize:'22px',color:C.sage,marginBottom:'28px'}}>The Book, reimagined.</p>
+        <p style={{fontSize:'17px',color:C.white,maxWidth:'600px',margin:'0 auto 44px',lineHeight:1.7,fontWeight:400}}>DivvyDup brings the quiet discipline of a paper ledger into the digital age — envelope budgeting, paycheck distribution, and a no-nonsense advisor named Floyd. No spreadsheets. No guesswork.</p>
+        <div style={{display:'flex',gap:'14px',justifyContent:'center',flexWrap:'wrap'}}>
+          <button onClick={onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'14px 36px',fontFamily:fb,fontSize:'15px',fontWeight:600,cursor:'pointer'}}>Start free trial</button>
+          <a href="#features" style={{background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'13px 34px',fontSize:'15px',textDecoration:'none',display:'inline-block'}}>See how it works</a>
         </div>
-        <p style={{marginTop:'18px',fontSize:'13px',color:'#5C4428',position:'relative',zIndex:1}}>No credit card required · 4 pages · 2 entries each · 3 days free</p>
+        <p style={{marginTop:'20px',fontSize:'13px',color:C.muted}}>No credit card required · 4 pages · 2 entries each · 3 days free</p>
       </section>
 
       {/* ORIGIN */}
-      <section style={{background:'#EDE0CB',padding:'80px 32px',borderBottom:'1px solid #D9C9B0'}}>
-        <div style={{maxWidth:'820px',margin:'0 auto',display:'flex',gap:'56px',alignItems:'flex-start'}}>
-          <div style={{flexShrink:0,width:'84px',height:'104px',background:'#16100A',borderRadius:'3px 14px 14px 3px',borderLeft:'9px solid #C4820F',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'12px 12px 14px'}}>
-            {[1,2,3,4,5].map(i=><div key={i} style={{height:'1.5px',background:'rgba(255,255,255,0.12)',marginBottom:'7px',borderRadius:'1px',width:i%2===0?'55%':'100%'}}></div>)}
+      <section style={{background:C.bgAlt,padding:'60px 32px',borderTop:`1px solid ${C.border}`,borderBottom:`1px solid ${C.border}`}}>
+        <div style={{maxWidth:'900px',margin:'0 auto',display:'grid',gridTemplateColumns:'auto 1fr',gap:'56px',alignItems:'center'}}>
+          <div style={{width:'120px',height:'150px',background:C.black,borderRadius:'4px 16px 16px 4px',borderLeft:`8px solid ${C.sage}`,display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'14px 14px 16px'}}>
+            {[1,2,3,4,5].map(i=><div key={i} style={{height:'2px',background:'rgba(255,255,255,0.12)',marginBottom:'8px',borderRadius:'1px',width:i%2===0?'55%':'100%'}}></div>)}
           </div>
           <div>
-            <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'30px',fontWeight:600,color:'#1C1208',marginBottom:'16px',lineHeight:1.25}}>Born from a ledger kept for sixty years.</h2>
-            <p style={{fontSize:'16px',color:'#5C4428',lineHeight:1.8,fontWeight:300}}>Tony’s father tracked every dollar in a paper columnar ledger — methodical, honest, and unfailing. That book was the family’s financial backbone for six decades. DivvyDup is its digital heir: the same discipline, without the pencil.</p>
+            <h2 style={{fontFamily:fh,fontSize:'clamp(32px,4vw,42px)',fontWeight:700,color:C.cream,marginBottom:'18px',lineHeight:1.15,letterSpacing:'-0.01em'}}>Born from a ledger kept for sixty years.</h2>
+            <p style={{fontSize:'15.5px',color:C.white,lineHeight:1.8,fontWeight:400}}>Tony's father tracked every dollar in a paper columnar ledger — methodical, honest, and unfailing. That book was the family's financial backbone for six decades. DivvyDup is its digital heir: the same discipline, without the pencil.</p>
           </div>
         </div>
       </section>
 
       {/* FEATURES */}
-      <section id="features" style={{background:'#F2E8D9',padding:'88px 32px'}}>
-        <p style={{textAlign:'center',fontSize:'11px',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color:'#A08060',marginBottom:'14px'}}>What’s inside</p>
-        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'34px',fontWeight:600,textAlign:'center',marginBottom:'56px',color:'#1C1208'}}>Everything the ledger had. Then some.</h2>
-        <div style={{maxWidth:'1100px',margin:'0 auto',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))',gap:'20px'}}>
+      <section id="features" style={{background:C.bg,padding:'66px 32px'}}>
+        <p style={{textAlign:'center',fontSize:'12px',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color:C.muted,marginBottom:'16px'}}>What's inside</p>
+        <h2 style={{fontFamily:fh,fontSize:'clamp(42px,5.5vw,68px)',fontWeight:700,textAlign:'center',marginBottom:'64px',color:C.cream,lineHeight:1.05,letterSpacing:'-0.015em'}}>Everything the ledger had. Then some.</h2>
+        <div style={{maxWidth:'1200px',margin:'0 auto',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))',gap:'24px'}}>
           {[
             {title:"Envelope budgeting",desc:"Assign every dollar a job. Budget pages work like real envelopes - money goes in, gets spent down, and you always know exactly what's left."},
             {title:"Paycheck distribution",desc:"Drop in a paycheck and DivvyDup splits it across your pages automatically, weighted by your monthly targets. One step, done."},
@@ -63,84 +63,84 @@ function LandingPage({onGetStarted}){
             {title:"Floyd, your advisor",desc:"Dry, direct, and old-school. Floyd speaks up when something's worth saying - and stays quiet when it's not. Not Clippy. Never Clippy."},
             {title:"Dashboard view",desc:"Customizable summary cards show the numbers that matter - balances, totals, progress - at a glance. Your ledger, at 30,000 feet."},
           ].map(f=>(
-            <div key={f.title} style={{background:'#fff',border:'1px solid #E4D7C4',borderRadius:'18px',padding:'28px 24px 30px'}}>
-              <div style={{width:'42px',height:'42px',borderRadius:'12px',background:'#FDF0DC',marginBottom:'18px'}}></div>
-              <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'18px',fontWeight:600,marginBottom:'10px',color:'#1C1208'}}>{f.title}</h3>
-              <p style={{fontSize:'14px',color:'#5C4428',lineHeight:1.7,fontWeight:300}}>{f.desc}</p>
+            <div key={f.title} style={{background:C.bgAlt,border:`1px solid ${C.border}`,borderRadius:'20px',padding:'32px 28px'}}>
+              <div style={{width:'44px',height:'44px',borderRadius:'12px',background:'rgba(181,212,168,0.18)',marginBottom:'20px'}}></div>
+              <h3 style={{fontFamily:fh,fontSize:'22px',fontWeight:700,marginBottom:'12px',color:C.cream,letterSpacing:'-0.01em'}}>{f.title}</h3>
+              <p style={{fontSize:'14.5px',color:C.white,lineHeight:1.65,fontWeight:400}}>{f.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* PRICING */}
-      <section id="pricing" style={{background:'#1C1208',padding:'88px 32px',textAlign:'center'}}>
-        <p style={{fontSize:'11px',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color:'#A08060',marginBottom:'14px'}}>Pricing</p>
-        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'34px',fontWeight:600,color:'#F0E8DC',marginBottom:'12px'}}>Simple. No tricks.</h2>
-        <p style={{fontSize:'16px',color:'#B8A48C',marginBottom:'56px',fontWeight:300}}>Pick a plan after your trial. Cancel anytime.</p>
-        <div style={{maxWidth:'680px',margin:'0 auto',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'20px',textAlign:'left'}}>
-          <div style={{background:'#231710',border:'1px solid rgba(255,255,255,0.07)',borderRadius:'20px',padding:'32px 28px 28px'}}>
-            <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:'#A08060',marginBottom:'10px'}}>Monthly</p>
-            <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'44px',fontWeight:700,color:'#F0E8DC',lineHeight:1,marginBottom:'4px'}}><sup style={{fontSize:'22px',fontWeight:400,verticalAlign:'super'}}>$</sup>5<sub style={{fontSize:'16px',fontWeight:300,verticalAlign:'baseline',color:'#B8A48C'}}>/mo</sub></p>
-            <p style={{fontSize:'13px',color:'#A08060',marginBottom:'28px',fontWeight:300}}>Billed monthly</p>
+      <section id="pricing" style={{background:C.bgAlt,padding:'66px 32px',textAlign:'center',borderTop:`1px solid ${C.border}`}}>
+        <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color:C.muted,marginBottom:'16px'}}>Pricing</p>
+        <h2 style={{fontFamily:fh,fontSize:'clamp(42px,5.5vw,68px)',fontWeight:700,color:C.cream,marginBottom:'14px',letterSpacing:'-0.015em'}}>Simple. No tricks.</h2>
+        <p style={{fontSize:'16px',color:C.white,marginBottom:'56px',fontWeight:400}}>Pick a plan after your trial. Cancel anytime.</p>
+        <div style={{maxWidth:'720px',margin:'0 auto',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'20px',textAlign:'left'}}>
+          <div style={{background:C.bg,border:`1px solid ${C.border}`,borderRadius:'20px',padding:'36px 30px'}}>
+            <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:C.muted,marginBottom:'10px'}}>Monthly</p>
+            <p style={{fontFamily:fh,fontSize:'48px',fontWeight:700,color:C.cream,lineHeight:1,marginBottom:'4px',letterSpacing:'-0.02em'}}><sup style={{fontSize:'24px',fontWeight:500,verticalAlign:'super'}}>$</sup>5<sub style={{fontSize:'16px',fontWeight:400,verticalAlign:'baseline',color:C.muted}}>/mo</sub></p>
+            <p style={{fontSize:'13px',color:C.muted,marginBottom:'28px'}}>Billed monthly</p>
             <ul style={{listStyle:'none',marginBottom:'28px',padding:0}}>
               {['Full ledger access','Cloud sync across devices','Floyd advisor','Unlimited pages & entries'].map(item=>(
-                <li key={item} style={{fontSize:'14px',color:'#B8A48C',padding:'7px 0',borderBottom:'1px solid rgba(255,255,255,0.05)',display:'flex',alignItems:'center',gap:'10px',fontWeight:300}}>
-                  <span style={{width:'5px',height:'5px',background:'#C4820F',borderRadius:'50%',flexShrink:0,display:'inline-block'}}></span>{item}
+                <li key={item} style={{fontSize:'14px',color:C.white,padding:'8px 0',borderBottom:`1px solid ${C.border}`,display:'flex',alignItems:'center',gap:'10px',fontWeight:400}}>
+                  <span style={{width:'6px',height:'6px',background:C.sage,borderRadius:'50%',flexShrink:0,display:'inline-block'}}></span>{item}
                 </li>
               ))}
             </ul>
-            <button onClick={onGetStarted} style={{width:'100%',background:'transparent',border:'1.5px solid rgba(255,255,255,0.14)',color:'#F0E8DC',borderRadius:'999px',padding:'12px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'14px',fontWeight:400,cursor:'pointer'}}>Get started</button>
+            <button onClick={onGetStarted} style={{width:'100%',background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'13px',fontFamily:fb,fontSize:'14px',fontWeight:500,cursor:'pointer'}}>Get started</button>
           </div>
-          <div style={{background:'#231710',border:'2px solid #C4820F',borderRadius:'20px',padding:'32px 28px 28px',position:'relative'}}>
-            <div style={{position:'absolute',top:'-13px',left:'50%',transform:'translateX(-50%)',background:'#C4820F',color:'#fff',fontSize:'11px',fontWeight:600,padding:'4px 16px',borderRadius:'999px',letterSpacing:'0.07em',whiteSpace:'nowrap'}}>Best value</div>
-            <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:'#A08060',marginBottom:'10px'}}>Annual</p>
-            <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'44px',fontWeight:700,color:'#F0E8DC',lineHeight:1,marginBottom:'4px'}}><sup style={{fontSize:'22px',fontWeight:400,verticalAlign:'super'}}>$</sup>50<sub style={{fontSize:'16px',fontWeight:300,verticalAlign:'baseline',color:'#B8A48C'}}>/yr</sub></p>
-            <p style={{fontSize:'13px',color:'#A08060',marginBottom:'28px',fontWeight:300}}>Save $10 vs monthly</p>
+          <div style={{background:C.bg,border:`2px solid ${C.sage}`,borderRadius:'20px',padding:'36px 30px',position:'relative'}}>
+            <div style={{position:'absolute',top:'-14px',left:'50%',transform:'translateX(-50%)',background:C.sage,color:C.bg,fontSize:'11px',fontWeight:700,padding:'5px 18px',borderRadius:'999px',letterSpacing:'0.07em',whiteSpace:'nowrap',textTransform:'uppercase'}}>Best value</div>
+            <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:C.muted,marginBottom:'10px'}}>Annual</p>
+            <p style={{fontFamily:fh,fontSize:'48px',fontWeight:700,color:C.cream,lineHeight:1,marginBottom:'4px',letterSpacing:'-0.02em'}}><sup style={{fontSize:'24px',fontWeight:500,verticalAlign:'super'}}>$</sup>50<sub style={{fontSize:'16px',fontWeight:400,verticalAlign:'baseline',color:C.muted}}>/yr</sub></p>
+            <p style={{fontSize:'13px',color:C.muted,marginBottom:'28px'}}>Save $10 vs monthly</p>
             <ul style={{listStyle:'none',marginBottom:'28px',padding:0}}>
               {['Everything in Monthly','Priority support','Early access to new features','Data export'].map(item=>(
-                <li key={item} style={{fontSize:'14px',color:'#B8A48C',padding:'7px 0',borderBottom:'1px solid rgba(255,255,255,0.05)',display:'flex',alignItems:'center',gap:'10px',fontWeight:300}}>
-                  <span style={{width:'5px',height:'5px',background:'#C4820F',borderRadius:'50%',flexShrink:0,display:'inline-block'}}></span>{item}
+                <li key={item} style={{fontSize:'14px',color:C.white,padding:'8px 0',borderBottom:`1px solid ${C.border}`,display:'flex',alignItems:'center',gap:'10px',fontWeight:400}}>
+                  <span style={{width:'6px',height:'6px',background:C.sage,borderRadius:'50%',flexShrink:0,display:'inline-block'}}></span>{item}
                 </li>
               ))}
             </ul>
-            <button onClick={onGetStarted} style={{width:'100%',background:'#C4820F',color:'#fff',border:'none',borderRadius:'999px',padding:'12px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'14px',fontWeight:600,cursor:'pointer',boxShadow:'0 3px 14px rgba(180,110,10,0.42)'}}>Get started</button>
+            <button onClick={onGetStarted} style={{width:'100%',background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'13px',fontFamily:fb,fontSize:'14px',fontWeight:600,cursor:'pointer'}}>Get started</button>
           </div>
         </div>
-        <div style={{maxWidth:'680px',margin:'36px auto 0',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.07)',borderRadius:'14px',padding:'22px 28px',display:'flex',alignItems:'center',gap:'16px',textAlign:'left'}}>
-          <div style={{width:'40px',height:'40px',borderRadius:'10px',background:'rgba(196,130,15,0.15)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:'18px'}}>⏱</div>
+        <div style={{maxWidth:'720px',margin:'36px auto 0',background:'rgba(181,212,168,0.08)',border:`1px solid ${C.border}`,borderRadius:'14px',padding:'22px 28px',display:'flex',alignItems:'center',gap:'16px',textAlign:'left'}}>
+          <div style={{width:'42px',height:'42px',borderRadius:'10px',background:'rgba(181,212,168,0.2)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:'18px'}}>⏱</div>
           <div>
-            <h4 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'15px',fontWeight:600,color:'#F0E8DC',marginBottom:'4px'}}>Free trial — no card required</h4>
-            <p style={{fontSize:'13px',color:'#B8A48C',fontWeight:300,lineHeight:1.5}}>Try DivvyDup for 3 days with 4 pages and 2 entries each. Enough to feel it. Then decide.</p>
+            <h4 style={{fontFamily:fh,fontSize:'16px',fontWeight:700,color:C.cream,marginBottom:'4px'}}>Free trial — no card required</h4>
+            <p style={{fontSize:'13px',color:C.white,fontWeight:400,lineHeight:1.55}}>Try DivvyDup for 3 days with 4 pages and 2 entries each. Enough to feel it. Then decide.</p>
           </div>
         </div>
       </section>
 
       {/* FLOYD */}
-      <section style={{background:'#EDE0CB',padding:'88px 32px',borderTop:'1px solid #D9C9B0'}}>
-        <div style={{maxWidth:'640px',margin:'0 auto',textAlign:'center'}}>
-          <p style={{fontSize:'11px',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color:'#A08060',marginBottom:'14px'}}>Meet Floyd</p>
-          <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'30px',fontWeight:600,color:'#1C1208',marginBottom:'40px'}}>The advisor who won’t let you off easy.</h2>
-          <div style={{background:'#16100A',borderRadius:'18px 18px 18px 4px',padding:'24px 28px',marginBottom:'12px',textAlign:'left'}}>
-            <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontStyle:'italic',fontSize:'16px',lineHeight:1.7,color:'#F0E8DC'}}>“You’ve overspent Dining Out three months running. That’s not bad luck — that’s a budget that needs adjusting. Want to fix it, or are we going to have this conversation again next month?”</p>
+      <section style={{background:C.sage,padding:'66px 32px'}}>
+        <div style={{maxWidth:'720px',margin:'0 auto',textAlign:'center'}}>
+          <p style={{fontSize:'12px',fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:C.bg,marginBottom:'16px'}}>Meet Floyd</p>
+          <h2 style={{fontFamily:fh,fontSize:'clamp(42px,5.5vw,68px)',fontWeight:700,color:C.bg,marginBottom:'44px',lineHeight:1.05,letterSpacing:'-0.015em'}}>The advisor who won't let you off easy.</h2>
+          <div style={{background:C.bg,borderRadius:'20px 20px 20px 4px',padding:'28px 32px',marginBottom:'14px',textAlign:'left'}}>
+            <p style={{fontFamily:fh,fontSize:'17px',lineHeight:1.65,color:C.cream,fontWeight:500}}>"You've overspent Dining Out three months running. That's not bad luck — that's a budget that needs adjusting. Want to fix it, or are we going to have this conversation again next month?"</p>
           </div>
-          <p style={{fontSize:'12px',fontWeight:500,letterSpacing:'0.07em',textTransform:'uppercase',color:'#A08060',textAlign:'left',paddingLeft:'4px'}}>Floyd — your DivvyDup advisor</p>
-          <p style={{marginTop:'36px',fontSize:'15px',color:'#5C4428',fontWeight:300,lineHeight:1.7}}>Floyd is built into every account. His name is yours to change. His opinion is not.</p>
+          <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.07em',textTransform:'uppercase',color:C.bg,textAlign:'left',paddingLeft:'4px'}}>Floyd — your DivvyDup advisor</p>
+          <p style={{marginTop:'40px',fontSize:'15px',color:C.bg,fontWeight:400,lineHeight:1.7}}>Floyd is built into every account. His name is yours to change. His opinion is not.</p>
         </div>
       </section>
 
       {/* FOOTER CTA */}
-      <section style={{background:'#F2E8D9',padding:'88px 32px',textAlign:'center',borderTop:'1px solid #E4D7C4'}}>
-        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'36px',fontWeight:600,color:'#1C1208',marginBottom:'16px'}}>Ready to open The Book?</h2>
-        <p style={{fontSize:'16px',color:'#5C4428',marginBottom:'36px',fontWeight:300}}>Start your free trial today. No card, no commitment.</p>
-        <button onClick={onGetStarted} style={{background:'#C4820F',color:'#fff',border:'none',borderRadius:'999px',padding:'13px 34px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'15px',fontWeight:600,cursor:'pointer',boxShadow:'0 3px 14px rgba(180,110,10,0.42)'}}>Start free trial</button>
+      <section style={{background:C.bg,padding:'66px 32px',textAlign:'center'}}>
+        <h2 style={{fontFamily:fh,fontSize:'clamp(52px,7vw,92px)',fontWeight:700,color:C.cream,marginBottom:'32px',letterSpacing:'-0.015em'}}>Ready to open The Book?</h2>
+        <button onClick={onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'16px 44px',fontFamily:fb,fontSize:'16px',fontWeight:600,cursor:'pointer'}}>Start free trial</button>
+        <p style={{marginTop:'16px',fontSize:'14px',color:C.muted}}>No card, no commitment.</p>
       </section>
 
       {/* FOOTER */}
-      <footer style={{background:'#1E140C',padding:'40px 32px',textAlign:'center',borderTop:'1px solid rgba(255,255,255,0.07)'}}>
-        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'18px',fontWeight:600,background:'linear-gradient(to right, #D4C4A8 68%, #C89040 68%)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text',marginBottom:'6px'}}>DivvyDup</p>
-        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontStyle:'italic',fontSize:'13px',color:'#A08060',marginBottom:'20px'}}>The Book, reimagined.</p>
-        <p style={{fontSize:'13px',color:'#3A2A1A'}}><a href="https://startinglinehq.com" style={{color:'#A08060',textDecoration:'none'}}>StartinglineHQ</a>{' · '}<a href="/privacy" style={{color:'#A08060',textDecoration:'none'}}>Privacy</a>{' · '}<a href="/terms" style={{color:'#A08060',textDecoration:'none'}}>Terms</a></p>
-        <p style={{fontSize:'12px',color:'#2E1E10',marginTop:'8px'}}>{'©'} 2026 StartinglineHQ. All rights reserved.</p>
+      <footer style={{background:C.black,padding:'48px 32px 32px',textAlign:'center',borderTop:`1px solid ${C.border}`}}>
+        <p style={{fontFamily:fh,fontSize:'20px',fontWeight:700,color:C.cream,marginBottom:'6px',letterSpacing:'-0.01em'}}>DivvyDup</p>
+        <p style={{fontFamily:fh,fontSize:'13px',color:C.sage,marginBottom:'20px',fontWeight:500}}>The Book, reimagined.</p>
+        <p style={{fontSize:'13px',color:C.muted}}><a href="https://startinglinehq.com" style={{color:C.muted,textDecoration:'none'}}>StartinglineHQ</a>{' · '}<a href="/privacy" style={{color:C.muted,textDecoration:'none'}}>Privacy</a>{' · '}<a href="/terms" style={{color:C.muted,textDecoration:'none'}}>Terms</a></p>
+        <p style={{fontSize:'12px',color:C.muted,marginTop:'10px',opacity:0.7}}>{'©'} 2026 StartinglineHQ. All rights reserved.</p>
       </footer>
 
     </div>
