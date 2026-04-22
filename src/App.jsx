@@ -563,6 +563,19 @@ export default function App() {
       <nav id="suite-nav">
         <div className="snav-group">
           <button className="snav-link" onClick={() => setFeedbackModal(true)}>✏️ Beta Feedback</button>
+          <button
+            className="snav-link"
+            onClick={async () => {
+              const { data: { session } } = await supabase.auth.getSession();
+              if (session) {
+                window.location.href = `https://startinglinehq.com?access_token=${session.access_token}&refresh_token=${session.refresh_token}`;
+              } else {
+                window.location.href = 'https://startinglinehq.com';
+              }
+            }}
+          >
+            ← Dashboard
+          </button>
           <a href="https://www.divvydup.com/settings" className="snav-link">⚙ Settings</a>
         </div>
         <div className="snav-sep"></div>
@@ -571,9 +584,7 @@ export default function App() {
             className="snav-link snav-link--signout"
             onClick={async () => {
               await supabase.auth.signOut();
-              setAuthSession(null);
-              setScreen('landing');
-              setS(DEFAULT_STATE);
+              window.location.href = 'https://startinglinehq.com';
             }}
           >
             Sign out
