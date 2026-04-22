@@ -574,7 +574,7 @@ export default function App() {
               }
             }}
           >
-            ← Dashboard
+            ← StartingLine HQ Dashboard
           </button>
           <a href="https://www.divvydup.com/settings" className="snav-link">⚙ Settings</a>
         </div>
