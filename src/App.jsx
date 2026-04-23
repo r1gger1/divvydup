@@ -528,6 +528,14 @@ export default function App() {
         return;
       }
 
+      // Hub-driven SSO handoff: consume access_token/refresh_token from URL if present
+      const accessToken = searchParams.get('access_token');
+      const refreshToken = searchParams.get('refresh_token');
+      if(accessToken && refreshToken){
+        await supabase.auth.setSession({access_token:accessToken,refresh_token:refreshToken});
+        window.history.replaceState(null,'',window.location.pathname);
+      }
+
       // Check for Supabase error params in URL (e.g. expired confirmation link)
       const hash = window.location.hash;
       const params = new URLSearchParams(hash.replace('#',''));
