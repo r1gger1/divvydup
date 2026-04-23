@@ -382,9 +382,9 @@ function supportsSubitems(id){return SUBITEMS_PAGES.some(s=>id.includes(s)||id==
 
 // ─── STORAGE ───────────────────────────────────────────────
 const STORAGE_KEY = 'famLedger';
-const LEGACY_KEYS = [STORAGE_KEY,'famLedger_v5','famLedger_v4','famLedger_v3','famLedger_v2','famLedger_v1','divvydup_ledger_v5'];
 const SUPABASE_KEY_PREFIX = 'sb-bvuzrhmqcrepsevkdutt-';
 function saveState(s){try{const d={...s,_version:5};localStorage.setItem(STORAGE_KEY,JSON.stringify(d));}catch(e){}}
+// Sign-out only clears Supabase auth keys. Ledger data (famLedger) is the user's work and persists.
 function clearSupabaseAuth(){
   try{
     const toRemove=[];
@@ -394,10 +394,6 @@ function clearSupabaseAuth(){
     }
     for(const k of toRemove){try{localStorage.removeItem(k);}catch(e){}}
   }catch(e){}
-}
-function clearStoredState(){
-  for(const k of LEGACY_KEYS){try{localStorage.removeItem(k);}catch(e){}}
-  clearSupabaseAuth();
 }
 function loadState(){
   try{
@@ -462,34 +458,48 @@ function getTrialInfo(session){
 
 // ─── TRIAL EXPIRED SCREEN ───────────────────────────────────
 function TrialExpiredScreen({onSignOut}){
+  const FH="'Fraunces','Playfair Display',Georgia,serif";
+  const FB="'Inter','Helvetica Neue',sans-serif";
+  const s={
+    page:{minHeight:'100vh',background:'#1E3530',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'48px 16px',fontFamily:FB,gap:'36px'},
+    heroWrap:{textAlign:'center',maxWidth:'560px',padding:'0 16px'},
+    heroTitle:{fontFamily:FH,fontWeight:800,fontSize:'clamp(48px, 8vw, 72px)',color:'#E8E2C8',lineHeight:1,letterSpacing:'-0.015em',marginBottom:'14px'},
+    heroTagline:{fontFamily:FB,fontSize:'16px',fontWeight:500,color:'#9FB5A8',lineHeight:1.55,fontStyle:'italic'},
+    card:{background:'#243D37',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'22px',padding:'44px',width:'100%',maxWidth:'480px',boxShadow:'0 20px 60px rgba(0,0,0,0.35)',boxSizing:'border-box',textAlign:'center'},
+    icon:{fontSize:'36px',marginBottom:'20px'},
+    heading:{fontFamily:FH,fontSize:'26px',fontWeight:700,color:'#E8E2C8',marginBottom:'14px',letterSpacing:'-0.01em',lineHeight:1.25},
+    body:{fontSize:'15px',color:'#FFFFFF',lineHeight:1.7,fontWeight:400,marginBottom:'28px'},
+    notice:{background:'rgba(181,212,168,0.12)',border:'1px solid rgba(181,212,168,0.35)',borderRadius:'14px',padding:'20px 22px',marginBottom:'28px',textAlign:'left'},
+    noticeTitle:{fontSize:'12px',fontWeight:600,color:'#B5D4A8',marginBottom:'8px',letterSpacing:'0.08em',textTransform:'uppercase'},
+    noticeText:{fontSize:'14px',color:'#E8E2C8',lineHeight:1.65,fontWeight:400,marginBottom:'16px'},
+    btnPrimary:{display:'inline-block',background:'#B5D4A8',color:'#1E3530',borderRadius:'999px',padding:'12px 28px',fontSize:'14px',fontWeight:600,fontFamily:FB,textDecoration:'none',border:'none',cursor:'pointer',letterSpacing:'0.01em'},
+    signOut:{background:'none',border:'none',color:'#9FB5A8',fontSize:'13px',cursor:'pointer',textDecoration:'underline',fontFamily:FB,padding:0}
+  };
   return(
-    <div style={{fontFamily:"'Instrument Sans','Helvetica Neue',sans-serif",background:'#F2E8D9',minHeight:'100vh',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'32px 20px'}}>
-      <div style={{maxWidth:'480px',width:'100%',textAlign:'center'}}>
+    <div style={s.page}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap');`}</style>
 
-        {/* Brand */}
-        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'28px',fontWeight:600,color:'#1C1208',marginBottom:'4px'}}>DivvyDup</p>
-        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontStyle:'italic',fontSize:'14px',color:'#A08060',marginBottom:'48px'}}>The Book, reimagined.</p>
+      <div style={s.heroWrap}>
+        <h1 style={s.heroTitle}>DivvyDup</h1>
+        <p style={s.heroTagline}>The Book, reimagined.</p>
+      </div>
 
-        {/* Card */}
-        <div style={{background:'#fff',border:'1px solid #E4D7C4',borderRadius:'20px',padding:'40px 36px'}}>
-          <div style={{fontSize:'36px',marginBottom:'20px'}}>📒</div>
-          <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'24px',fontWeight:600,color:'#1C1208',marginBottom:'12px',lineHeight:1.3}}>Your free trial has ended.</h2>
-          <p style={{fontSize:'15px',color:'#5C4428',lineHeight:1.75,fontWeight:300,marginBottom:'28px'}}>
-            Thanks for giving DivvyDup a look. Paid plans are on their way — and when they arrive, your ledger will be right where you left it.
-          </p>
+      <div style={s.card}>
+        <div style={s.icon}>📒</div>
+        <h2 style={s.heading}>Your free trial has ended.</h2>
+        <p style={s.body}>
+          Thanks for giving DivvyDup a look. Paid plans are on their way — and when they arrive, your ledger will be right where you left it.
+        </p>
 
-          <div style={{background:'#FDF0DC',border:'1px solid #E4D7C4',borderRadius:'14px',padding:'20px 24px',marginBottom:'28px',textAlign:'left'}}>
-            <p style={{fontSize:'13px',fontWeight:600,color:'#7A3E14',marginBottom:'6px',letterSpacing:'0.04em',textTransform:'uppercase'}}>Want early access?</p>
-            <p style={{fontSize:'14px',color:'#5C4428',lineHeight:1.65,fontWeight:300,marginBottom:'14px'}}>Drop us a line and we'll let you know the moment plans are available — and make sure your data is waiting for you.</p>
-            <a href="mailto:hello@startinglinehq.com?subject=DivvyDup Early Access" style={{display:'inline-block',background:'#C4820F',color:'#fff',borderRadius:'999px',padding:'11px 28px',fontSize:'14px',fontWeight:600,textDecoration:'none',boxShadow:'0 3px 14px rgba(180,110,10,0.42)'}}>
-              Email us for early access
-            </a>
-          </div>
-
-          <button onClick={onSignOut} style={{background:'none',border:'none',color:'#A08060',fontSize:'13px',cursor:'pointer',textDecoration:'underline',fontFamily:"'Instrument Sans',sans-serif"}}>
-            Sign out
-          </button>
+        <div style={s.notice}>
+          <div style={s.noticeTitle}>Want early access?</div>
+          <p style={s.noticeText}>Drop us a line and we'll let you know the moment plans are available — and make sure your data is waiting for you.</p>
+          <a href="mailto:hello@startinglinehq.com?subject=DivvyDup Early Access" style={s.btnPrimary}>
+            Email us for early access
+          </a>
         </div>
+
+        <button onClick={onSignOut} style={s.signOut}>Sign out</button>
       </div>
     </div>
   );
@@ -521,7 +531,7 @@ export default function App() {
       const searchParams = new URLSearchParams(window.location.search);
       if(searchParams.get('force_signout') === 'true'){
         await supabase.auth.signOut();
-        clearStoredState();
+        clearSupabaseAuth();
         window.history.replaceState(null,'',window.location.pathname);
         setScreen('landing');
         setS(DEFAULT_STATE);
@@ -672,7 +682,7 @@ export default function App() {
             className="snav-link snav-link--signout"
             onClick={async () => {
               await supabase.auth.signOut();
-              clearStoredState();
+              clearSupabaseAuth();
               window.location.href = 'https://startinglinehq.com/?signout=true';
             }}
           >
@@ -710,7 +720,7 @@ export default function App() {
           <button className="btn-xfr" onClick={()=>setModal('overflow')}>🌊 Overflow</button>
           <button className="btn-xfr" onClick={()=>setModal('xfr')}>⇄ Move Money</button>
           <button className="btn-xfr" style={{fontSize:'.68rem',color:'var(--red-light)',borderColor:'rgba(200,64,64,.3)'}} onClick={()=>setModal('reset')}>↺ Reset</button>
-          {authSession&&<button className="btn-xfr" style={{fontSize:'.68rem',color:'var(--inkl)',borderColor:'rgba(160,128,96,.3)'}} onClick={async()=>{await supabase.auth.signOut();clearStoredState();window.location.href='https://startinglinehq.com/?signout=true';}}>Sign Out</button>}
+          {authSession&&<button className="btn-xfr" style={{fontSize:'.68rem',color:'var(--inkl)',borderColor:'rgba(160,128,96,.3)'}} onClick={async()=>{await supabase.auth.signOut();clearSupabaseAuth();window.location.href='https://startinglinehq.com/?signout=true';}}>Sign Out</button>}
           <button className="btn-dep" onClick={()=>setModal('dep')}>+ Deposit Paycheck</button>
         </div>
       </header>
