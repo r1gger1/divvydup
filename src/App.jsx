@@ -4,7 +4,7 @@ import { supabase } from './supabase';
 Chart.register(...registerables);
 
 // ─── LANDING PAGE ───────────────────────────────────────────
-function LandingPage({onGetStarted}){
+function LandingPage({onGetStarted,onSignIn}){
   const C = { bg:'#1E3530', bgAlt:'#243D37', black:'#0D1C18', sage:'#B5D4A8', sageHover:'#A2C295', cream:'#E8E2C8', white:'#FFFFFF', muted:'#9FB5A8', border:'rgba(255,255,255,0.08)', borderStrong:'rgba(255,255,255,0.14)' };
   const fh = "'Fraunces','Playfair Display',Georgia,serif";
   const fb = "'Inter','Helvetica Neue',sans-serif";
@@ -20,7 +20,8 @@ function LandingPage({onGetStarted}){
           <div style={{display:'flex',alignItems:'center',gap:'28px'}}>
             <a href="#features" style={{color:C.cream,fontSize:'14px',textDecoration:'none'}}>Features</a>
             <a href="#pricing" style={{color:C.cream,fontSize:'14px',textDecoration:'none'}}>Pricing</a>
-            <button onClick={onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'10px 22px',fontFamily:fb,fontSize:'14px',fontWeight:600,cursor:'pointer'}}>Start free trial</button>
+            <button onClick={onSignIn} style={{background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'9px 20px',fontFamily:fb,fontSize:'14px',fontWeight:500,cursor:'pointer',marginRight:'8px'}}>Sign In</button>
+            <button onClick={onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'10px 22px',fontFamily:fb,fontSize:'14px',fontWeight:600,cursor:'pointer'}}>Start Free Trial</button>
           </div>
         </div>
       </nav>
@@ -150,8 +151,8 @@ function LandingPage({onGetStarted}){
 
 
 // ─── AUTH SCREEN ───────────────────────────────────────────
-function AuthScreen({onAuth,onBack,initialError}){
-  const [mode,setMode]=useState('signup'); // 'signup'|'signin'
+function AuthScreen({onAuth,onBack,initialError,initialMode}){
+  const [mode,setMode]=useState(initialMode==='signin'?'signin':'signup'); // 'signup'|'signin'
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
   const [confirm,setConfirm]=useState('');
@@ -331,7 +332,9 @@ function supportsSubitems(id){return SUBITEMS_PAGES.some(s=>id.includes(s)||id==
 
 // ─── STORAGE ───────────────────────────────────────────────
 const STORAGE_KEY = 'famLedger';
+const LEGACY_KEYS = [STORAGE_KEY,'famLedger_v5','famLedger_v4','famLedger_v3','famLedger_v2','famLedger_v1','divvydup_ledger_v5'];
 function saveState(s){try{const d={...s,_version:5};localStorage.setItem(STORAGE_KEY,JSON.stringify(d));}catch(e){}}
+function clearStoredState(){for(const k of LEGACY_KEYS){try{localStorage.removeItem(k);}catch(e){}}}
 function loadState(){
   try{
     const keys=[STORAGE_KEY,'famLedger_v5','famLedger_v4','famLedger_v3','famLedger_v2','famLedger_v1'];
@@ -440,6 +443,7 @@ export default function App() {
   const [screen, setScreen] = useState('loading'); // 'loading'|'landing'|'auth'|'setup'|'app'
   const [authSession, setAuthSession] = useState(null);
   const [authError, setAuthError] = useState('');
+  const [authMode, setAuthMode] = useState('signup');
   const [feedbackModal, setFeedbackModal] = useState(false);
   const toastTimer = useRef(null);
   const advTimer = useRef(null);
@@ -453,7 +457,7 @@ export default function App() {
       const searchParams = new URLSearchParams(window.location.search);
       if(searchParams.get('force_signout') === 'true'){
         await supabase.auth.signOut();
-        localStorage.removeItem('divvydup_ledger_v5');
+        clearStoredState();
         window.history.replaceState(null,'',window.location.pathname);
         setScreen('landing');
         setS(DEFAULT_STATE);
@@ -482,14 +486,8 @@ export default function App() {
           setScreen('setup');
         }
       } else {
-        // No session — check localStorage for legacy users who haven't signed up yet
-        const saved = loadState();
-        if(saved && saved.ready){
-          setS(saved);
-          setScreen('app');
-        } else {
-          setScreen('landing');
-        }
+        // No session — always show landing. Never auto-enter the app from stale localStorage.
+        setScreen('landing');
       }
 
       // Listen for auth state changes (e.g. after email confirmation) — only once we've settled
@@ -564,8 +562,8 @@ export default function App() {
   }
 
   if(screen==='loading') return null;
-  if(screen==='landing') return <LandingPage onGetStarted={()=>setScreen('auth')}/>;
-  if(screen==='auth') return <AuthScreen onAuth={(session)=>{setAuthSession(session);const saved=loadState();if(saved&&saved.ready){setS(saved);setScreen('app');}else{setScreen('setup');}}} onBack={()=>{setAuthError('');setScreen('landing');}} initialError={authError}/>;
+  if(screen==='landing') return <LandingPage onGetStarted={()=>{setAuthMode('signup');setScreen('auth');}} onSignIn={()=>{setAuthMode('signin');setScreen('auth');}}/>;
+  if(screen==='auth') return <AuthScreen onAuth={(session)=>{setAuthSession(session);const saved=loadState();if(saved&&saved.ready){setS(saved);setScreen('app');}else{setScreen('setup');}}} onBack={()=>{setAuthError('');setScreen('landing');}} initialError={authError} initialMode={authMode}/>;
   if(screen==='setup') return <SetupScreen onLaunch={launch} showToast={showToast}/>;
 
   // Trial enforcement — only for authenticated users (localStorage-only users bypass)
@@ -602,7 +600,7 @@ export default function App() {
             className="snav-link snav-link--signout"
             onClick={async () => {
               await supabase.auth.signOut();
-              localStorage.removeItem('divvydup_ledger_v5');
+              clearStoredState();
               window.location.href = 'https://startinglinehq.com/?signout=true';
             }}
           >
@@ -640,7 +638,7 @@ export default function App() {
           <button className="btn-xfr" onClick={()=>setModal('overflow')}>🌊 Overflow</button>
           <button className="btn-xfr" onClick={()=>setModal('xfr')}>⇄ Move Money</button>
           <button className="btn-xfr" style={{fontSize:'.68rem',color:'var(--red-light)',borderColor:'rgba(200,64,64,.3)'}} onClick={()=>setModal('reset')}>↺ Reset</button>
-          {authSession&&<button className="btn-xfr" style={{fontSize:'.68rem',color:'var(--inkl)',borderColor:'rgba(160,128,96,.3)'}} onClick={async()=>{await supabase.auth.signOut();localStorage.removeItem('divvydup_ledger_v5');window.location.href='https://startinglinehq.com/?signout=true';}}>Sign Out</button>}
+          {authSession&&<button className="btn-xfr" style={{fontSize:'.68rem',color:'var(--inkl)',borderColor:'rgba(160,128,96,.3)'}} onClick={async()=>{await supabase.auth.signOut();clearStoredState();window.location.href='https://startinglinehq.com/?signout=true';}}>Sign Out</button>}
           <button className="btn-dep" onClick={()=>setModal('dep')}>+ Deposit Paycheck</button>
         </div>
       </header>
