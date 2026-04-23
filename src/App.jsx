@@ -443,6 +443,19 @@ function getTips(advisorName,ledgerName){
 const TRIAL_DAYS = 3;
 const TRIAL_MAX_PAGES = 4;
 const TRIAL_MAX_ENTRIES = 2;
+const DIVVYDUP_PRODUCT_ID = '9dfa6eed-0d63-4037-b71a-24531f542437';
+
+// Returns true if the user is an admin or has been granted DivvyDup product access.
+// Any error (RLS, network) falls through to false so the trial logic still applies.
+async function checkFullAccess(userId){
+  try{
+    const [{data:profile},{data:access}] = await Promise.all([
+      supabase.from('profiles').select('is_admin').eq('id',userId).maybeSingle(),
+      supabase.from('user_product_access').select('product_id').eq('user_id',userId).eq('product_id',DIVVYDUP_PRODUCT_ID).maybeSingle()
+    ]);
+    return !!(profile?.is_admin || access);
+  }catch(e){return false;}
+}
 
 function getTrialInfo(session){
   // No session = localStorage-only user, no trial enforcement
@@ -518,6 +531,7 @@ export default function App() {
   const [authSession, setAuthSession] = useState(null);
   const [authError, setAuthError] = useState('');
   const [authMode, setAuthMode] = useState('signup');
+  const [hasFullAccess, setHasFullAccess] = useState(false);
   const [feedbackModal, setFeedbackModal] = useState(false);
   const toastTimer = useRef(null);
   const advTimer = useRef(null);
@@ -560,6 +574,7 @@ export default function App() {
       const {data:{session}} = await supabase.auth.getSession();
       if(session){
         setAuthSession(session);
+        setHasFullAccess(await checkFullAccess(session.user.id));
         const saved = loadState();
         if(saved && saved.ready){
           setS(saved);
@@ -573,9 +588,10 @@ export default function App() {
       }
 
       // Listen for auth state changes (e.g. after email confirmation) — only once we've settled
-      const sub = supabase.auth.onAuthStateChange((_event,session)=>{
+      const sub = supabase.auth.onAuthStateChange(async (_event,session)=>{
         if(session&&!authSession){
           setAuthSession(session);
+          setHasFullAccess(await checkFullAccess(session.user.id));
           const saved = loadState();
           if(saved && saved.ready){
             setS(saved);
@@ -645,11 +661,11 @@ export default function App() {
 
   if(screen==='loading') return null;
   if(screen==='landing') return <LandingPage onGetStarted={()=>{setAuthMode('signup');setScreen('auth');}} onSignIn={()=>{setAuthMode('signin');setScreen('auth');}}/>;
-  if(screen==='auth') return <AuthScreen onAuth={(session)=>{setAuthSession(session);const saved=loadState();if(saved&&saved.ready){setS(saved);setScreen('app');}else{setScreen('setup');}}} onBack={()=>{setAuthError('');setScreen('landing');}} initialError={authError} initialMode={authMode}/>;
-  if(screen==='setup') return <SetupScreen onLaunch={launch} showToast={showToast}/>;
+  if(screen==='auth') return <AuthScreen onAuth={async (session)=>{setAuthSession(session);setHasFullAccess(await checkFullAccess(session.user.id));const saved=loadState();if(saved&&saved.ready){setS(saved);setScreen('app');}else{setScreen('setup');}}} onBack={()=>{setAuthError('');setScreen('landing');}} initialError={authError} initialMode={authMode}/>;
+  if(screen==='setup') return <SetupScreen onLaunch={launch} showToast={showToast} hasFullAccess={hasFullAccess}/>;
 
-  // Trial enforcement — only for authenticated users (localStorage-only users bypass)
-  const trial = getTrialInfo(authSession);
+  // Trial enforcement — bypassed entirely for admins and users with product access.
+  const trial = hasFullAccess ? {active:false,expired:false,daysLeft:null} : getTrialInfo(authSession);
   if(trial.expired) return <TrialExpiredScreen onSignOut={async()=>{await supabase.auth.signOut();setAuthSession(null);setScreen('landing');setS(DEFAULT_STATE);}}/>;
 
   const displayName = S.name.charAt(0).toUpperCase()+S.name.slice(1);
@@ -693,7 +709,7 @@ export default function App() {
       
       <div className="main-app">
       {/* TRIAL BANNER */}
-      {trial.active&&!trial.expired&&(
+      {trial.active&&!trial.expired&&!hasFullAccess&&(
         <div style={{background:'#1C1208',borderBottom:'1px solid rgba(196,130,15,0.3)',padding:'8px 24px',display:'flex',alignItems:'center',justifyContent:'center',gap:'12px',fontSize:'13px',color:'#B8A48C',fontFamily:"'Instrument Sans',sans-serif"}}>
           <span style={{color:'#C4820F',fontWeight:600}}>⏱ Free trial</span>
           <span>{trial.daysLeft===1?'1 day left':trial.daysLeft===0?'Last day':`${trial.daysLeft} days left`} · {TRIAL_MAX_PAGES} pages · {TRIAL_MAX_ENTRIES} entries per page</span>
@@ -844,7 +860,7 @@ export default function App() {
 // ═══════════════════════════════════════════════════════════
 // SETUP SCREEN
 // ═══════════════════════════════════════════════════════════
-function SetupScreen({onLaunch,showToast}){
+function SetupScreen({onLaunch,showToast,hasFullAccess}){
   const [step,setStep]=useState(1);
   const [name,setName]=useState('');
   const [freq,setFreq]=useState(26);
@@ -862,7 +878,7 @@ function SetupScreen({onLaunch,showToast}){
   function togglePage(id){
     setSelected(prev=>{
       const n=new Set(prev);
-      if(!n.has(id)&&n.size>=TRIAL_MAX_PAGES){showToast(`Trial limit: ${TRIAL_MAX_PAGES} pages max. You can add more after upgrading.`,"tw");return prev;}
+      if(!hasFullAccess&&!n.has(id)&&n.size>=TRIAL_MAX_PAGES){showToast(`Trial limit: ${TRIAL_MAX_PAGES} pages max. You can add more after upgrading.`,"tw");return prev;}
       n.has(id)?n.delete(id):n.add(id);return n;
     });
   }
@@ -953,7 +969,7 @@ function SetupScreen({onLaunch,showToast}){
 
           {step===2&&(
             <div>
-              <p style={{fontFamily:"'Lora',serif",fontStyle:'italic',fontSize:'.83rem',color:'var(--ink3)',marginBottom:'13px'}}>Each page is a pocket reserved for that purpose. Check the ones that belong in your household's ledger. <strong>Free trial: up to {TRIAL_MAX_PAGES} pages.</strong></p>
+              <p style={{fontFamily:"'Lora',serif",fontStyle:'italic',fontSize:'.83rem',color:'var(--ink3)',marginBottom:'13px'}}>Each page is a pocket reserved for that purpose. Check the ones that belong in your household's ledger.{!hasFullAccess && <> <strong>Free trial: up to {TRIAL_MAX_PAGES} pages.</strong></>}</p>
               <div className="pages-grid">
                 {CATALOG.map(p=>(
                   <label key={p.id} className={`po${selected.has(p.id)?' sel':''}`}>
