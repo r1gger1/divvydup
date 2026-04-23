@@ -446,18 +446,32 @@ export default function App() {
 
   // Load on mount — check Supabase session first, then fall back to localStorage
   useEffect(()=>{
-    // Check for Supabase error params in URL (e.g. expired confirmation link)
-    const hash = window.location.hash;
-    const params = new URLSearchParams(hash.replace('#',''));
-    const urlError = params.get('error_description') || params.get('error');
-    if(urlError){
-      setAuthError(urlError.replace(/\+/g,' '));
-      setScreen('auth');
-      window.history.replaceState(null,'',window.location.pathname);
-      return;
-    }
+    let subscription;
 
-    supabase.auth.getSession().then(({data:{session}})=>{
+    const init = async () => {
+      // Hub-driven force signout: clear any stale local session before doing ANYTHING else
+      const searchParams = new URLSearchParams(window.location.search);
+      if(searchParams.get('force_signout') === 'true'){
+        await supabase.auth.signOut();
+        localStorage.removeItem('divvydup_ledger_v5');
+        window.history.replaceState(null,'',window.location.pathname);
+        setScreen('landing');
+        setS(DEFAULT_STATE);
+        return;
+      }
+
+      // Check for Supabase error params in URL (e.g. expired confirmation link)
+      const hash = window.location.hash;
+      const params = new URLSearchParams(hash.replace('#',''));
+      const urlError = params.get('error_description') || params.get('error');
+      if(urlError){
+        setAuthError(urlError.replace(/\+/g,' '));
+        setScreen('auth');
+        window.history.replaceState(null,'',window.location.pathname);
+        return;
+      }
+
+      const {data:{session}} = await supabase.auth.getSession();
       if(session){
         setAuthSession(session);
         const saved = loadState();
@@ -477,22 +491,26 @@ export default function App() {
           setScreen('landing');
         }
       }
-    });
 
-    // Listen for auth state changes (e.g. after email confirmation)
-    const{data:{subscription}}=supabase.auth.onAuthStateChange((_event,session)=>{
-      if(session&&!authSession){
-        setAuthSession(session);
-        const saved = loadState();
-        if(saved && saved.ready){
-          setS(saved);
-          setScreen('app');
-        } else {
-          setScreen('setup');
+      // Listen for auth state changes (e.g. after email confirmation) — only once we've settled
+      const sub = supabase.auth.onAuthStateChange((_event,session)=>{
+        if(session&&!authSession){
+          setAuthSession(session);
+          const saved = loadState();
+          if(saved && saved.ready){
+            setS(saved);
+            setScreen('app');
+          } else {
+            setScreen('setup');
+          }
         }
-      }
-    });
-    return()=>subscription.unsubscribe();
+      });
+      subscription = sub.data.subscription;
+    };
+
+    init();
+
+    return()=>{ if(subscription) subscription.unsubscribe(); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
