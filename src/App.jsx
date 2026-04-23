@@ -159,8 +159,11 @@ function AuthScreen({onAuth,onBack,initialError,initialMode}){
   const [error,setError]=useState('');
   const [loading,setLoading]=useState(false);
   const [done,setDone]=useState(false);
+  const [showPassword,setShowPassword]=useState(false);
+  const [showConfirm,setShowConfirm]=useState(false);
 
-  async function handleSignUp(){
+  async function handleSignUp(e){
+    e?.preventDefault?.();
     if(!email.trim()||!password)return setError('Email and password are required.');
     if(password.length<6)return setError('Password must be at least 6 characters.');
     if(password!==confirm)return setError('Passwords do not match.');
@@ -171,7 +174,8 @@ function AuthScreen({onAuth,onBack,initialError,initialMode}){
     setDone(true);
   }
 
-  async function handleSignIn(){
+  async function handleSignIn(e){
+    e?.preventDefault?.();
     if(!email.trim()||!password)return setError('Email and password are required.');
     setError('');setLoading(true);
     const{data,error:err}=await supabase.auth.signInWithPassword({email:email.trim(),password});
@@ -180,84 +184,130 @@ function AuthScreen({onAuth,onBack,initialError,initialMode}){
     if(data?.session)onAuth(data.session);
   }
 
-  const inp={background:'#fff',border:'1.5px solid #D9C9B0',borderRadius:'10px',padding:'11px 14px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'15px',color:'#1C1208',width:'100%',boxSizing:'border-box',outline:'none'};
-  const btn={background:'#C4820F',color:'#fff',border:'none',borderRadius:'999px',padding:'13px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'15px',fontWeight:600,cursor:'pointer',width:'100%',boxShadow:'0 3px 14px rgba(180,110,10,0.42)'};
-  const ghost={background:'transparent',border:'1.5px solid #D9C9B0',borderRadius:'999px',padding:'11px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'14px',color:'#5C4428',cursor:'pointer',width:'100%'};
+  const FH="'Fraunces','Playfair Display',Georgia,serif";
+  const FB="'Inter','Helvetica Neue',sans-serif";
+  const s={
+    page:{minHeight:'100vh',background:'#1E3530',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'48px 16px',fontFamily:FB,gap:'36px',position:'relative'},
+    back:{background:'none',border:'none',cursor:'pointer',fontSize:'13px',color:'#9FB5A8',fontFamily:FB,padding:'8px 12px',position:'absolute',top:'20px',left:'20px'},
+    heroWrap:{textAlign:'center',maxWidth:'560px',padding:'0 16px'},
+    heroTitle:{fontFamily:FH,fontWeight:800,fontSize:'clamp(48px, 8vw, 72px)',color:'#E8E2C8',lineHeight:1,letterSpacing:'-0.015em',marginBottom:'14px'},
+    heroTagline:{fontFamily:FB,fontSize:'16px',fontWeight:500,color:'#9FB5A8',lineHeight:1.55,fontStyle:'italic'},
+    card:{background:'#243D37',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'22px',padding:'44px',width:'100%',maxWidth:'440px',boxShadow:'0 20px 60px rgba(0,0,0,0.35)',boxSizing:'border-box'},
+    heading:{fontFamily:FH,fontSize:'26px',fontWeight:700,color:'#E8E2C8',marginBottom:'24px',letterSpacing:'-0.01em'},
+    form:{display:'flex',flexDirection:'column',gap:'4px'},
+    label:{fontSize:'13px',fontWeight:500,color:'#FFFFFF',marginBottom:'6px',marginTop:'14px'},
+    input:{background:'transparent',border:'1px solid rgba(255,255,255,0.14)',borderRadius:'6px',padding:'12px 14px',fontSize:'14px',color:'#FFFFFF',fontFamily:FB,outline:'none',transition:'border 0.15s',width:'100%',boxSizing:'border-box'},
+    pwWrap:{position:'relative',display:'flex',alignItems:'center'},
+    eyeBtn:{position:'absolute',right:'10px',background:'none',border:'none',cursor:'pointer',fontSize:'16px',padding:'4px',lineHeight:1,color:'#9FB5A8',display:'flex',alignItems:'center',justifyContent:'center'},
+    btn:{marginTop:'22px',background:'#B5D4A8',color:'#1E3530',border:'none',borderRadius:'999px',padding:'14px',fontSize:'15px',fontWeight:600,fontFamily:FB,cursor:'pointer',transition:'background 0.15s',width:'100%',letterSpacing:'0.01em'},
+    errBox:{background:'rgba(217,48,37,0.12)',border:'1px solid rgba(217,48,37,0.35)',borderRadius:'10px',padding:'11px 14px',fontSize:'13px',color:'#F4A199',marginBottom:'12px',fontWeight:500},
+    noticeBox:{background:'rgba(181,212,168,0.12)',border:'1px solid rgba(181,212,168,0.35)',borderRadius:'14px',padding:'16px 18px',marginBottom:'18px'},
+    noticeTitle:{fontSize:'14px',fontWeight:600,color:'#E8E2C8',marginBottom:'6px'},
+    noticeText:{fontSize:'12px',color:'#9FB5A8',lineHeight:1.6},
+    okBox:{background:'rgba(181,212,168,0.12)',border:'1px solid rgba(181,212,168,0.35)',borderRadius:'14px',padding:'20px',fontSize:'13px',color:'#E8E2C8',fontWeight:500,marginBottom:'16px',display:'flex',gap:'14px',alignItems:'flex-start',lineHeight:1.6},
+    okIcon:{width:'28px',height:'28px',background:'#B5D4A8',color:'#1E3530',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:'14px',flexShrink:0},
+    switchText:{textAlign:'center',fontSize:'13px',color:'#9FB5A8',marginTop:'16px'},
+    switchLink:{background:'none',border:'none',cursor:'pointer',fontSize:'13px',color:'#B5D4A8',fontFamily:FB,fontWeight:600,padding:0,textDecoration:'underline'},
+    footerNote:{fontSize:'12px',color:'#9FB5A8',marginTop:'8px'}
+  };
 
   return(
-    <div style={{fontFamily:"'Instrument Sans','Helvetica Neue',sans-serif",background:'#F2E8D9',minHeight:'100vh',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'32px 20px'}}>
-      <div style={{maxWidth:'420px',width:'100%'}}>
+    <div style={s.page}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap');`}</style>
 
-        {/* Back */}
-        <button onClick={onBack} style={{background:'none',border:'none',color:'#A08060',fontSize:'14px',cursor:'pointer',padding:'0 0 24px',display:'flex',alignItems:'center',gap:'6px'}}>← Back</button>
+      <button onClick={onBack} style={s.back}>← Back</button>
 
-        {/* Brand */}
-        <div style={{textAlign:'center',marginBottom:'36px'}}>
-          <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'28px',fontWeight:600,color:'#1C1208',marginBottom:'4px'}}>DivvyDup</p>
-          <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontStyle:'italic',fontSize:'14px',color:'#A08060'}}>The Book, reimagined.</p>
-        </div>
+      <div style={s.heroWrap}>
+        <h1 style={s.heroTitle}>DivvyDup</h1>
+        <p style={s.heroTagline}>The Book, reimagined.</p>
+      </div>
 
+      <div style={s.card}>
         {initialError&&(
-          <div style={{background:'#FFF8E6',border:'1.5px solid #C4820F',borderRadius:'12px',padding:'16px 20px',marginBottom:'20px',textAlign:'center'}}>
-            <p style={{fontSize:'15px',fontWeight:600,color:'#7A3E14',marginBottom:'6px'}}>That confirmation link has expired.</p>
-            <p style={{fontSize:'13px',color:'#5C4428',lineHeight:1.6,fontWeight:300}}>Sign in below and we'll send you a fresh one — or create a new account if you haven't confirmed yet.</p>
+          <div style={s.noticeBox}>
+            <div style={s.noticeTitle}>That confirmation link has expired.</div>
+            <div style={s.noticeText}>Sign in below and we'll send you a fresh one — or create a new account if you haven't confirmed yet.</div>
           </div>
         )}
 
         {done?(
-          <div style={{background:'#fff',border:'1px solid #E4D7C4',borderRadius:'18px',padding:'36px 32px',textAlign:'center'}}>
-            <div style={{fontSize:'32px',marginBottom:'16px'}}>📬</div>
-            <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'22px',fontWeight:600,color:'#1C1208',marginBottom:'12px'}}>Check your email</h2>
-            <p style={{fontSize:'15px',color:'#5C4428',lineHeight:1.7,fontWeight:300}}>We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account, then come back here to sign in.</p>
-            <button style={{...ghost,marginTop:'24px'}} onClick={()=>{setMode('signin');setDone(false);setPassword('');setConfirm('');}}>Go to Sign In</button>
-          </div>
-        ):(
-          <div style={{background:'#fff',border:'1px solid #E4D7C4',borderRadius:'18px',padding:'36px 32px'}}>
-
-            {/* Tabs */}
-            <div style={{display:'flex',background:'#F2E8D9',borderRadius:'999px',padding:'4px',marginBottom:'28px'}}>
-              {['signup','signin'].map(m=>(
-                <button key={m} onClick={()=>{setMode(m);setError('');}} style={{flex:1,background:mode===m?'#fff':'transparent',border:'none',borderRadius:'999px',padding:'9px',fontFamily:"'Instrument Sans',sans-serif",fontSize:'14px',fontWeight:mode===m?600:400,color:mode===m?'#1C1208':'#A08060',cursor:'pointer',transition:'all .15s',boxShadow:mode===m?'0 1px 4px rgba(0,0,0,.1)':'none'}}>
-                  {m==='signup'?'Create Account':'Sign In'}
-                </button>
-              ))}
-            </div>
-
-            {/* Fields */}
-            <div style={{display:'flex',flexDirection:'column',gap:'14px'}}>
+          <>
+            <div style={s.okBox}>
+              <div style={s.okIcon}>✓</div>
               <div>
-                <label style={{display:'block',fontSize:'12px',fontWeight:600,color:'#5C4428',marginBottom:'6px',letterSpacing:'0.05em'}}>Email</label>
-                <input style={inp} type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com" autoComplete="email"/>
+                <strong>Check your email</strong>
+                <p style={{marginTop:'6px',fontWeight:400}}>
+                  We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
+                </p>
               </div>
-              <div>
-                <label style={{display:'block',fontSize:'12px',fontWeight:600,color:'#5C4428',marginBottom:'6px',letterSpacing:'0.05em'}}>Password</label>
-                <input style={inp} type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder={mode==='signup'?'At least 6 characters':'Your password'} autoComplete={mode==='signup'?'new-password':'current-password'}/>
-              </div>
-              {mode==='signup'&&(
-                <div>
-                  <label style={{display:'block',fontSize:'12px',fontWeight:600,color:'#5C4428',marginBottom:'6px',letterSpacing:'0.05em'}}>Confirm Password</label>
-                  <input style={inp} type="password" value={confirm} onChange={e=>setConfirm(e.target.value)} placeholder="Repeat password" autoComplete="new-password"/>
-                </div>
-              )}
             </div>
-
-            {error&&<div style={{marginTop:'14px',background:'#FFE5E8',border:'1px solid #9B2335',borderRadius:'10px',padding:'10px 14px',fontSize:'13px',color:'#9B2335'}}>{error}</div>}
-
-            <button style={{...btn,marginTop:'22px',opacity:loading?.6:1}} onClick={mode==='signup'?handleSignUp:handleSignIn} disabled={loading}>
-              {loading?'Please wait…':mode==='signup'?'Create My Account':'Sign In to My Ledger'}
-            </button>
-
-            <p style={{textAlign:'center',marginTop:'16px',fontSize:'13px',color:'#A08060',fontWeight:300}}>
-              {mode==='signup'?'Already have an account? ':'New here? '}
-              <button onClick={()=>{setMode(mode==='signup'?'signin':'signup');setError('');}} style={{background:'none',border:'none',color:'#7A3E14',fontSize:'13px',fontWeight:600,cursor:'pointer',textDecoration:'underline',padding:0}}>
-                {mode==='signup'?'Sign in':'Create one'}
-              </button>
+            <p style={s.switchText}>
+              Already confirmed?{' '}
+              <button style={s.switchLink} onClick={()=>{setMode('signin');setDone(false);setPassword('');setConfirm('');}}>Sign in</button>
             </p>
-          </div>
-        )}
+          </>
+        ):mode==='signup'?(
+          <>
+            <h2 style={s.heading}>Create your account</h2>
+            {error&&<div style={s.errBox}>{error}</div>}
+            <form onSubmit={handleSignUp} style={s.form}>
+              <label style={s.label}>Email address</label>
+              <input style={s.input} type="email" placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus autoComplete="email"/>
 
-        <p style={{textAlign:'center',marginTop:'20px',fontSize:'12px',color:'#A08060',fontWeight:300}}>No credit card required · 3-day free trial</p>
+              <label style={s.label}>Password</label>
+              <div style={s.pwWrap}>
+                <input style={{...s.input,paddingRight:'44px'}} type={showPassword?'text':'password'} placeholder="At least 6 characters" value={password} onChange={e=>setPassword(e.target.value)} required autoComplete="new-password"/>
+                <button type="button" style={s.eyeBtn} onClick={()=>setShowPassword(v=>!v)} aria-label={showPassword?'Hide password':'Show password'}>
+                  {showPassword?'🙈':'👁️'}
+                </button>
+              </div>
+
+              <label style={s.label}>Confirm password</label>
+              <div style={s.pwWrap}>
+                <input style={{...s.input,paddingRight:'44px'}} type={showConfirm?'text':'password'} placeholder="••••••••" value={confirm} onChange={e=>setConfirm(e.target.value)} required autoComplete="new-password"/>
+                <button type="button" style={s.eyeBtn} onClick={()=>setShowConfirm(v=>!v)} aria-label={showConfirm?'Hide password':'Show password'}>
+                  {showConfirm?'🙈':'👁️'}
+                </button>
+              </div>
+
+              <button type="submit" style={{...s.btn,opacity:loading?.6:1}} disabled={loading}>
+                {loading?'Creating account…':'Create account'}
+              </button>
+            </form>
+            <p style={s.switchText}>
+              Already have an account?{' '}
+              <button style={s.switchLink} onClick={()=>{setMode('signin');setError('');}}>Sign in</button>
+            </p>
+          </>
+        ):(
+          <>
+            <h2 style={s.heading}>Welcome back</h2>
+            {error&&<div style={s.errBox}>{error}</div>}
+            <form onSubmit={handleSignIn} style={s.form}>
+              <label style={s.label}>Email address</label>
+              <input style={s.input} type="email" placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus autoComplete="email"/>
+
+              <label style={s.label}>Password</label>
+              <div style={s.pwWrap}>
+                <input style={{...s.input,paddingRight:'44px'}} type={showPassword?'text':'password'} placeholder="••••••••" value={password} onChange={e=>setPassword(e.target.value)} required autoComplete="current-password"/>
+                <button type="button" style={s.eyeBtn} onClick={()=>setShowPassword(v=>!v)} aria-label={showPassword?'Hide password':'Show password'}>
+                  {showPassword?'🙈':'👁️'}
+                </button>
+              </div>
+
+              <button type="submit" style={{...s.btn,opacity:loading?.6:1}} disabled={loading}>
+                {loading?'Signing in…':'Sign in'}
+              </button>
+            </form>
+            <p style={s.switchText}>
+              Don't have an account?{' '}
+              <button style={s.switchLink} onClick={()=>{setMode('signup');setError('');}}>Create one</button>
+            </p>
+          </>
+        )}
       </div>
+
+      <p style={s.footerNote}>No credit card required · 3-day free trial</p>
     </div>
   );
 }
