@@ -333,8 +333,22 @@ function supportsSubitems(id){return SUBITEMS_PAGES.some(s=>id.includes(s)||id==
 // ─── STORAGE ───────────────────────────────────────────────
 const STORAGE_KEY = 'famLedger';
 const LEGACY_KEYS = [STORAGE_KEY,'famLedger_v5','famLedger_v4','famLedger_v3','famLedger_v2','famLedger_v1','divvydup_ledger_v5'];
+const SUPABASE_KEY_PREFIX = 'sb-bvuzrhmqcrepsevkdutt-';
 function saveState(s){try{const d={...s,_version:5};localStorage.setItem(STORAGE_KEY,JSON.stringify(d));}catch(e){}}
-function clearStoredState(){for(const k of LEGACY_KEYS){try{localStorage.removeItem(k);}catch(e){}}}
+function clearSupabaseAuth(){
+  try{
+    const toRemove=[];
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i);
+      if(k && k.startsWith(SUPABASE_KEY_PREFIX)) toRemove.push(k);
+    }
+    for(const k of toRemove){try{localStorage.removeItem(k);}catch(e){}}
+  }catch(e){}
+}
+function clearStoredState(){
+  for(const k of LEGACY_KEYS){try{localStorage.removeItem(k);}catch(e){}}
+  clearSupabaseAuth();
+}
 function loadState(){
   try{
     const keys=[STORAGE_KEY,'famLedger_v5','famLedger_v4','famLedger_v3','famLedger_v2','famLedger_v1'];
