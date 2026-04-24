@@ -28,7 +28,7 @@ function LandingPage({onGetStarted,onSignIn}){
 
       {/* HERO */}
       <section style={{background:C.bg,padding:'100px 32px 80px',textAlign:'center',position:'relative',overflow:'hidden'}}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/hero-background.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.2, filter: 'blur(8px)', zIndex: 0 }} />
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/hero-background.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.2, filter: 'blur(3px)', zIndex: 0 }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <h1 style={{fontFamily:fh,fontSize:'clamp(56px,9vw,104px)',fontWeight:800,color:C.cream,lineHeight:1,marginBottom:'24px',letterSpacing:'-0.015em'}}>Your money,<br/>finally organized.</h1>
           <p style={{fontFamily:fh,fontWeight:500,fontSize:'22px',color:C.sage,marginBottom:'28px'}}>The Book, reimagined.</p>
