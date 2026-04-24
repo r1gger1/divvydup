@@ -27,15 +27,18 @@ function LandingPage({onGetStarted,onSignIn}){
       </nav>
 
       {/* HERO */}
-      <section style={{background:C.bg,padding:'100px 32px 80px',textAlign:'center'}}>
-        <h1 style={{fontFamily:fh,fontSize:'clamp(56px,9vw,104px)',fontWeight:800,color:C.cream,lineHeight:1,marginBottom:'24px',letterSpacing:'-0.015em'}}>Your money,<br/>finally organized.</h1>
-        <p style={{fontFamily:fh,fontWeight:500,fontSize:'22px',color:C.sage,marginBottom:'28px'}}>The Book, reimagined.</p>
-        <p style={{fontSize:'17px',color:C.white,maxWidth:'600px',margin:'0 auto 44px',lineHeight:1.7,fontWeight:400}}>DivvyDup brings the quiet discipline of a paper ledger into the digital age — envelope budgeting, paycheck distribution, and a no-nonsense advisor named Floyd. No spreadsheets. No guesswork.</p>
-        <div style={{display:'flex',gap:'14px',justifyContent:'center',flexWrap:'wrap'}}>
-          <button onClick={onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'14px 36px',fontFamily:fb,fontSize:'15px',fontWeight:600,cursor:'pointer'}}>Start free trial</button>
-          <a href="#features" style={{background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'13px 34px',fontSize:'15px',textDecoration:'none',display:'inline-block'}}>See how it works</a>
+      <section style={{background:C.bg,padding:'100px 32px 80px',textAlign:'center',position:'relative',overflow:'hidden'}}>
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/hero-background.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.2, filter: 'blur(8px)', zIndex: 0 }} />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <h1 style={{fontFamily:fh,fontSize:'clamp(56px,9vw,104px)',fontWeight:800,color:C.cream,lineHeight:1,marginBottom:'24px',letterSpacing:'-0.015em'}}>Your money,<br/>finally organized.</h1>
+          <p style={{fontFamily:fh,fontWeight:500,fontSize:'22px',color:C.sage,marginBottom:'28px'}}>The Book, reimagined.</p>
+          <p style={{fontSize:'17px',color:C.white,maxWidth:'600px',margin:'0 auto 44px',lineHeight:1.7,fontWeight:400}}>DivvyDup brings the quiet discipline of a paper ledger into the digital age — envelope budgeting, paycheck distribution, and a no-nonsense advisor named Floyd. No spreadsheets. No guesswork.</p>
+          <div style={{display:'flex',gap:'14px',justifyContent:'center',flexWrap:'wrap'}}>
+            <button onClick={onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'14px 36px',fontFamily:fb,fontSize:'15px',fontWeight:600,cursor:'pointer'}}>Start free trial</button>
+            <a href="#features" style={{background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'13px 34px',fontSize:'15px',textDecoration:'none',display:'inline-block'}}>See how it works</a>
+          </div>
+          <p style={{marginTop:'20px',fontSize:'13px',color:C.muted}}>No credit card required · 4 pages · 2 entries each · 3 days free</p>
         </div>
-        <p style={{marginTop:'20px',fontSize:'13px',color:C.muted}}>No credit card required · 4 pages · 2 entries each · 3 days free</p>
       </section>
 
       {/* ORIGIN */}
