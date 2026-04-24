@@ -55,7 +55,7 @@ function LandingPage({onGetStarted,onSignIn}){
           </div>
           <div>
             <h2 style={{fontFamily:fh,fontSize:'clamp(32px,4vw,42px)',fontWeight:700,color:C.cream,marginBottom:'18px',lineHeight:1.15,letterSpacing:'-0.01em'}}>Born from a ledger kept for sixty years.</h2>
-            <p style={{fontSize:'15.5px',color:C.white,lineHeight:1.8,fontWeight:400}}>Tony's father tracked every dollar in a paper columnar ledger — methodical, honest, and unfailing. That book was the family's financial backbone for six decades. DivvyDup is its digital heir: the same discipline, without the pencil.</p>
+            <p style={{fontSize:'15.5px',color:C.white,lineHeight:1.8,fontWeight:400,textAlign:'center'}}>Tony's father still tracks every dollar in a paper columnar ledger — methodical, honest, and unfailing. That book was the family's financial backbone for six decades. DivvyDup is its digital heir: the same discipline, without the pencil.</p>
           </div>
         </div>
       </section>
