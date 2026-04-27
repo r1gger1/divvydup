@@ -4,7 +4,7 @@ import { supabase } from './supabase';
 Chart.register(...registerables);
 
 // ─── LANDING PAGE ───────────────────────────────────────────
-function LandingPage({onGetStarted,onSignIn}){
+function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccount}){
   const C = { bg:'#1E3530', bgAlt:'#243D37', black:'#0D1C18', sage:'#B5D4A8', sageHover:'#A2C295', cream:'#E8E2C8', white:'#FFFFFF', muted:'#9FB5A8', border:'rgba(255,255,255,0.08)', borderStrong:'rgba(255,255,255,0.14)' };
   const fh = "'Fraunces','Playfair Display',Georgia,serif";
   const fb = "'Inter','Helvetica Neue',sans-serif";
@@ -21,7 +21,7 @@ function LandingPage({onGetStarted,onSignIn}){
             <a href="#features" style={{color:C.cream,fontSize:'14px',textDecoration:'none'}}>Features</a>
             <a href="#pricing" style={{color:C.cream,fontSize:'14px',textDecoration:'none'}}>Pricing</a>
             <button onClick={onSignIn} style={{background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'9px 20px',fontFamily:fb,fontSize:'14px',fontWeight:500,cursor:'pointer',marginRight:'8px'}}>Sign In</button>
-            <button onClick={onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'10px 22px',fontFamily:fb,fontSize:'14px',fontWeight:600,cursor:'pointer'}}>Start Free Trial</button>
+            <button onClick={showAddToAccount?onAddToAccount:onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'10px 22px',fontFamily:fb,fontSize:'14px',fontWeight:600,cursor:'pointer'}}>{showAddToAccount?'Add to My Account':'Start Free Trial'}</button>
           </div>
         </div>
       </nav>
@@ -40,7 +40,7 @@ function LandingPage({onGetStarted,onSignIn}){
           <p style={{fontFamily:fh,fontWeight:700,fontSize:'clamp(28px,4vw,42px)',color:C.cream,marginBottom:'20px',letterSpacing:'-0.02em',lineHeight:1.1}}>Every dollar gets a job.</p>
           <p style={{fontSize:'17px',color:C.white,maxWidth:'600px',margin:'0 auto 44px',lineHeight:1.7,fontWeight:400}}>Most people look at their bank balance and hope there's enough left when the bills come. We do it different. We give every dollar a job before it even hits your account — your rent dollar knows it's rent, your grocery dollar knows it's groceries, your emergency fund dollar sits there until you need it. No more guessing. No more scrambling at the end of the month. Every dollar has a purpose, and every purpose gets paid.</p>
           <div style={{display:'flex',gap:'14px',justifyContent:'center',flexWrap:'wrap'}}>
-            <button onClick={onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'14px 36px',fontFamily:fb,fontSize:'15px',fontWeight:600,cursor:'pointer'}}>Start free trial</button>
+            <button onClick={showAddToAccount?onAddToAccount:onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'14px 36px',fontFamily:fb,fontSize:'15px',fontWeight:600,cursor:'pointer'}}>{showAddToAccount?'Add to My Account':'Start free trial'}</button>
             <a href="#features" style={{background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'13px 34px',fontSize:'15px',textDecoration:'none',display:'inline-block'}}>See how it works</a>
           </div>
           <p style={{marginTop:'20px',fontSize:'13px',color:C.muted}}>No credit card required · 4 pages · 2 entries each · 3 days free</p>
@@ -459,10 +459,10 @@ const DIVVYDUP_PRODUCT_ID = '9dfa6eed-0d63-4037-b71a-24531f542437';
 async function checkFullAccess(userId){
   try{
     const [{data:profile},{data:access}] = await Promise.all([
-      supabase.from('profiles').select('is_admin').eq('id',userId).maybeSingle(),
+      supabase.from('profiles').select('is_admin, has_divvydup').eq('id',userId).maybeSingle(),
       supabase.from('user_product_access').select('product_id').eq('user_id',userId).eq('product_id',DIVVYDUP_PRODUCT_ID).maybeSingle()
     ]);
-    return !!(profile?.is_admin || access);
+    return !!(profile?.is_admin || profile?.has_divvydup || access);
   }catch(e){return false;}
 }
 
