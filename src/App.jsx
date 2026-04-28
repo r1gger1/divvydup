@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Chart, registerables } from 'chart.js';
 import { supabase } from './supabase';
+import StandardModal from './components/StandardModal';
+import SettingsView from './components/Settings';
+import FeedbackModal from './components/FeedbackModal';
 Chart.register(...registerables);
 
 // ─── LANDING PAGE ───────────────────────────────────────────
@@ -21,7 +24,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
             <a href="#features" style={{color:C.cream,fontSize:'14px',textDecoration:'none'}}>Features</a>
             <a href="#pricing" style={{color:C.cream,fontSize:'14px',textDecoration:'none'}}>Pricing</a>
             <button onClick={onSignIn} style={{background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'9px 20px',fontFamily:fb,fontSize:'14px',fontWeight:500,cursor:'pointer',marginRight:'8px'}}>Sign In</button>
-            <button onClick={showAddToAccount?onAddToAccount:onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'10px 22px',fontFamily:fb,fontSize:'14px',fontWeight:600,cursor:'pointer'}}>{showAddToAccount?'Add to My Account':'Start Free Trial'}</button>
+            <button onClick={showAddToAccount?onAddToAccount:onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'10px 22px',fontFamily:fb,fontSize:'14px',fontWeight:600,cursor:'pointer'}}>{showAddToAccount?'Add to My Account':'Get Started'}</button>
           </div>
         </div>
       </nav>
@@ -40,10 +43,10 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
           <p style={{fontFamily:fh,fontWeight:700,fontSize:'clamp(28px,4vw,42px)',color:C.cream,marginBottom:'20px',letterSpacing:'-0.02em',lineHeight:1.1}}>Every dollar gets a job.</p>
           <p style={{fontSize:'17px',color:C.white,maxWidth:'600px',margin:'0 auto 44px',lineHeight:1.7,fontWeight:400}}>Most people look at their bank balance and hope there's enough left when the bills come. We do it different. We give every dollar a job before it even hits your account — your rent dollar knows it's rent, your grocery dollar knows it's groceries, your emergency fund dollar sits there until you need it. No more guessing. No more scrambling at the end of the month. Every dollar has a purpose, and every purpose gets paid.</p>
           <div style={{display:'flex',gap:'14px',justifyContent:'center',flexWrap:'wrap'}}>
-            <button onClick={showAddToAccount?onAddToAccount:onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'14px 36px',fontFamily:fb,fontSize:'15px',fontWeight:600,cursor:'pointer'}}>{showAddToAccount?'Add to My Account':'Start free trial'}</button>
+            <button onClick={showAddToAccount?onAddToAccount:onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'14px 36px',fontFamily:fb,fontSize:'15px',fontWeight:600,cursor:'pointer'}}>{showAddToAccount?'Add to My Account':'Get Started'}</button>
             <a href="#features" style={{background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'13px 34px',fontSize:'15px',textDecoration:'none',display:'inline-block'}}>See how it works</a>
           </div>
-          <p style={{marginTop:'20px',fontSize:'13px',color:C.muted}}>No credit card required · 4 pages · 2 entries each · 3 days free</p>
+          <p style={{marginTop:'20px',fontSize:'13px',color:C.muted}}>Credit card required · Cancel anytime</p>
         </div>
       </section>
 
@@ -141,7 +144,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
       {/* FOOTER CTA */}
       <section style={{background:C.bg,padding:'66px 32px',textAlign:'center'}}>
         <h2 style={{fontFamily:fh,fontSize:'clamp(52px,7vw,92px)',fontWeight:700,color:C.cream,marginBottom:'32px',letterSpacing:'-0.015em'}}>Ready to open The Book?</h2>
-        <button onClick={onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'16px 44px',fontFamily:fb,fontSize:'16px',fontWeight:600,cursor:'pointer'}}>Start free trial</button>
+        <button onClick={onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'16px 44px',fontFamily:fb,fontSize:'16px',fontWeight:600,cursor:'pointer'}}>Get Started</button>
         <p style={{marginTop:'16px',fontSize:'14px',color:C.muted}}>No card, no commitment.</p>
       </section>
 
@@ -161,7 +164,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
 
 // ─── AUTH SCREEN ───────────────────────────────────────────
 function AuthScreen({onAuth,onBack,initialError,initialMode}){
-  const [mode,setMode]=useState(initialMode==='signin'?'signin':'signup'); // 'signup'|'signin'
+  const [mode,setMode]=useState(initialMode==='signin'?'signin':'signup');
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
   const [confirm,setConfirm]=useState('');
@@ -223,104 +226,89 @@ function AuthScreen({onAuth,onBack,initialError,initialMode}){
     footerNote:{fontSize:'12px',color:'#9FB5A8',marginTop:'8px'}
   };
 
+  const title = done ? 'Check your email' : mode==='signup' ? 'Create your account' : 'Welcome back';
   return(
-    <div style={s.page}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap');`}</style>
-
-      <button onClick={onBack} style={s.back}>← Back</button>
-
-      <div style={s.heroWrap}>
-        <h1 style={s.heroTitle}>DivvyDup</h1>
-        <p style={s.heroTagline}>The Book, reimagined.</p>
-      </div>
-
-      <div style={s.card}>
+    <StandardModal isOpen={true} onClose={onBack} title={title} maxWidth="460px">
         {initialError&&(
-          <div style={s.noticeBox}>
-            <div style={s.noticeTitle}>That confirmation link has expired.</div>
-            <div style={s.noticeText}>Sign in below and we'll send you a fresh one — or create a new account if you haven't confirmed yet.</div>
+          <div className="standard-modal-info" style={{marginBottom:16}}>
+            <strong>That confirmation link has expired.</strong>{' '}
+            Sign in below and we'll send you a fresh one — or create a new account if you haven't confirmed yet.
           </div>
         )}
 
         {done?(
           <>
-            <div style={s.okBox}>
-              <div style={s.okIcon}>✓</div>
+            <div className="standard-modal-info" style={{display:'flex',gap:14,alignItems:'flex-start'}}>
+              <div style={{width:28,height:28,background:'#B5D4A8',color:'#1E3530',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:14,flexShrink:0}}>✓</div>
               <div>
-                <strong>Check your email</strong>
-                <p style={{marginTop:'6px',fontWeight:400}}>
-                  We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
-                </p>
+                <strong>Confirmation sent</strong>
+                <p style={{marginTop:4,fontWeight:400}}>We sent a link to <strong>{email}</strong>. Click it to activate your account.</p>
               </div>
             </div>
-            <p style={s.switchText}>
+            <p style={{textAlign:'center',marginTop:16}}>
               Already confirmed?{' '}
-              <button style={s.switchLink} onClick={()=>{setMode('signin');setDone(false);setPassword('');setConfirm('');}}>Sign in</button>
+              <a href="#" onClick={e=>{e.preventDefault();setMode('signin');setDone(false);setPassword('');setConfirm('');}}>Sign in</a>
             </p>
           </>
         ):mode==='signup'?(
           <>
-            <h2 style={s.heading}>Create your account</h2>
-            {error&&<div style={s.errBox}>{error}</div>}
-            <form onSubmit={handleSignUp} style={s.form}>
-              <label style={s.label}>Email address</label>
-              <input style={s.input} type="email" placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus autoComplete="email"/>
+            {error&&<div className="standard-modal-error">{error}</div>}
+            <form onSubmit={handleSignUp}>
+              <label>Email address</label>
+              <input type="email" placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus autoComplete="email"/>
 
-              <label style={s.label}>Password</label>
-              <div style={s.pwWrap}>
-                <input style={{...s.input,paddingRight:'44px'}} type={showPassword?'text':'password'} placeholder="At least 6 characters" value={password} onChange={e=>setPassword(e.target.value)} required autoComplete="new-password"/>
-                <button type="button" style={s.eyeBtn} onClick={()=>setShowPassword(v=>!v)} aria-label={showPassword?'Hide password':'Show password'}>
+              <label>Password</label>
+              <div style={{position:'relative',display:'flex',alignItems:'center'}}>
+                <input type={showPassword?'text':'password'} placeholder="At least 6 characters" value={password} onChange={e=>setPassword(e.target.value)} required autoComplete="new-password" style={{paddingRight:44}}/>
+                <button type="button" onClick={()=>setShowPassword(v=>!v)} style={{position:'absolute',right:10,background:'none',border:'none',cursor:'pointer',fontSize:16,color:'rgba(255,255,255,0.5)',padding:4}}>
                   {showPassword?'🙈':'👁️'}
                 </button>
               </div>
 
-              <label style={s.label}>Confirm password</label>
-              <div style={s.pwWrap}>
-                <input style={{...s.input,paddingRight:'44px'}} type={showConfirm?'text':'password'} placeholder="••••••••" value={confirm} onChange={e=>setConfirm(e.target.value)} required autoComplete="new-password"/>
-                <button type="button" style={s.eyeBtn} onClick={()=>setShowConfirm(v=>!v)} aria-label={showConfirm?'Hide password':'Show password'}>
+              <label>Confirm password</label>
+              <div style={{position:'relative',display:'flex',alignItems:'center'}}>
+                <input type={showConfirm?'text':'password'} placeholder="••••••••" value={confirm} onChange={e=>setConfirm(e.target.value)} required autoComplete="new-password" style={{paddingRight:44}}/>
+                <button type="button" onClick={()=>setShowConfirm(v=>!v)} style={{position:'absolute',right:10,background:'none',border:'none',cursor:'pointer',fontSize:16,color:'rgba(255,255,255,0.5)',padding:4}}>
                   {showConfirm?'🙈':'👁️'}
                 </button>
               </div>
 
-              <button type="submit" style={{...s.btn,opacity:loading?.6:1}} disabled={loading}>
+              <button type="submit" className="btn-primary" disabled={loading}>
                 {loading?'Creating account…':'Create account'}
               </button>
             </form>
-            <p style={s.switchText}>
+            <p style={{textAlign:'center',marginTop:16}}>
               Already have an account?{' '}
-              <button style={s.switchLink} onClick={()=>{setMode('signin');setError('');}}>Sign in</button>
+              <a href="#" onClick={e=>{e.preventDefault();setMode('signin');setError('');}}>Sign in</a>
             </p>
+            <p style={{textAlign:'center',fontSize:11,color:'rgba(255,255,255,0.4)',marginTop:8}}>Credit card required · Cancel anytime</p>
           </>
         ):(
           <>
-            <h2 style={s.heading}>Welcome back</h2>
-            {error&&<div style={s.errBox}>{error}</div>}
-            <form onSubmit={handleSignIn} style={s.form}>
-              <label style={s.label}>Email address</label>
-              <input style={s.input} type="email" placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus autoComplete="email"/>
+            {error&&<div className="standard-modal-error">{error}</div>}
+            <form onSubmit={handleSignIn}>
+              <label>Email address</label>
+              <input type="email" placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus autoComplete="email"/>
 
-              <label style={s.label}>Password</label>
-              <div style={s.pwWrap}>
-                <input style={{...s.input,paddingRight:'44px'}} type={showPassword?'text':'password'} placeholder="••••••••" value={password} onChange={e=>setPassword(e.target.value)} required autoComplete="current-password"/>
-                <button type="button" style={s.eyeBtn} onClick={()=>setShowPassword(v=>!v)} aria-label={showPassword?'Hide password':'Show password'}>
+              <label>Password</label>
+              <div style={{position:'relative',display:'flex',alignItems:'center'}}>
+                <input type={showPassword?'text':'password'} placeholder="••••••••" value={password} onChange={e=>setPassword(e.target.value)} required autoComplete="current-password" style={{paddingRight:44}}/>
+                <button type="button" onClick={()=>setShowPassword(v=>!v)} style={{position:'absolute',right:10,background:'none',border:'none',cursor:'pointer',fontSize:16,color:'rgba(255,255,255,0.5)',padding:4}}>
                   {showPassword?'🙈':'👁️'}
                 </button>
               </div>
 
-              <button type="submit" style={{...s.btn,opacity:loading?.6:1}} disabled={loading}>
+              <button type="submit" className="btn-primary" disabled={loading}>
                 {loading?'Signing in…':'Sign in'}
               </button>
             </form>
-            <p style={s.switchText}>
+            <p style={{textAlign:'center',marginTop:16}}>
               Don't have an account?{' '}
-              <button style={s.switchLink} onClick={()=>{setMode('signup');setError('');}}>Create one</button>
+              <a href="#" onClick={e=>{e.preventDefault();setMode('signup');setError('');}}>Create one</a>
             </p>
           </>
         )}
-      </div>
-
-      <p style={s.footerNote}>No credit card required · 3-day free trial</p>
-    </div>
+    </StandardModal>
   );
 }
 
@@ -544,6 +532,8 @@ export default function App() {
   const [authError, setAuthError] = useState('');
   const [authMode, setAuthMode] = useState('signup');
   const [hasFullAccess, setHasFullAccess] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isBetaTester, setIsBetaTester] = useState(false);
   const [feedbackModal, setFeedbackModal] = useState(false);
   const toastTimer = useRef(null);
   const advTimer = useRef(null);
@@ -587,6 +577,8 @@ export default function App() {
       if(session){
         setAuthSession(session);
         setHasFullAccess(await checkFullAccess(session.user.id));
+        supabase.from('profiles').select('is_admin, is_beta_tester').eq('id', session.user.id).maybeSingle()
+          .then(({ data }) => { if (data?.is_admin) setIsAdmin(true); if (data?.is_beta_tester) setIsBetaTester(true); });
         const saved = loadState();
         if(saved && saved.ready){
           setS(saved);
@@ -672,8 +664,12 @@ export default function App() {
   }
 
   if(screen==='loading') return null;
-  if(screen==='landing') return <LandingPage onGetStarted={()=>{setAuthMode('signup');setScreen('auth');}} onSignIn={()=>{setAuthMode('signin');setScreen('auth');}}/>;
-  if(screen==='auth') return <AuthScreen onAuth={async (session)=>{setAuthSession(session);setHasFullAccess(await checkFullAccess(session.user.id));const saved=loadState();if(saved&&saved.ready){setS(saved);setScreen('app');}else{setScreen('setup');}}} onBack={()=>{setAuthError('');setScreen('landing');}} initialError={authError} initialMode={authMode}/>;
+  if(screen==='landing'||screen==='auth') return (
+    <>
+      <LandingPage onGetStarted={()=>{setAuthMode('signup');setScreen('auth');}} onSignIn={()=>{setAuthMode('signin');setScreen('auth');}}/>
+      {screen==='auth'&&<AuthScreen onAuth={async (session)=>{setAuthSession(session);setHasFullAccess(await checkFullAccess(session.user.id));const saved=loadState();if(saved&&saved.ready){setS(saved);setScreen('app');}else{setScreen('setup');}}} onBack={()=>{setAuthError('');setScreen('landing');}} initialError={authError} initialMode={authMode}/>}
+    </>
+  );
   if(screen==='setup') return <SetupScreen onLaunch={launch} showToast={showToast} hasFullAccess={hasFullAccess}/>;
 
   // Trial enforcement — bypassed entirely for admins and users with product access.
@@ -688,7 +684,7 @@ export default function App() {
       {/* SUITE NAV */}
       <nav id="suite-nav">
         <div className="snav-group">
-          <button className="snav-link" onClick={() => setFeedbackModal(true)}>✏️ Beta Feedback</button>
+          {(isAdmin || isBetaTester) && <button className="snav-link" onClick={() => setFeedbackModal(true)}>✏️ Beta Feedback</button>}
           <button
             className="snav-link"
             onClick={async () => {
@@ -702,7 +698,7 @@ export default function App() {
           >
             ← StartingLine HQ Dashboard
           </button>
-          <a href="https://www.divvydup.com/settings" className="snav-link">⚙ Settings</a>
+          <button className="snav-link" onClick={() => setView('settings')}>⚙ Settings</button>
         </div>
         <div className="snav-sep"></div>
         <div className="snav-group">
@@ -778,6 +774,7 @@ export default function App() {
           {view==='dashboard' && <DashboardView S={S} updateS={updateS} setModal={setModal} onSelectPage={(id)=>{updateS(s=>({...s,activePage:id}));setView('ledger');}} advSay={advSay}/>}
           {view==='ledger' && <LedgerView S={S} updateS={updateS} activePage={activePage} pgById={pgById} showToast={showToast} advSay={advSay} setModal={setModal} trial={trial}/>}
           {view==='charts' && <ChartsView S={S}/>}
+          {view==='settings' && <SettingsView session={authSession} onSignOut={()=>{setScreen('landing');setAuthSession(null);}} S={S}/>}
         </div>
       </div>
 
@@ -790,7 +787,15 @@ export default function App() {
       {modal==='bailout' && <BailoutModal S={S} updateS={updateS} onClose={()=>setModal(null)} showToast={showToast} advSay={advSay}/>}
       {modal==='customize' && <CustomizeModal S={S} updateS={updateS} onClose={()=>setModal(null)} showToast={showToast}/>}
       {modal==='reset' && <ResetModal onClose={()=>setModal(null)} onReset={async()=>{await supabase.auth.signOut();window.location.reload();}}/>}
-      {feedbackModal && <BetaFeedbackModal onClose={()=>setFeedbackModal(false)}/>}
+      <FeedbackModal
+        isOpen={feedbackModal}
+        onClose={()=>setFeedbackModal(false)}
+        productName="DivvyDup"
+        onSubmit={async (data) => {
+          const { error } = await supabase.from('feedback').insert({ user_id: authSession?.user?.id, product: 'DivvyDup', context: data.context, issues: data.issues, ideas: data.ideas });
+          if (error) throw error;
+        }}
+      />
 
       {/* ADVISOR */}
       <div id="advisor">
@@ -803,68 +808,6 @@ export default function App() {
       <div className={`toast${toast.show?' show':''} ${toast.cls}`}>{toast.msg}</div>
     </div>
 
-    {/* FEEDBACK MODAL */}
-    {feedbackModal && (
-      <div 
-        style={{
-          position:'fixed',
-          inset:0,
-          background:'rgba(14,26,14,.82)',
-          zIndex:500,
-          display:'flex',
-          alignItems:'center',
-          justifyContent:'center',
-          padding:'20px'
-        }}
-        onClick={(e) => {
-          if (e.target === e.currentTarget) setFeedbackModal(false);
-        }}
-      >
-        <div className="modal-book" style={{maxWidth:'520px'}}>
-          <div className="modal-header">
-            <h3>✏️ Beta Feedback</h3>
-            <p>Help us improve DivvyDup</p>
-          </div>
-          <div className="modal-body">
-            <p style={{fontSize:'.88rem',color:'var(--ink2)',lineHeight:1.65,marginBottom:'16px'}}>
-              We'd love to hear your thoughts on DivvyDup. What's working? What could be better? What features would you like to see?
-            </p>
-            <textarea 
-              id="feedback-text"
-              className="modal-input"
-              placeholder="Share your feedback here..." 
-              style={{
-                width:'100%',
-                minHeight:'140px',
-                resize:'vertical',
-                fontSize:'.88rem',
-                lineHeight:1.6,
-                padding:'12px'
-              }}
-            />
-          </div>
-          <div className="modal-footer">
-            <button className="btn-cancel" onClick={() => setFeedbackModal(false)}>Cancel</button>
-            <button 
-              className="btn-ok" 
-              onClick={() => {
-                const feedback = document.getElementById('feedback-text').value.trim();
-                if (!feedback) {
-                  alert('Please enter your feedback before submitting.');
-                  return;
-                }
-                const subject = encodeURIComponent('DivvyDup Beta Feedback');
-                const body = encodeURIComponent(feedback);
-                window.location.href = `mailto:hello@startinglinehq.com?subject=${subject}&body=${body}`;
-                setFeedbackModal(false);
-              }}
-            >
-              Send Feedback
-            </button>
-          </div>
-        </div>
-      </div>
-    )}
     </>
   );
 }
