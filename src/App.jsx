@@ -177,9 +177,12 @@ function AuthScreen({onAuth,onBack,initialError,initialMode}){
     if(password.length<6)return setError('Password must be at least 6 characters.');
     if(password!==confirm)return setError('Passwords do not match.');
     setError('');setLoading(true);
-    const{error:err}=await supabase.auth.signUp({email:email.trim(),password});
+    const{data,error:err}=await supabase.auth.signUp({email:email.trim(),password});
     setLoading(false);
     if(err)return setError(err.message);
+    if(data?.user){
+      await supabase.from('profiles').update({has_divvydup:true}).eq('id',data.user.id);
+    }
     setDone(true);
   }
 
