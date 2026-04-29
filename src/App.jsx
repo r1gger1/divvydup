@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { Compass, CalendarCheck, ArrowLeftRight, PiggyBank, MessageCircle, LayoutDashboard } from 'lucide-react';
 import { Chart, registerables } from 'chart.js';
 import { supabase } from './supabase';
 import StandardModal from './components/StandardModal';
@@ -70,19 +71,21 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
         <h2 style={{fontFamily:fh,fontSize:'clamp(42px,5.5vw,68px)',fontWeight:700,textAlign:'center',marginBottom:'64px',color:C.cream,lineHeight:1.05,letterSpacing:'-0.015em'}}>Everything you need to stay ahead of your money</h2>
         <div style={{maxWidth:'1200px',margin:'0 auto',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))',gap:'24px'}}>
           {[
-            {title:"Know where your money is going",desc:"Every dollar gets assigned before it's spent. No guessing, no surprises.",featured:true},
-            {title:"Stop juggling bills every month",desc:"Your paycheck is split so rent, groceries, and everything else are already covered.",featured:true,highlight:true},
-            {title:"Move money without losing control",desc:"Move money between pages without losing track. See the impact before anything changes."},
-            {title:"Actually build savings",desc:"Set a goal and watch it grow. No hoping there's money left — it's already reserved."},
-            {title:"A voice that keeps you honest",desc:"Simple, direct guidance when you need it. Quiet when you don't."},
-            {title:"Always know where you stand",desc:"Totals, balances, and progress — always current, never buried."},
-          ].map(f=>(
+            {title:"Know where your money is going",desc:"Every dollar gets assigned before it's spent. No guessing, no surprises.",featured:true,icon:Compass},
+            {title:"Stop juggling bills every month",desc:"Your paycheck is split so rent, groceries, and everything else are already covered.",featured:true,highlight:true,icon:CalendarCheck},
+            {title:"Move money without losing control",desc:"Move money between pages without losing track. See the impact before anything changes.",icon:ArrowLeftRight},
+            {title:"Actually build savings",desc:"Set a goal and watch it grow. No hoping there's money left — it's already reserved.",icon:PiggyBank},
+            {title:"A voice that keeps you honest",desc:"Simple, direct guidance when you need it. Quiet when you don't.",icon:MessageCircle},
+            {title:"Always know where you stand",desc:"Totals, balances, and progress — always current, never buried.",icon:LayoutDashboard},
+          ].map(f=>{const Icon=f.icon;return(
             <div key={f.title} style={{background:f.highlight ? 'rgba(181,212,168,0.07)' : C.bgAlt,border:`${f.highlight ? '1.5px' : '1px'} solid ${f.highlight ? 'rgba(181,212,168,0.45)' : f.featured ? 'rgba(181,212,168,0.3)' : C.border}`,borderRadius:'20px',padding:'32px 28px'}}>
-              <div style={{width:'44px',height:'44px',borderRadius:'12px',background:f.highlight ? 'rgba(181,212,168,0.32)' : f.featured ? 'rgba(181,212,168,0.26)' : 'rgba(181,212,168,0.18)',marginBottom:'20px'}}></div>
+              <div style={{width:'44px',height:'44px',borderRadius:'12px',background:f.highlight ? 'rgba(181,212,168,0.32)' : f.featured ? 'rgba(181,212,168,0.26)' : 'rgba(181,212,168,0.18)',marginBottom:'20px',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <Icon size={22} strokeWidth={1.5} color="rgba(181,212,168,0.85)"/>
+              </div>
               <h3 style={{fontFamily:fh,fontSize:'22px',fontWeight:700,marginBottom:'12px',color:C.cream,letterSpacing:'-0.01em'}}>{f.title}</h3>
               <p style={{fontSize:'14.5px',color:f.featured ? 'rgba(255,255,255,0.9)' : C.white,lineHeight:1.65,fontWeight:400}}>{f.desc}</p>
             </div>
-          ))}
+          );})}
         </div>
       </section>
 
