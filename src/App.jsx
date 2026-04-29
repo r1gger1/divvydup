@@ -65,22 +65,22 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
       </section>
 
       {/* FEATURES */}
-      <section id="features" style={{background:C.bg,padding:'66px 32px'}}>
+      <section id="features" style={{background:C.bg,padding:'66px 32px 88px'}}>
         <p style={{textAlign:'center',fontSize:'12px',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color:C.muted,marginBottom:'16px'}}>What's inside</p>
-        <h2 style={{fontFamily:fh,fontSize:'clamp(42px,5.5vw,68px)',fontWeight:700,textAlign:'center',marginBottom:'64px',color:C.cream,lineHeight:1.05,letterSpacing:'-0.015em'}}>Everything the ledger had. Then some.</h2>
+        <h2 style={{fontFamily:fh,fontSize:'clamp(42px,5.5vw,68px)',fontWeight:700,textAlign:'center',marginBottom:'64px',color:C.cream,lineHeight:1.05,letterSpacing:'-0.015em'}}>Everything you need to stay ahead of your money</h2>
         <div style={{maxWidth:'1200px',margin:'0 auto',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))',gap:'24px'}}>
           {[
-            {title:"Know where your money is going",desc:"Every dollar gets assigned before it's spent. No guessing, no surprises."},
-            {title:"Stop juggling bills every month",desc:"Your paycheck is split automatically so rent, groceries, and everything else are already covered."},
-            {title:"Adjust without breaking everything",desc:"Move money between pages without losing track. See the impact before anything changes."},
-            {title:"Actually build savings",desc:"Set a goal and watch it grow automatically instead of hoping there's money left over."},
+            {title:"Know where your money is going",desc:"Every dollar gets assigned before it's spent. No guessing, no surprises.",featured:true},
+            {title:"Stop juggling bills every month",desc:"Your paycheck is split so rent, groceries, and everything else are already covered.",featured:true},
+            {title:"Move money without losing control",desc:"Move money between pages without losing track. See the impact before anything changes."},
+            {title:"Actually build savings",desc:"Set a goal and watch it grow. No hoping there's money left — it's already reserved."},
             {title:"A voice that keeps you honest",desc:"Simple, direct guidance when you need it. Quiet when you don't."},
-            {title:"See everything at a glance",desc:"Clear totals, balances, and progress so you always know where you stand."},
+            {title:"Always know where you stand",desc:"Totals, balances, and progress — always current, never buried."},
           ].map(f=>(
-            <div key={f.title} style={{background:C.bgAlt,border:`1px solid ${C.border}`,borderRadius:'20px',padding:'32px 28px'}}>
-              <div style={{width:'44px',height:'44px',borderRadius:'12px',background:'rgba(181,212,168,0.18)',marginBottom:'20px'}}></div>
+            <div key={f.title} style={{background:C.bgAlt,border:`1px solid ${f.featured ? 'rgba(181,212,168,0.3)' : C.border}`,borderRadius:'20px',padding:'32px 28px'}}>
+              <div style={{width:'44px',height:'44px',borderRadius:'12px',background:f.featured ? 'rgba(181,212,168,0.26)' : 'rgba(181,212,168,0.18)',marginBottom:'20px'}}></div>
               <h3 style={{fontFamily:fh,fontSize:'22px',fontWeight:700,marginBottom:'12px',color:C.cream,letterSpacing:'-0.01em'}}>{f.title}</h3>
-              <p style={{fontSize:'14.5px',color:C.white,lineHeight:1.65,fontWeight:400}}>{f.desc}</p>
+              <p style={{fontSize:'14.5px',color:f.featured ? 'rgba(255,255,255,0.9)' : C.white,lineHeight:1.65,fontWeight:400}}>{f.desc}</p>
             </div>
           ))}
         </div>
