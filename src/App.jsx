@@ -36,13 +36,13 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
         <div style={{ position: 'relative', zIndex: 1 }}>
           <h1 style={{fontFamily:fh,fontSize:'clamp(46px,7.4vw,92px)',fontWeight:800,color:C.cream,lineHeight:1.08,letterSpacing:'-0.015em',maxWidth:'740px',margin:'0 auto 32px'}}>Stop using this paycheck<br/>to pay last month's bills.</h1>
           <p style={{fontFamily:fh,fontWeight:600,fontSize:'clamp(26px,3.4vw,36px)',color:C.cream,marginTop:'0',marginBottom:'36px',letterSpacing:'-0.01em',lineHeight:1.2,opacity:0.92}}>Every dollar gets a job. No guessing.</p>
-          <div style={{display:'flex',gap:'14px',justifyContent:'center',alignItems:'flex-start',maxWidth:'440px',margin:'0 auto 44px'}}>
+          <div style={{display:'flex',gap:'14px',justifyContent:'center',alignItems:'flex-start',maxWidth:'440px',margin:'0 auto 32px'}}>
             <img src="/dollar_0.png" alt="Rent dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(12px)',opacity:0.72,transition:'transform 0.3s'}} />
             <img src="/dollar_1.png" alt="Groceries dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(-12px)',opacity:0.72,transition:'transform 0.3s'}} />
             <img src="/dollar_2.png" alt="Savings dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(12px)',opacity:0.72,transition:'transform 0.3s'}} />
           </div>
-          <p style={{fontSize:'19px',color:'rgba(232,226,200,0.88)',maxWidth:'500px',margin:'0 auto 18px',lineHeight:1.9,fontWeight:400}}>Instead of scrambling every time bills hit,<br/>you start <strong style={{fontWeight:600,color:C.cream}}>setting money aside ahead of time</strong>.</p>
-          <p style={{fontSize:'19px',color:'rgba(232,226,200,0.62)',maxWidth:'500px',margin:'0 auto 56px',lineHeight:1.9,fontWeight:400}}>Rent, insurance, groceries, subscriptions…<br/>everything builds quietly until you need it.</p>
+          <p style={{fontSize:'19px',color:'rgba(232,226,200,0.88)',maxWidth:'500px',margin:'0 auto 14px',lineHeight:1.9,fontWeight:400}}>Instead of scrambling every time bills hit,<br/>you start <strong style={{fontWeight:600,color:C.cream}}>setting money aside ahead of time</strong>.</p>
+          <p style={{fontSize:'19px',color:'rgba(232,226,200,0.62)',maxWidth:'500px',margin:'0 auto 44px',lineHeight:1.9,fontWeight:400}}>Rent, insurance, groceries, subscriptions…<br/>everything builds quietly until you need it.</p>
           <div style={{display:'flex',gap:'14px',justifyContent:'center',flexWrap:'wrap'}}>
             <button onClick={showAddToAccount?onAddToAccount:onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'16px 42px',fontFamily:fb,fontSize:'15px',fontWeight:700,cursor:'pointer',letterSpacing:'0.01em',boxShadow:`0 4px 24px rgba(181,212,168,0.25)`}}>{showAddToAccount?'Add to My Account':'Start assigning my money →'}</button>
             <a href="#features" style={{background:'transparent',border:`1.5px solid rgba(232,226,200,0.3)`,color:'rgba(232,226,200,0.55)',borderRadius:'999px',padding:'15px 34px',fontSize:'15px',textDecoration:'none',display:'inline-block',fontWeight:400}}>See how it works</a>
