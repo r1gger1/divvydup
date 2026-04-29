@@ -90,7 +90,8 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
       <section id="pricing" style={{background:C.bgAlt,padding:'66px 32px',textAlign:'center',borderTop:`1px solid ${C.border}`}}>
         <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color:C.muted,marginBottom:'16px'}}>Pricing</p>
         <h2 style={{fontFamily:fh,fontSize:'clamp(42px,5.5vw,68px)',fontWeight:700,color:C.cream,marginBottom:'14px',letterSpacing:'-0.015em'}}>Simple. No tricks.</h2>
-        <p style={{fontSize:'16px',color:C.white,marginBottom:'56px',fontWeight:400}}>Pick a plan after your trial. Cancel anytime.</p>
+        <p style={{fontSize:'16px',color:C.white,marginBottom:'32px',fontWeight:400}}>Pick a plan after your trial. Cancel anytime.</p>
+        <p style={{fontSize:'14px',color:C.muted,marginBottom:'40px',fontWeight:400,fontStyle:'italic'}}>Try it. If it doesn't click, you can stop anytime.</p>
         <div style={{maxWidth:'720px',margin:'0 auto',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'20px',textAlign:'left'}}>
           <div style={{background:C.bg,border:`1px solid ${C.border}`,borderRadius:'20px',padding:'36px 30px'}}>
             <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:C.muted,marginBottom:'10px'}}>Monthly</p>
@@ -103,7 +104,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
                 </li>
               ))}
             </ul>
-            <button onClick={onGetStarted} style={{width:'100%',background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'13px',fontFamily:fb,fontSize:'14px',fontWeight:500,cursor:'pointer'}}>Get started</button>
+            <button onClick={onGetStarted} style={{width:'100%',background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'13px',fontFamily:fb,fontSize:'14px',fontWeight:500,cursor:'pointer'}}>Try it for a month</button>
           </div>
           <div style={{background:C.bg,border:`2px solid ${C.sage}`,borderRadius:'20px',padding:'36px 30px',position:'relative'}}>
             <div style={{position:'absolute',top:'-14px',left:'50%',transform:'translateX(-50%)',background:C.sage,color:C.bg,fontSize:'11px',fontWeight:700,padding:'5px 18px',borderRadius:'999px',letterSpacing:'0.07em',whiteSpace:'nowrap',textTransform:'uppercase'}}>Best value</div>
@@ -117,9 +118,10 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
                 </li>
               ))}
             </ul>
-            <button onClick={onGetStarted} style={{width:'100%',background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'13px',fontFamily:fb,fontSize:'14px',fontWeight:600,cursor:'pointer'}}>Get started</button>
+            <button onClick={onGetStarted} style={{width:'100%',background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'13px',fontFamily:fb,fontSize:'14px',fontWeight:600,cursor:'pointer'}}>Save and keep it simple</button>
           </div>
         </div>
+        <p style={{fontSize:'14px',color:C.muted,marginTop:'28px',marginBottom:'0',fontWeight:400,fontStyle:'italic'}}>Most people start small. You can too.</p>
         <div style={{maxWidth:'720px',margin:'36px auto 0',background:'rgba(181,212,168,0.08)',border:`1px solid ${C.border}`,borderRadius:'14px',padding:'22px 28px',display:'flex',alignItems:'center',gap:'16px',textAlign:'left'}}>
           <div style={{width:'42px',height:'42px',borderRadius:'10px',background:'rgba(181,212,168,0.2)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:'18px'}}>⏱</div>
           <div>
