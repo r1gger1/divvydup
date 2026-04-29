@@ -78,7 +78,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
             {title:"A voice that keeps you honest",desc:"Simple, direct guidance when you need it. Quiet when you don't.",icon:MessageCircle},
             {title:"Always know where you stand",desc:"Totals, balances, and progress — always current, never buried.",icon:BarChart3},
           ].map(f=>{const Icon=f.icon;return(
-            <div key={f.title} style={{background:f.highlight ? 'rgba(181,212,168,0.07)' : C.bgAlt,border:`${f.highlight ? '1.5px' : '1px'} solid ${f.highlight ? 'rgba(181,212,168,0.45)' : f.featured ? 'rgba(181,212,168,0.3)' : C.border}`,borderRadius:'20px',padding:'32px 28px'}}>
+            <div key={f.title} style={{background:f.highlight ? 'rgba(181,212,168,0.07)' : C.bgAlt,border:`1px solid ${f.featured ? 'rgba(181,212,168,0.3)' : C.border}`,borderRadius:'20px',padding:'32px 28px',textAlign:'center'}}>
               <div style={{width:'44px',height:'44px',borderRadius:'12px',background:f.highlight ? 'rgba(181,212,168,0.32)' : f.featured ? 'rgba(181,212,168,0.26)' : 'rgba(181,212,168,0.18)',border:'1px solid rgba(181,212,168,0.2)',margin:'0 auto 20px',display:'flex',alignItems:'center',justifyContent:'center'}}>
                 <Icon size={22} strokeWidth={1.5} color="rgba(181,212,168,1)"/>
               </div>
