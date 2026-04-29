@@ -31,8 +31,8 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
 
       {/* HERO */}
       <section style={{background:C.bg,padding:'72px 32px 60px',textAlign:'center',position:'relative',overflow:'hidden'}}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/hero-background.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.12, filter: 'blur(3px)', zIndex: 0 }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(13,28,24,0.72) 0%, rgba(13,28,24,0.5) 100%)', zIndex: 0 }} />
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/hero-background.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.22, filter: 'blur(1.5px) contrast(1.12)', zIndex: 0 }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 68% 65% at 50% 42%, rgba(13,28,24,0) 0%, rgba(13,28,24,0.48) 100%), linear-gradient(180deg, rgba(13,28,24,0.60) 0%, rgba(13,28,24,0.38) 100%)', zIndex: 0 }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <h1 style={{fontFamily:fh,fontSize:'clamp(46px,7.4vw,92px)',fontWeight:800,color:C.cream,lineHeight:1.08,letterSpacing:'-0.015em',maxWidth:'740px',margin:'0 auto 32px'}}>Stop using this paycheck<br/>to pay last month's bills.</h1>
           <p style={{fontFamily:fh,fontWeight:600,fontSize:'clamp(26px,3.4vw,36px)',color:C.cream,marginTop:'0',marginBottom:'36px',letterSpacing:'-0.01em',lineHeight:1.2,opacity:0.92}}>Every dollar gets a job. No guessing.</p>
