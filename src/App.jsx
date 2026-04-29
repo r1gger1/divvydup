@@ -59,7 +59,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
           </div>
           <div>
             <h2 style={{fontFamily:fh,fontSize:'clamp(26px,3.2vw,34px)',fontWeight:700,color:C.cream,marginBottom:'14px',lineHeight:1.15,letterSpacing:'-0.01em'}}>Born from a ledger kept for sixty years.</h2>
-            <p style={{fontSize:'15px',color:'rgba(232,226,200,0.75)',lineHeight:1.75,fontWeight:400,maxWidth:'520px'}}>Tony's dad still tracks every dollar in a simple paper ledger. It's methodical, honest, and it works.<br/><br/>DivvyDup brings that same discipline into a simple tool: set money aside ahead of time, keep every dollar assigned, and stop guessing what you can afford.</p>
+            <p style={{fontSize:'15px',color:'rgba(232,226,200,0.75)',lineHeight:1.75,fontWeight:400,maxWidth:'520px'}}>Tony's dad still tracks every dollar in a simple paper ledger. It's methodical, honest, and <strong style={{fontWeight:700,color:C.cream}}>it works.</strong><br/><br/>DivvyDup brings that same discipline into a simple tool: set money aside ahead of time, keep every dollar assigned, and stop guessing what you can afford.</p>
           </div>
         </div>
       </section>
@@ -71,14 +71,14 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
         <div style={{maxWidth:'1200px',margin:'0 auto',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))',gap:'24px'}}>
           {[
             {title:"Know where your money is going",desc:"Every dollar gets assigned before it's spent. No guessing, no surprises.",featured:true},
-            {title:"Stop juggling bills every month",desc:"Your paycheck is split so rent, groceries, and everything else are already covered.",featured:true},
+            {title:"Stop juggling bills every month",desc:"Your paycheck is split so rent, groceries, and everything else are already covered.",featured:true,highlight:true},
             {title:"Move money without losing control",desc:"Move money between pages without losing track. See the impact before anything changes."},
             {title:"Actually build savings",desc:"Set a goal and watch it grow. No hoping there's money left — it's already reserved."},
             {title:"A voice that keeps you honest",desc:"Simple, direct guidance when you need it. Quiet when you don't."},
             {title:"Always know where you stand",desc:"Totals, balances, and progress — always current, never buried."},
           ].map(f=>(
-            <div key={f.title} style={{background:C.bgAlt,border:`1px solid ${f.featured ? 'rgba(181,212,168,0.3)' : C.border}`,borderRadius:'20px',padding:'32px 28px'}}>
-              <div style={{width:'44px',height:'44px',borderRadius:'12px',background:f.featured ? 'rgba(181,212,168,0.26)' : 'rgba(181,212,168,0.18)',marginBottom:'20px'}}></div>
+            <div key={f.title} style={{background:f.highlight ? 'rgba(181,212,168,0.07)' : C.bgAlt,border:`${f.highlight ? '1.5px' : '1px'} solid ${f.highlight ? 'rgba(181,212,168,0.45)' : f.featured ? 'rgba(181,212,168,0.3)' : C.border}`,borderRadius:'20px',padding:'32px 28px'}}>
+              <div style={{width:'44px',height:'44px',borderRadius:'12px',background:f.highlight ? 'rgba(181,212,168,0.32)' : f.featured ? 'rgba(181,212,168,0.26)' : 'rgba(181,212,168,0.18)',marginBottom:'20px'}}></div>
               <h3 style={{fontFamily:fh,fontSize:'22px',fontWeight:700,marginBottom:'12px',color:C.cream,letterSpacing:'-0.01em'}}>{f.title}</h3>
               <p style={{fontSize:'14.5px',color:f.featured ? 'rgba(255,255,255,0.9)' : C.white,lineHeight:1.65,fontWeight:400}}>{f.desc}</p>
             </div>
@@ -91,12 +91,13 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
         <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color:C.muted,marginBottom:'16px'}}>Pricing</p>
         <h2 style={{fontFamily:fh,fontSize:'clamp(42px,5.5vw,68px)',fontWeight:700,color:C.cream,marginBottom:'14px',letterSpacing:'-0.015em'}}>Simple. No tricks.</h2>
         <p style={{fontSize:'16px',color:C.white,marginBottom:'32px',fontWeight:400}}>Pick a plan after your trial. Cancel anytime.</p>
-        <p style={{fontSize:'14px',color:C.muted,marginBottom:'40px',fontWeight:400,fontStyle:'italic'}}>Try it. If it doesn't click, you can stop anytime.</p>
+        <p style={{fontSize:'14px',color:C.white,marginBottom:'40px',fontWeight:500}}>Try it. If it doesn't click, you can stop anytime.</p>
         <div style={{maxWidth:'720px',margin:'0 auto',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'20px',textAlign:'left'}}>
           <div style={{background:C.bg,border:`1px solid ${C.border}`,borderRadius:'20px',padding:'36px 30px'}}>
             <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:C.muted,marginBottom:'10px'}}>Monthly</p>
             <p style={{fontFamily:fh,fontSize:'48px',fontWeight:700,color:C.cream,lineHeight:1,marginBottom:'4px',letterSpacing:'-0.02em'}}><sup style={{fontSize:'24px',fontWeight:500,verticalAlign:'super'}}>$</sup>5<sub style={{fontSize:'16px',fontWeight:400,verticalAlign:'baseline',color:C.muted}}>/mo</sub></p>
-            <p style={{fontSize:'13px',color:C.muted,marginBottom:'28px'}}>Billed monthly</p>
+            <p style={{fontSize:'13px',color:C.muted,marginBottom:'6px'}}>Billed monthly</p>
+            <p style={{fontSize:'12px',color:C.sage,marginBottom:'22px',fontWeight:500}}>Try it first. Cancel anytime.</p>
             <ul style={{listStyle:'none',marginBottom:'28px',padding:0}}>
               {['Full ledger access','Cloud sync across devices','Floyd advisor','Unlimited pages & entries'].map(item=>(
                 <li key={item} style={{fontSize:'14px',color:C.white,padding:'8px 0',borderBottom:`1px solid ${C.border}`,display:'flex',alignItems:'center',gap:'10px',fontWeight:400}}>
@@ -106,7 +107,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
             </ul>
             <button onClick={onGetStarted} style={{width:'100%',background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'13px',fontFamily:fb,fontSize:'14px',fontWeight:500,cursor:'pointer'}}>Try it for a month</button>
           </div>
-          <div style={{background:C.bg,border:`2px solid ${C.sage}`,borderRadius:'20px',padding:'36px 30px',position:'relative'}}>
+          <div style={{background:'rgba(181,212,168,0.06)',border:`2px solid rgba(181,212,168,0.72)`,borderRadius:'20px',padding:'36px 30px',position:'relative',boxShadow:'0 0 0 4px rgba(181,212,168,0.06)'}}>
             <div style={{position:'absolute',top:'-14px',left:'50%',transform:'translateX(-50%)',background:C.sage,color:C.bg,fontSize:'11px',fontWeight:700,padding:'5px 18px',borderRadius:'999px',letterSpacing:'0.07em',whiteSpace:'nowrap',textTransform:'uppercase'}}>Best value</div>
             <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:C.muted,marginBottom:'10px'}}>Annual</p>
             <p style={{fontFamily:fh,fontSize:'48px',fontWeight:700,color:C.cream,lineHeight:1,marginBottom:'4px',letterSpacing:'-0.02em'}}><sup style={{fontSize:'24px',fontWeight:500,verticalAlign:'super'}}>$</sup>50<sub style={{fontSize:'16px',fontWeight:400,verticalAlign:'baseline',color:C.muted}}>/yr</sub></p>
