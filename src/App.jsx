@@ -58,9 +58,8 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
             {[1,2,3,4,5].map(i=><div key={i} style={{height:'2px',background:'rgba(255,255,255,0.12)',marginBottom:'8px',borderRadius:'1px',width:i%2===0?'55%':'100%'}}></div>)}
           </div>
           <div>
-            <p style={{fontSize:'11px',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:C.muted,marginBottom:'10px'}}>Built from a real system</p>
-            <h2 style={{fontFamily:fh,fontSize:'clamp(26px,3.2vw,34px)',fontWeight:700,color:C.cream,marginBottom:'14px',lineHeight:1.15,letterSpacing:'-0.01em'}}>A method that's worked for decades</h2>
-            <p style={{fontSize:'15px',color:'rgba(232,226,200,0.75)',lineHeight:1.75,fontWeight:400,maxWidth:'520px'}}>Tony's dad still tracks every dollar in a simple paper ledger. It's methodical, honest, and it works.<br/><br/>DivvyDup takes that same discipline and makes it effortless: set money aside ahead of time, keep every dollar assigned, and stop guessing what you can afford.</p>
+            <h2 style={{fontFamily:fh,fontSize:'clamp(26px,3.2vw,34px)',fontWeight:700,color:C.cream,marginBottom:'14px',lineHeight:1.15,letterSpacing:'-0.01em'}}>Born from a ledger kept for sixty years.</h2>
+            <p style={{fontSize:'15px',color:'rgba(232,226,200,0.75)',lineHeight:1.75,fontWeight:400,maxWidth:'520px'}}>Tony's dad still tracks every dollar in a simple paper ledger. It's methodical, honest, and it works.<br/><br/>DivvyDup brings that same discipline into a simple tool: set money aside ahead of time, keep every dollar assigned, and stop guessing what you can afford.</p>
           </div>
         </div>
       </section>
@@ -71,12 +70,12 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
         <h2 style={{fontFamily:fh,fontSize:'clamp(42px,5.5vw,68px)',fontWeight:700,textAlign:'center',marginBottom:'64px',color:C.cream,lineHeight:1.05,letterSpacing:'-0.015em'}}>Everything the ledger had. Then some.</h2>
         <div style={{maxWidth:'1200px',margin:'0 auto',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))',gap:'24px'}}>
           {[
-            {title:"Envelope budgeting",desc:"Assign every dollar a job. Budget pages work like real envelopes - money goes in, gets spent down, and you always know exactly what's left."},
-            {title:"Paycheck distribution",desc:"Drop in a paycheck and DivvyDup splits it across your pages automatically, weighted by your monthly targets. One step, done."},
-            {title:"Auto-Balance",desc:"Flush overages out of donor pages and into the ones that need it - with a full preview before anything moves. No surprises."},
-            {title:"Savings targets",desc:"Set a goal. Watch the progress bar fill. Temporary pages close automatically when they hit their target - vacation, car repair, anything."},
-            {title:"Floyd, your advisor",desc:"Dry, direct, and old-school. Floyd speaks up when something's worth saying - and stays quiet when it's not. Not Clippy. Never Clippy."},
-            {title:"Dashboard view",desc:"Customizable summary cards show the numbers that matter - balances, totals, progress - at a glance. Your ledger, at 30,000 feet."},
+            {title:"Know where your money is going",desc:"Every dollar gets assigned before it's spent. No guessing, no surprises."},
+            {title:"Stop juggling bills every month",desc:"Your paycheck is split automatically so rent, groceries, and everything else are already covered."},
+            {title:"Adjust without breaking everything",desc:"Move money between pages without losing track. See the impact before anything changes."},
+            {title:"Actually build savings",desc:"Set a goal and watch it grow automatically instead of hoping there's money left over."},
+            {title:"A voice that keeps you honest",desc:"Simple, direct guidance when you need it. Quiet when you don't."},
+            {title:"See everything at a glance",desc:"Clear totals, balances, and progress so you always know where you stand."},
           ].map(f=>(
             <div key={f.title} style={{background:C.bgAlt,border:`1px solid ${C.border}`,borderRadius:'20px',padding:'32px 28px'}}>
               <div style={{width:'44px',height:'44px',borderRadius:'12px',background:'rgba(181,212,168,0.18)',marginBottom:'20px'}}></div>
