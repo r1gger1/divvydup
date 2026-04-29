@@ -35,10 +35,10 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
         <div style={{ position: 'relative', zIndex: 1 }}>
           <h1 style={{fontFamily:fh,fontSize:'clamp(56px,9vw,104px)',fontWeight:800,color:C.cream,lineHeight:1,marginBottom:'24px',letterSpacing:'-0.015em'}}>Your money,<br/>finally organized.</h1>
           <p style={{fontFamily:fh,fontWeight:500,fontSize:'22px',color:C.sage,marginBottom:'28px'}}>The Book, reimagined.</p>
-          <div style={{display:'flex',gap:'20px',justifyContent:'center',alignItems:'flex-start',maxWidth:'960px',margin:'0 auto 48px',paddingTop:'24px'}}>
-            <img src="/dollar_0.png" alt="Rent dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(24px)',transition:'transform 0.3s'}} />
-            <img src="/dollar_1.png" alt="Groceries dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(-24px)',transition:'transform 0.3s'}} />
-            <img src="/dollar_2.png" alt="Savings dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(24px)',transition:'transform 0.3s'}} />
+          <div style={{display:'flex',gap:'14px',justifyContent:'center',alignItems:'flex-start',maxWidth:'640px',margin:'0 auto 48px',paddingTop:'24px'}}>
+            <img src="/dollar_0.png" alt="Rent dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(16px)',transition:'transform 0.3s'}} />
+            <img src="/dollar_1.png" alt="Groceries dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(-16px)',transition:'transform 0.3s'}} />
+            <img src="/dollar_2.png" alt="Savings dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(16px)',transition:'transform 0.3s'}} />
           </div>
           <p style={{fontFamily:fh,fontWeight:700,fontSize:'clamp(28px,4vw,42px)',color:C.cream,marginBottom:'20px',letterSpacing:'-0.02em',lineHeight:1.1}}>Every dollar gets a job.</p>
           <p style={{fontSize:'17px',color:C.white,maxWidth:'600px',margin:'0 auto 44px',lineHeight:1.7,fontWeight:400}}>Most people look at their bank balance and hope there's enough left when the bills come. We do it different. We give every dollar a job before it even hits your account — your rent dollar knows it's rent, your grocery dollar knows it's groceries, your emergency fund dollar sits there until you need it. No more guessing. No more scrambling at the end of the month. Every dollar has a purpose, and every purpose gets paid.</p>
