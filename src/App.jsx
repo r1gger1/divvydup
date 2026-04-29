@@ -34,7 +34,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
         <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/hero-background.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.12, filter: 'blur(3px)', zIndex: 0 }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(13,28,24,0.72) 0%, rgba(13,28,24,0.5) 100%)', zIndex: 0 }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <h1 style={{fontFamily:fh,fontSize:'clamp(50px,8vw,100px)',fontWeight:800,color:C.cream,lineHeight:1.0,letterSpacing:'-0.015em',maxWidth:'820px',margin:'0 auto 52px'}}>Stop using this paycheck<br/>to pay last month's bills.</h1>
+          <h1 style={{fontFamily:fh,fontSize:'clamp(46px,7.4vw,92px)',fontWeight:800,color:C.cream,lineHeight:1.08,letterSpacing:'-0.015em',maxWidth:'740px',margin:'0 auto 44px'}}>Stop using this paycheck<br/>to pay last month's bills.</h1>
           <p style={{fontFamily:fh,fontWeight:600,fontSize:'clamp(26px,3.4vw,36px)',color:C.cream,marginTop:'8px',marginBottom:'60px',letterSpacing:'-0.01em',lineHeight:1.2,opacity:0.92}}>Every dollar gets a job. No guessing.</p>
           <div style={{display:'flex',gap:'14px',justifyContent:'center',alignItems:'flex-start',maxWidth:'480px',margin:'12px auto 64px'}}>
             <img src="/dollar_0.png" alt="Rent dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(14px)',opacity:0.72,transition:'transform 0.3s'}} />
