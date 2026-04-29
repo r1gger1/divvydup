@@ -31,22 +31,23 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
 
       {/* HERO */}
       <section style={{background:C.bg,padding:'100px 32px 80px',textAlign:'center',position:'relative',overflow:'hidden'}}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/hero-background.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.2, filter: 'blur(3px)', zIndex: 0 }} />
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/hero-background.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.12, filter: 'blur(3px)', zIndex: 0 }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(13,28,24,0.55) 0%, rgba(13,28,24,0.35) 100%)', zIndex: 0 }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <h1 style={{fontFamily:fh,fontSize:'clamp(56px,9vw,104px)',fontWeight:800,color:C.cream,lineHeight:1,marginBottom:'24px',letterSpacing:'-0.015em'}}>Your money,<br/>finally organized.</h1>
-          <p style={{fontFamily:fh,fontWeight:500,fontSize:'22px',color:C.sage,marginBottom:'28px'}}>The Book, reimagined.</p>
-          <div style={{display:'flex',gap:'14px',justifyContent:'center',alignItems:'flex-start',maxWidth:'640px',margin:'0 auto 48px',paddingTop:'24px'}}>
+          <h1 style={{fontFamily:fh,fontSize:'clamp(44px,7vw,88px)',fontWeight:800,color:C.cream,lineHeight:1.05,marginBottom:'36px',letterSpacing:'-0.015em',maxWidth:'800px',margin:'0 auto 36px'}}>Stop using this paycheck<br/>to pay last month's bills.</h1>
+          <p style={{fontFamily:fh,fontWeight:600,fontSize:'clamp(22px,3vw,30px)',color:C.sage,marginBottom:'40px',letterSpacing:'-0.01em',lineHeight:1.2}}>Every dollar gets a job.</p>
+          <div style={{display:'flex',gap:'14px',justifyContent:'center',alignItems:'flex-start',maxWidth:'640px',margin:'0 auto 48px',paddingTop:'8px'}}>
             <img src="/dollar_0.png" alt="Rent dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(16px)',transition:'transform 0.3s'}} />
             <img src="/dollar_1.png" alt="Groceries dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(-16px)',transition:'transform 0.3s'}} />
             <img src="/dollar_2.png" alt="Savings dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(16px)',transition:'transform 0.3s'}} />
           </div>
-          <p style={{fontFamily:fh,fontWeight:700,fontSize:'clamp(28px,4vw,42px)',color:C.cream,marginBottom:'20px',letterSpacing:'-0.02em',lineHeight:1.1}}>Every dollar gets a job.</p>
-          <p style={{fontSize:'17px',color:C.white,maxWidth:'600px',margin:'0 auto 44px',lineHeight:1.7,fontWeight:400}}>Most people look at their bank balance and hope there's enough left when the bills come. We do it different. We give every dollar a job before it even hits your account — your rent dollar knows it's rent, your grocery dollar knows it's groceries, your emergency fund dollar sits there until you need it. No more guessing. No more scrambling at the end of the month. Every dollar has a purpose, and every purpose gets paid.</p>
+          <p style={{fontSize:'17px',color:'rgba(232,226,200,0.8)',maxWidth:'520px',margin:'0 auto 16px',lineHeight:1.75,fontWeight:400}}>Instead of reacting when bills hit,<br/>you start setting money aside ahead of time.</p>
+          <p style={{fontSize:'17px',color:'rgba(232,226,200,0.65)',maxWidth:'520px',margin:'0 auto 52px',lineHeight:1.75,fontWeight:400}}>Rent, insurance, groceries, subscriptions…<br/>everything builds quietly until you need it.</p>
           <div style={{display:'flex',gap:'14px',justifyContent:'center',flexWrap:'wrap'}}>
-            <button onClick={showAddToAccount?onAddToAccount:onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'14px 36px',fontFamily:fb,fontSize:'15px',fontWeight:600,cursor:'pointer'}}>{showAddToAccount?'Add to My Account':'Get Started'}</button>
-            <a href="#features" style={{background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'13px 34px',fontSize:'15px',textDecoration:'none',display:'inline-block'}}>See how it works</a>
+            <button onClick={showAddToAccount?onAddToAccount:onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'15px 38px',fontFamily:fb,fontSize:'15px',fontWeight:700,cursor:'pointer',letterSpacing:'0.01em'}}>{showAddToAccount?'Add to My Account':'Start assigning my money'}</button>
+            <a href="#features" style={{background:'transparent',border:`1.5px solid rgba(232,226,200,0.4)`,color:'rgba(232,226,200,0.7)',borderRadius:'999px',padding:'14px 34px',fontSize:'15px',textDecoration:'none',display:'inline-block',fontWeight:400}}>See how it works</a>
           </div>
-          <p style={{marginTop:'20px',fontSize:'13px',color:C.muted}}>Credit card required · Cancel anytime</p>
+          <p style={{marginTop:'16px',fontSize:'13px',color:C.muted}}>Takes less than 2 minutes</p>
         </div>
       </section>
 
