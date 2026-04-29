@@ -52,14 +52,15 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
       </section>
 
       {/* ORIGIN */}
-      <section style={{background:C.bgAlt,padding:'60px 32px',borderTop:`1px solid ${C.border}`,borderBottom:`1px solid ${C.border}`}}>
-        <div style={{maxWidth:'900px',margin:'0 auto',display:'grid',gridTemplateColumns:'auto 1fr',gap:'56px',alignItems:'center'}}>
-          <div style={{width:'120px',height:'150px',background:C.black,borderRadius:'4px 16px 16px 4px',borderLeft:`8px solid ${C.sage}`,display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'14px 14px 16px'}}>
+      <section style={{background:C.bgAlt,padding:'44px 32px',borderTop:`1px solid ${C.border}`,borderBottom:`1px solid ${C.border}`}}>
+        <div style={{maxWidth:'780px',margin:'0 auto',display:'grid',gridTemplateColumns:'auto 1fr',gap:'48px',alignItems:'center'}}>
+          <div style={{width:'100px',height:'130px',background:C.black,borderRadius:'4px 16px 16px 4px',borderLeft:`8px solid ${C.sage}`,display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'12px 12px 14px',flexShrink:0}}>
             {[1,2,3,4,5].map(i=><div key={i} style={{height:'2px',background:'rgba(255,255,255,0.12)',marginBottom:'8px',borderRadius:'1px',width:i%2===0?'55%':'100%'}}></div>)}
           </div>
           <div>
-            <h2 style={{fontFamily:fh,fontSize:'clamp(32px,4vw,42px)',fontWeight:700,color:C.cream,marginBottom:'18px',lineHeight:1.15,letterSpacing:'-0.01em'}}>Born from a ledger kept for sixty years.</h2>
-            <p style={{fontSize:'15.5px',color:C.white,lineHeight:1.8,fontWeight:400,textAlign:'center'}}>Tony's father still tracks every dollar in a paper columnar ledger — methodical, honest, and unfailing. That book was the family's financial backbone for six decades. DivvyDup is its digital heir: the same discipline, without the pencil.</p>
+            <p style={{fontSize:'11px',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:C.muted,marginBottom:'10px'}}>Built from a real system</p>
+            <h2 style={{fontFamily:fh,fontSize:'clamp(26px,3.2vw,34px)',fontWeight:700,color:C.cream,marginBottom:'14px',lineHeight:1.15,letterSpacing:'-0.01em'}}>A method that's worked for decades</h2>
+            <p style={{fontSize:'15px',color:'rgba(232,226,200,0.75)',lineHeight:1.75,fontWeight:400,maxWidth:'520px'}}>Tony's dad still tracks every dollar in a simple paper ledger. It's methodical, honest, and it works.<br/><br/>DivvyDup takes that same discipline and makes it effortless: set money aside ahead of time, keep every dollar assigned, and stop guessing what you can afford.</p>
           </div>
         </div>
       </section>
