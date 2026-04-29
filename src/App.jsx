@@ -35,19 +35,19 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(13,28,24,0.72) 0%, rgba(13,28,24,0.5) 100%)', zIndex: 0 }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <h1 style={{fontFamily:fh,fontSize:'clamp(50px,8vw,100px)',fontWeight:800,color:C.cream,lineHeight:1.0,letterSpacing:'-0.015em',maxWidth:'820px',margin:'0 auto 52px'}}>Stop using this paycheck<br/>to pay last month's bills.</h1>
-          <p style={{fontFamily:fh,fontWeight:600,fontSize:'clamp(22px,3vw,30px)',color:C.sage,marginBottom:'40px',letterSpacing:'-0.01em',lineHeight:1.2}}>Every dollar gets a job.</p>
-          <div style={{display:'flex',gap:'14px',justifyContent:'center',alignItems:'flex-start',maxWidth:'560px',margin:'0 auto 56px'}}>
-            <img src="/dollar_0.png" alt="Rent dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(16px)',opacity:0.9,transition:'transform 0.3s'}} />
-            <img src="/dollar_1.png" alt="Groceries dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(-16px)',opacity:0.9,transition:'transform 0.3s'}} />
-            <img src="/dollar_2.png" alt="Savings dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(16px)',opacity:0.9,transition:'transform 0.3s'}} />
+          <p style={{fontFamily:fh,fontWeight:600,fontSize:'clamp(24px,3.2vw,34px)',color:C.cream,marginTop:'8px',marginBottom:'52px',letterSpacing:'-0.01em',lineHeight:1.2,opacity:0.9}}>Every dollar gets a job.</p>
+          <div style={{display:'flex',gap:'14px',justifyContent:'center',alignItems:'flex-start',maxWidth:'500px',margin:'0 auto 60px'}}>
+            <img src="/dollar_0.png" alt="Rent dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(14px)',opacity:0.8,transition:'transform 0.3s'}} />
+            <img src="/dollar_1.png" alt="Groceries dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(-14px)',opacity:0.8,transition:'transform 0.3s'}} />
+            <img src="/dollar_2.png" alt="Savings dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(14px)',opacity:0.8,transition:'transform 0.3s'}} />
           </div>
-          <p style={{fontSize:'18px',color:'rgba(232,226,200,0.85)',maxWidth:'500px',margin:'0 auto 18px',lineHeight:1.85,fontWeight:400}}>Instead of reacting when bills hit,<br/>you start <strong style={{fontWeight:600,color:C.cream}}>setting money aside ahead of time</strong>.</p>
-          <p style={{fontSize:'18px',color:'rgba(232,226,200,0.6)',maxWidth:'500px',margin:'0 auto 68px',lineHeight:1.85,fontWeight:400}}>Rent, insurance, groceries, subscriptions…<br/>everything builds quietly until you need it.</p>
+          <p style={{fontSize:'19px',color:'rgba(232,226,200,0.88)',maxWidth:'500px',margin:'0 auto 22px',lineHeight:1.9,fontWeight:400}}>Instead of scrambling when bills hit,<br/>you start <strong style={{fontWeight:600,color:C.cream}}>setting money aside ahead of time</strong>.</p>
+          <p style={{fontSize:'19px',color:'rgba(232,226,200,0.62)',maxWidth:'500px',margin:'0 auto 76px',lineHeight:1.9,fontWeight:400}}>Rent, insurance, groceries, subscriptions…<br/>everything builds quietly until you need it.</p>
           <div style={{display:'flex',gap:'14px',justifyContent:'center',flexWrap:'wrap'}}>
             <button onClick={showAddToAccount?onAddToAccount:onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'16px 42px',fontFamily:fb,fontSize:'15px',fontWeight:700,cursor:'pointer',letterSpacing:'0.01em',boxShadow:`0 4px 24px rgba(181,212,168,0.25)`}}>{showAddToAccount?'Add to My Account':'Start assigning my money'}</button>
             <a href="#features" style={{background:'transparent',border:`1.5px solid rgba(232,226,200,0.3)`,color:'rgba(232,226,200,0.55)',borderRadius:'999px',padding:'15px 34px',fontSize:'15px',textDecoration:'none',display:'inline-block',fontWeight:400}}>See how it works</a>
           </div>
-          <p style={{marginTop:'18px',fontSize:'13px',color:'rgba(159,181,168,0.8)',fontWeight:500}}>Takes less than 2 minutes</p>
+          <p style={{marginTop:'20px',fontSize:'13px',color:'rgba(159,181,168,0.9)',fontWeight:600}}>Takes less than 2 minutes</p>
         </div>
       </section>
 
