@@ -35,7 +35,8 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
         <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/hero-background.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.22, filter: 'blur(1.5px) contrast(1.12)', zIndex: 0 }} />
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 52% 48% at 50% 36%, rgba(232,226,200,0.05) 0%, transparent 65%), radial-gradient(ellipse 72% 68% at 50% 40%, rgba(13,28,24,0) 0%, rgba(13,28,24,0.50) 100%), linear-gradient(180deg, rgba(13,28,24,0.58) 0%, rgba(13,28,24,0.36) 100%)', zIndex: 0 }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <h1 style={{fontFamily:fh,fontSize:'clamp(46px,7.4vw,92px)',fontWeight:800,color:C.cream,lineHeight:1.08,letterSpacing:'-0.015em',maxWidth:'740px',margin:'0 auto 32px'}}>Stop using this paycheck<br/>to pay last month's bills.</h1>
+          <h1 style={{fontFamily:fh,fontSize:'clamp(46px,7.4vw,92px)',fontWeight:800,color:C.cream,lineHeight:1.08,letterSpacing:'-0.015em',maxWidth:'740px',margin:'0 auto 16px'}}>Stop playing catch-up with your bills.</h1>
+          <p style={{fontSize:'18px',color:'rgba(232,226,200,0.72)',marginBottom:'20px',fontWeight:400,lineHeight:1.5}}>Set money aside before it's needed.</p>
           <p style={{fontFamily:fh,fontWeight:600,fontSize:'clamp(26px,3.4vw,36px)',color:C.cream,marginTop:'0',marginBottom:'36px',letterSpacing:'-0.01em',lineHeight:1.2,opacity:0.92}}>Every dollar gets a job. No guessing.</p>
           <div style={{display:'flex',gap:'14px',justifyContent:'center',alignItems:'flex-start',maxWidth:'440px',margin:'0 auto 32px'}}>
             <img src="/dollar_0.png" alt="Rent dollar" style={{width:'32%',height:'auto',borderRadius:'12px',transform:'translateY(12px)',opacity:0.72,transition:'transform 0.3s'}} />
