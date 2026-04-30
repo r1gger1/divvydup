@@ -161,7 +161,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
         <p style={{fontFamily:fh,fontSize:'20px',fontWeight:700,color:C.cream,marginBottom:'6px',letterSpacing:'-0.01em'}}>DivvyDup</p>
         <p style={{fontFamily:fh,fontSize:'13px',color:C.sage,marginBottom:'20px',fontWeight:500}}>The Book, reimagined.</p>
         <p style={{fontSize:'13px',color:C.muted}}><a href="https://startinglinehq.com" style={{color:C.muted,textDecoration:'none'}}>StartinglineHQ</a>{' · '}<a href="/privacy" style={{color:C.muted,textDecoration:'none'}}>Privacy</a>{' · '}<a href="/terms" style={{color:C.muted,textDecoration:'none'}}>Terms</a></p>
-        <p style={{fontSize:'12px',color:C.muted,marginTop:'10px',opacity:0.7}}>{'©'} 2026 StartinglineHQ. All rights reserved.</p>
+        <p style={{fontSize:'12px',color:C.muted,marginTop:'10px',opacity:0.7}}>© 2026 StartingLine HQ, LLC. All rights reserved.</p>
       </footer>
 
     </div>
