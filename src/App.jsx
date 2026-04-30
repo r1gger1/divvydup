@@ -130,8 +130,8 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
         <div style={{maxWidth:'720px',margin:'36px auto 0',background:'rgba(181,212,168,0.08)',border:`1px solid ${C.border}`,borderRadius:'14px',padding:'22px 28px',display:'flex',alignItems:'center',gap:'16px',textAlign:'left'}}>
           <div style={{width:'42px',height:'42px',borderRadius:'10px',background:'rgba(181,212,168,0.2)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:'18px'}}>⏱</div>
           <div>
-            <h4 style={{fontFamily:fh,fontSize:'16px',fontWeight:700,color:C.cream,marginBottom:'4px'}}>Free trial — no card required</h4>
-            <p style={{fontSize:'13px',color:C.white,fontWeight:400,lineHeight:1.55}}>Try DivvyDup for 3 days with 4 pages and 2 entries each. Enough to feel it. Then decide.</p>
+            <h4 style={{fontFamily:fh,fontSize:'16px',fontWeight:700,color:C.cream,marginBottom:'4px'}}>14-day free trial</h4>
+            <p style={{fontSize:'13px',color:C.white,fontWeight:400,lineHeight:1.55}}>Card required. Cancel before day 14 and you won't be charged.</p>
           </div>
         </div>
       </section>
@@ -153,7 +153,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
       <section style={{background:C.bg,padding:'66px 32px',textAlign:'center'}}>
         <h2 style={{fontFamily:fh,fontSize:'clamp(52px,7vw,92px)',fontWeight:700,color:C.cream,marginBottom:'32px',letterSpacing:'-0.015em'}}>Ready to open The Book?</h2>
         <button onClick={onGetStarted} style={{background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'16px 44px',fontFamily:fb,fontSize:'16px',fontWeight:600,cursor:'pointer'}}>Get Started</button>
-        <p style={{marginTop:'16px',fontSize:'14px',color:C.muted}}>No card, no commitment.</p>
+        <p style={{marginTop:'16px',fontSize:'14px',color:C.muted}}>Card required. Cancel anytime.</p>
       </section>
 
       {/* FOOTER */}
