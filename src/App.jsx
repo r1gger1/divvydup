@@ -94,14 +94,14 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
       <section id="pricing" style={{background:C.bgAlt,padding:'66px 32px',textAlign:'center',borderTop:`1px solid ${C.border}`}}>
         <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color:C.muted,marginBottom:'16px'}}>Pricing</p>
         <h2 style={{fontFamily:fh,fontSize:'clamp(42px,5.5vw,68px)',fontWeight:700,color:C.cream,marginBottom:'14px',letterSpacing:'-0.015em'}}>Simple. No tricks.</h2>
-        <p style={{fontSize:'16px',color:C.white,marginBottom:'32px',fontWeight:400}}>Pick a plan after your trial. Cancel anytime.</p>
+        <p style={{fontSize:'16px',color:C.white,marginBottom:'32px',fontWeight:400}}>Card required. Cancel anytime.</p>
         <p style={{fontSize:'14px',color:C.white,marginBottom:'40px',fontWeight:500}}>Try it. If it doesn't click, you can stop anytime.</p>
         <div style={{maxWidth:'720px',margin:'0 auto',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'20px',textAlign:'left'}}>
           <div style={{background:C.bg,border:`1px solid ${C.border}`,borderRadius:'20px',padding:'36px 30px'}}>
             <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:C.muted,marginBottom:'10px'}}>Monthly</p>
             <p style={{fontFamily:fh,fontSize:'48px',fontWeight:700,color:C.cream,lineHeight:1,marginBottom:'4px',letterSpacing:'-0.02em'}}><sup style={{fontSize:'24px',fontWeight:500,verticalAlign:'super'}}>$</sup>5<sub style={{fontSize:'16px',fontWeight:400,verticalAlign:'baseline',color:C.muted}}>/mo</sub></p>
             <p style={{fontSize:'13px',color:C.muted,marginBottom:'6px'}}>Billed monthly</p>
-            <p style={{fontSize:'12px',color:C.sage,marginBottom:'22px',fontWeight:500}}>Try it first. Cancel anytime.</p>
+            <p style={{fontSize:'12px',color:C.sage,marginBottom:'22px',fontWeight:500}}>Card required. Cancel anytime.</p>
             <ul style={{listStyle:'none',marginBottom:'28px',padding:0}}>
               {['Full ledger access','Cloud sync across devices','Floyd advisor','Unlimited pages & entries'].map(item=>(
                 <li key={item} style={{fontSize:'14px',color:C.white,padding:'8px 0',borderBottom:`1px solid ${C.border}`,display:'flex',alignItems:'center',gap:'10px',fontWeight:400}}>
@@ -130,8 +130,8 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
         <div style={{maxWidth:'720px',margin:'36px auto 0',background:'rgba(181,212,168,0.08)',border:`1px solid ${C.border}`,borderRadius:'14px',padding:'22px 28px',display:'flex',alignItems:'center',gap:'16px',textAlign:'left'}}>
           <div style={{width:'42px',height:'42px',borderRadius:'10px',background:'rgba(181,212,168,0.2)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:'18px'}}>⏱</div>
           <div>
-            <h4 style={{fontFamily:fh,fontSize:'16px',fontWeight:700,color:C.cream,marginBottom:'4px'}}>14-day free trial</h4>
-            <p style={{fontSize:'13px',color:C.white,fontWeight:400,lineHeight:1.55}}>Card required. Cancel before day 14 and you won't be charged.</p>
+            <h4 style={{fontFamily:fh,fontSize:'16px',fontWeight:700,color:C.cream,marginBottom:'4px'}}>No long-term commitment</h4>
+            <p style={{fontSize:'13px',color:C.white,fontWeight:400,lineHeight:1.55}}>Card required. Cancel anytime.</p>
           </div>
         </div>
       </section>
