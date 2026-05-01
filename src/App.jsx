@@ -481,6 +481,84 @@ function getTrialInfo(session){
   return {active:true, expired, daysLeft};
 }
 
+// ─── SUBSCRIPTION PAYWALL ────────────────────────────────────
+function PaywallScreen({ onCheckout, checkoutLoading, checkoutMsg, checkoutPending, onSignOut }) {
+  const FH = "'Fraunces','Playfair Display',Georgia,serif";
+  const FB = "'Inter','Helvetica Neue',sans-serif";
+  const C = { bg: '#1E3530', card: '#243D37', accent: '#B5D4A8', muted: '#9FB5A8', text: '#E8E2C8', border: 'rgba(255,255,255,0.08)' };
+
+  return (
+    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 16px', fontFamily: FB, gap: '32px' }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap');`}</style>
+
+      <div style={{ textAlign: 'center' }}>
+        <h1 style={{ fontFamily: FH, fontWeight: 800, fontSize: 'clamp(42px, 8vw, 64px)', color: C.text, lineHeight: 1, letterSpacing: '-0.015em', marginBottom: 10 }}>DivvyDup</h1>
+        <p style={{ fontSize: 15, color: C.muted, fontStyle: 'italic', fontWeight: 500 }}>The Book, reimagined.</p>
+      </div>
+
+      {checkoutPending ? (
+        <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 22, padding: '44px 40px', maxWidth: 420, width: '100%', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.35)' }}>
+          <div style={{ fontSize: 36, marginBottom: 20 }}>⏳</div>
+          <p style={{ fontFamily: FH, fontSize: 22, fontWeight: 700, color: C.text, marginBottom: 10 }}>Activating your subscription…</p>
+          <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.6 }}>This usually takes a few seconds. Hang tight.</p>
+        </div>
+      ) : (
+        <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 22, padding: '44px 40px', maxWidth: 480, width: '100%', boxShadow: '0 20px 60px rgba(0,0,0,0.35)', boxSizing: 'border-box' }}>
+          <p style={{ fontFamily: FH, fontSize: 22, fontWeight: 700, color: C.text, marginBottom: 6, textAlign: 'center' }}>Choose a plan to get started</p>
+          <p style={{ fontSize: 14, color: C.muted, textAlign: 'center', marginBottom: 28, lineHeight: 1.6 }}>Full access from day one. Cancel anytime from Settings.</p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 20 }}>
+            {/* Monthly */}
+            <div style={{ background: '#1E3530', border: `1px solid ${C.border}`, borderRadius: 14, padding: '22px 18px' }}>
+              <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted, marginBottom: 8 }}>Monthly</p>
+              <p style={{ fontFamily: FH, fontSize: 36, fontWeight: 700, color: C.text, lineHeight: 1, marginBottom: 4 }}>
+                <sup style={{ fontSize: 18, fontWeight: 500, verticalAlign: 'super' }}>$</sup>4.99<sub style={{ fontSize: 13, fontWeight: 400, color: C.muted }}>/mo</sub>
+              </p>
+              <p style={{ fontSize: 12, color: C.muted, marginBottom: 18 }}>Billed monthly</p>
+              <button
+                onClick={() => onCheckout(import.meta.env.VITE_STRIPE_PRICE_MONTHLY)}
+                disabled={checkoutLoading}
+                style={{ width: '100%', background: C.accent, color: '#1E3530', border: 'none', borderRadius: 999, padding: '11px', fontSize: 13, fontWeight: 600, cursor: checkoutLoading ? 'not-allowed' : 'pointer', fontFamily: FB, opacity: checkoutLoading ? 0.7 : 1 }}
+              >
+                {checkoutLoading ? 'Redirecting…' : 'Subscribe'}
+              </button>
+            </div>
+
+            {/* Annual */}
+            <div style={{ background: 'rgba(181,212,168,0.06)', border: '2px solid rgba(181,212,168,0.72)', borderRadius: 14, padding: '22px 18px', position: 'relative' }}>
+              <div style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', background: C.accent, color: '#1E3530', fontSize: 10, fontWeight: 700, padding: '4px 14px', borderRadius: 999, textTransform: 'uppercase', letterSpacing: '0.07em', whiteSpace: 'nowrap' }}>Best value</div>
+              <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted, marginBottom: 8 }}>Annual</p>
+              <p style={{ fontFamily: FH, fontSize: 36, fontWeight: 700, color: C.text, lineHeight: 1, marginBottom: 4 }}>
+                <sup style={{ fontSize: 18, fontWeight: 500, verticalAlign: 'super' }}>$</sup>50<sub style={{ fontSize: 13, fontWeight: 400, color: C.muted }}>/yr</sub>
+              </p>
+              <p style={{ fontSize: 12, color: C.muted, marginBottom: 18 }}>Save $10 vs monthly</p>
+              <button
+                onClick={() => onCheckout(import.meta.env.VITE_STRIPE_PRICE_ANNUAL)}
+                disabled={checkoutLoading}
+                style={{ width: '100%', background: C.accent, color: '#1E3530', border: 'none', borderRadius: 999, padding: '11px', fontSize: 13, fontWeight: 600, cursor: checkoutLoading ? 'not-allowed' : 'pointer', fontFamily: FB, opacity: checkoutLoading ? 0.7 : 1 }}
+              >
+                {checkoutLoading ? 'Redirecting…' : 'Subscribe'}
+              </button>
+            </div>
+          </div>
+
+          {checkoutMsg && (
+            <p style={{ fontSize: 13, color: '#F4A199', textAlign: 'center', marginBottom: 12 }}>{checkoutMsg}</p>
+          )}
+
+          <p style={{ fontSize: 12, color: C.muted, textAlign: 'center', lineHeight: 1.6 }}>
+            Secure checkout via Stripe. Your card is never stored on our servers.
+          </p>
+        </div>
+      )}
+
+      <button onClick={onSignOut} style={{ background: 'none', border: 'none', color: C.muted, fontSize: 13, cursor: 'pointer', textDecoration: 'underline', fontFamily: FB }}>
+        Sign out
+      </button>
+    </div>
+  );
+}
+
 // ─── TRIAL EXPIRED SCREEN ───────────────────────────────────
 function TrialExpiredScreen({onSignOut}){
   const FH="'Fraunces','Playfair Display',Georgia,serif";
@@ -599,15 +677,21 @@ export default function App() {
       const {data:{session}} = await supabase.auth.getSession();
       if(session){
         setAuthSession(session);
-        setHasFullAccess(await checkFullAccess(session.user.id));
-        supabase.from('profiles').select('is_admin, is_beta_tester, subscription_status, subscription_tier, subscription_started_at').eq('id', session.user.id).maybeSingle()
-          .then(({ data }) => { if (data?.is_admin) setIsAdmin(true); if (data?.is_beta_tester) setIsBetaTester(true); if (data) setSubscriptionData({ status: data.subscription_status, tier: data.subscription_tier, startedAt: data.subscription_started_at }); });
+        const [hasAccess, {data: profileData}] = await Promise.all([
+          checkFullAccess(session.user.id),
+          supabase.from('profiles').select('is_admin, is_beta_tester, subscription_status, subscription_tier, subscription_started_at').eq('id', session.user.id).maybeSingle(),
+        ]);
+        if (profileData?.is_admin) setIsAdmin(true);
+        if (profileData?.is_beta_tester) setIsBetaTester(true);
+        if (profileData) setSubscriptionData({ status: profileData.subscription_status, tier: profileData.subscription_tier, startedAt: profileData.subscription_started_at });
+        const isSubscribed = profileData?.is_admin || profileData?.subscription_status === 'active';
+        setHasFullAccess(isSubscribed || hasAccess);
         const saved = loadState();
-        if(saved && saved.ready){
-          setS(saved);
-          setScreen('app');
+        if (isSubscribed) {
+          if(saved && saved.ready){ setS(saved); setScreen('app'); }
+          else { setScreen('setup'); }
         } else {
-          setScreen('setup');
+          setScreen('paywall');
         }
       } else {
         // No session — always show landing. Never auto-enter the app from stale localStorage.
@@ -618,13 +702,21 @@ export default function App() {
       const sub = supabase.auth.onAuthStateChange(async (_event,session)=>{
         if(session&&!authSession){
           setAuthSession(session);
-          setHasFullAccess(await checkFullAccess(session.user.id));
+          const [hasAccess, {data: profileData}] = await Promise.all([
+            checkFullAccess(session.user.id),
+            supabase.from('profiles').select('is_admin, is_beta_tester, subscription_status, subscription_tier, subscription_started_at').eq('id', session.user.id).maybeSingle(),
+          ]);
+          if (profileData?.is_admin) setIsAdmin(true);
+          if (profileData?.is_beta_tester) setIsBetaTester(true);
+          if (profileData) setSubscriptionData({ status: profileData.subscription_status, tier: profileData.subscription_tier, startedAt: profileData.subscription_started_at });
+          const isSubscribed = profileData?.is_admin || profileData?.subscription_status === 'active';
+          setHasFullAccess(isSubscribed || hasAccess);
           const saved = loadState();
-          if(saved && saved.ready){
-            setS(saved);
-            setScreen('app');
+          if (isSubscribed) {
+            if(saved && saved.ready){ setS(saved); setScreen('app'); }
+            else { setScreen('setup'); }
           } else {
-            setScreen('setup');
+            setScreen('paywall');
           }
         }
       });
@@ -666,9 +758,35 @@ export default function App() {
   }
 
   useEffect(()=>{
-    if(checkoutSuccess && screen==='app'){
+    if (!checkoutSuccess || !authSession) return;
+
+    if (screen === 'app') {
       showToast('Subscription activated! Welcome to DivvyDup.');
       setCheckoutSuccess(false);
+      return;
+    }
+
+    // On paywall: webhook may not have fired yet — poll until subscription is active
+    if (screen === 'paywall') {
+      let attempts = 0;
+      const poll = async () => {
+        attempts++;
+        const { data } = await supabase.from('profiles').select('subscription_status, subscription_tier, subscription_started_at, is_admin').eq('id', authSession.user.id).single();
+        if (data?.subscription_status === 'active' || data?.is_admin) {
+          setSubscriptionData({ status: data.subscription_status, tier: data.subscription_tier, startedAt: data.subscription_started_at });
+          setCheckoutSuccess(false);
+          const saved = loadState();
+          if (saved && saved.ready) { setS(saved); setScreen('app'); }
+          else { setScreen('setup'); }
+          showToast('Subscription activated! Welcome to DivvyDup.');
+        } else if (attempts < 12) {
+          setTimeout(poll, 1000);
+        } else {
+          // Webhook didn't arrive in time — clear the pending state, user will see paywall again
+          setCheckoutSuccess(false);
+        }
+      };
+      poll();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[checkoutSuccess, screen]);
@@ -749,9 +867,27 @@ export default function App() {
         checkoutMsg={checkoutMsg}
         checkoutLoading={checkoutLoading}
       />
-      {screen==='auth'&&<AuthScreen onAuth={async (session)=>{setAuthSession(session);setHasFullAccess(await checkFullAccess(session.user.id));const saved=loadState();if(saved&&saved.ready){setS(saved);setScreen('app');}else{setScreen('setup');}}} onBack={()=>{setAuthError('');setScreen('landing');}} initialError={authError} initialMode={authMode}/>}
+      {screen==='auth'&&<AuthScreen onAuth={async (session)=>{
+        setAuthSession(session);
+        const [hasAccess, {data: profileData}] = await Promise.all([
+          checkFullAccess(session.user.id),
+          supabase.from('profiles').select('is_admin, is_beta_tester, subscription_status, subscription_tier, subscription_started_at').eq('id', session.user.id).maybeSingle(),
+        ]);
+        if (profileData?.is_admin) setIsAdmin(true);
+        if (profileData?.is_beta_tester) setIsBetaTester(true);
+        if (profileData) setSubscriptionData({ status: profileData.subscription_status, tier: profileData.subscription_tier, startedAt: profileData.subscription_started_at });
+        const isSubscribed = profileData?.is_admin || profileData?.subscription_status === 'active';
+        setHasFullAccess(isSubscribed || hasAccess);
+        const saved = loadState();
+        if (isSubscribed) {
+          if(saved && saved.ready){ setS(saved); setScreen('app'); } else { setScreen('setup'); }
+        } else {
+          setScreen('paywall');
+        }
+      }} onBack={()=>{setAuthError('');setScreen('landing');}} initialError={authError} initialMode={authMode}/>}
     </>
   );
+  if(screen==='paywall') return <PaywallScreen onCheckout={handleCheckout} checkoutLoading={checkoutLoading} checkoutMsg={checkoutMsg} checkoutPending={checkoutSuccess} onSignOut={async()=>{await supabase.auth.signOut();setAuthSession(null);setScreen('landing');setS(DEFAULT_STATE);}}/>;
   if(screen==='setup') return <SetupScreen onLaunch={launch} showToast={showToast} hasFullAccess={hasFullAccess}/>;
 
   // Trial enforcement — bypassed entirely for admins and users with product access.
