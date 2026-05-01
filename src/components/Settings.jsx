@@ -38,7 +38,15 @@ function Toggle({ checked, onChange }) {
   );
 }
 
-export default function Settings({ session, onSignOut, S }) {
+function formatDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+const MONTHLY_PRICE_ID = import.meta.env.VITE_STRIPE_PRICE_MONTHLY;
+const ANNUAL_PRICE_ID  = import.meta.env.VITE_STRIPE_PRICE_ANNUAL;
+
+export default function Settings({ session, onSignOut, S, subscriptionStatus, subscriptionTier, subscriptionStartedAt, onCheckout, checkoutLoading, onManageSubscription, portalLoading }) {
   const [prefs, setPrefs] = useState({ all_enabled: true, renewal_alerts: true });
   const [modal, setModal] = useState(null);
   const [toast, setToast] = useState(null);
@@ -171,6 +179,82 @@ export default function Settings({ session, onSignOut, S }) {
         <button onClick={handleExport} style={{ background:C.accent, color:C.bg, border:'none', borderRadius:999, padding:'10px 24px', fontSize:14, fontWeight:600, cursor:'pointer', fontFamily:F.b }}>
           Export My Data
         </button>
+      </section>
+
+      {/* Subscription */}
+      <section style={cardSt}>
+        <h2 style={sectionTitle}>💳 Subscription</h2>
+
+        {/* State A — no subscription or canceled */}
+        {(!subscriptionStatus || subscriptionStatus === 'canceled') && (
+          <>
+            <p style={{ fontSize:14, color:C.textMuted, marginBottom:20, lineHeight:1.6 }}>
+              {subscriptionStatus === 'canceled' ? 'Your subscription has been canceled. Resubscribe to restore full access.' : 'Choose a plan to unlock full access.'}
+            </p>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
+              <div style={{ background:C.bg, border:`1px solid ${C.border}`, borderRadius:14, padding:'24px 20px' }}>
+                <p style={{ fontSize:11, fontWeight:600, letterSpacing:'0.1em', textTransform:'uppercase', color:C.muted, marginBottom:8 }}>Monthly</p>
+                <p style={{ fontFamily:F.h, fontSize:38, fontWeight:700, color:C.text, lineHeight:1, marginBottom:4, letterSpacing:'-0.02em' }}><sup style={{ fontSize:20, fontWeight:500, verticalAlign:'super' }}>$</sup>5<sub style={{ fontSize:14, fontWeight:400, verticalAlign:'baseline', color:C.muted }}>/mo</sub></p>
+                <p style={{ fontSize:12, color:C.muted, marginBottom:20 }}>Billed monthly</p>
+                <button onClick={() => onCheckout(MONTHLY_PRICE_ID)} disabled={checkoutLoading} style={{ width:'100%', background:C.accent, color:C.bg, border:'none', borderRadius:999, padding:'11px', fontSize:13, fontWeight:600, cursor:checkoutLoading?'not-allowed':'pointer', fontFamily:F.b, opacity:checkoutLoading?0.7:1 }}>
+                  {checkoutLoading ? 'Redirecting…' : 'Subscribe'}
+                </button>
+              </div>
+              <div style={{ background:'rgba(181,212,168,0.06)', border:`2px solid rgba(181,212,168,0.72)`, borderRadius:14, padding:'24px 20px', position:'relative' }}>
+                <div style={{ position:'absolute', top:-12, left:'50%', transform:'translateX(-50%)', background:C.accent, color:C.bg, fontSize:10, fontWeight:700, padding:'4px 14px', borderRadius:999, textTransform:'uppercase', letterSpacing:'0.07em', whiteSpace:'nowrap' }}>Best value</div>
+                <p style={{ fontSize:11, fontWeight:600, letterSpacing:'0.1em', textTransform:'uppercase', color:C.muted, marginBottom:8 }}>Annual</p>
+                <p style={{ fontFamily:F.h, fontSize:38, fontWeight:700, color:C.text, lineHeight:1, marginBottom:4, letterSpacing:'-0.02em' }}><sup style={{ fontSize:20, fontWeight:500, verticalAlign:'super' }}>$</sup>50<sub style={{ fontSize:14, fontWeight:400, verticalAlign:'baseline', color:C.muted }}>/yr</sub></p>
+                <p style={{ fontSize:12, color:C.muted, marginBottom:20 }}>Save $10 vs monthly</p>
+                <button onClick={() => onCheckout(ANNUAL_PRICE_ID)} disabled={checkoutLoading} style={{ width:'100%', background:C.accent, color:C.bg, border:'none', borderRadius:999, padding:'11px', fontSize:13, fontWeight:600, cursor:checkoutLoading?'not-allowed':'pointer', fontFamily:F.b, opacity:checkoutLoading?0.7:1 }}>
+                  {checkoutLoading ? 'Redirecting…' : 'Subscribe'}
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* State B — active */}
+        {subscriptionStatus === 'active' && (
+          <>
+            <div style={rowSt}>
+              <div>
+                <p style={{ fontSize:11, fontWeight:600, color:C.textMuted, textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:3 }}>Plan</p>
+                <p style={{ fontSize:14, color:C.text, fontWeight:500 }}>You're on the {subscriptionTier === 'annual' ? 'Annual' : 'Monthly'} plan</p>
+              </div>
+              <span style={{ fontSize:11, fontWeight:700, padding:'3px 10px', borderRadius:999, background:C.greenBg, color:C.green, border:`1px solid ${C.green}` }}>Active</span>
+            </div>
+            {subscriptionStartedAt && (
+              <div style={rowSt}>
+                <div>
+                  <p style={{ fontSize:11, fontWeight:600, color:C.textMuted, textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:3 }}>Member since</p>
+                  <p style={{ fontSize:14, color:C.text }}>{formatDate(subscriptionStartedAt)}</p>
+                </div>
+              </div>
+            )}
+            <div style={rowLast}>
+              <div>
+                <p style={{ fontSize:14, fontWeight:600, color:C.text }}>Manage Subscription</p>
+                <p style={{ fontSize:13, color:C.textMuted }}>Cancel, update payment method, or view invoices</p>
+              </div>
+              <button onClick={onManageSubscription} disabled={portalLoading} style={{ background:'transparent', border:`1.5px solid ${C.border}`, borderRadius:999, padding:'8px 18px', fontSize:13, fontWeight:600, cursor:portalLoading?'not-allowed':'pointer', fontFamily:F.b, color:C.textMuted, opacity:portalLoading?0.7:1 }}>
+                {portalLoading ? 'Opening…' : 'Manage'}
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* State C — past due */}
+        {subscriptionStatus === 'past_due' && (
+          <>
+            <div style={{ background:C.redBg, border:`1px solid rgba(244,161,153,0.3)`, borderRadius:12, padding:'16px 20px', marginBottom:20 }}>
+              <p style={{ fontSize:14, fontWeight:600, color:C.red }}>⚠ Payment failed</p>
+              <p style={{ fontSize:13, color:C.textMuted, marginTop:4, lineHeight:1.55 }}>Please update your payment method to keep your subscription active.</p>
+            </div>
+            <button onClick={onManageSubscription} disabled={portalLoading} style={{ background:C.red, color:'#fff', border:'none', borderRadius:999, padding:'10px 24px', fontSize:14, fontWeight:600, cursor:portalLoading?'not-allowed':'pointer', fontFamily:F.b, opacity:portalLoading?0.7:1 }}>
+              {portalLoading ? 'Opening…' : 'Update Payment Method'}
+            </button>
+          </>
+        )}
       </section>
 
       {/* Change Password Modal */}

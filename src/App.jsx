@@ -1,14 +1,17 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Compass, CalendarCheck, ArrowLeftRight, PiggyBank, MessageCircle, BarChart3 } from 'lucide-react';
 import { Chart, registerables } from 'chart.js';
+import { loadStripe } from '@stripe/stripe-js';
 import { supabase } from './supabase';
 import StandardModal from './components/StandardModal';
 import SettingsView from './components/Settings';
 import FeedbackModal from './components/FeedbackModal';
 Chart.register(...registerables);
 
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
 // ─── LANDING PAGE ───────────────────────────────────────────
-function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccount}){
+function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccount,onCheckoutMonthly,onCheckoutAnnual,checkoutMsg='',checkoutLoading=false}){
   const C = { bg:'#1E3530', bgAlt:'#243D37', black:'#0D1C18', sage:'#B5D4A8', sageHover:'#A2C295', cream:'#E8E2C8', white:'#FFFFFF', muted:'#9FB5A8', border:'rgba(255,255,255,0.08)', borderStrong:'rgba(255,255,255,0.14)' };
   const fh = "'Fraunces','Playfair Display',Georgia,serif";
   const fb = "'Inter','Helvetica Neue',sans-serif";
@@ -109,7 +112,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
                 </li>
               ))}
             </ul>
-            <button onClick={onGetStarted} style={{width:'100%',background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'13px',fontFamily:fb,fontSize:'14px',fontWeight:500,cursor:'pointer'}}>Try it for a month</button>
+            <button onClick={()=>onCheckoutMonthly?onCheckoutMonthly():onGetStarted()} disabled={checkoutLoading} style={{width:'100%',background:'transparent',border:`1.5px solid ${C.cream}`,color:C.cream,borderRadius:'999px',padding:'13px',fontFamily:fb,fontSize:'14px',fontWeight:500,cursor:checkoutLoading?'not-allowed':'pointer',opacity:checkoutLoading?0.7:1}}>{checkoutLoading?'Redirecting…':'Try it for a month'}</button>
           </div>
           <div style={{background:'rgba(181,212,168,0.06)',border:`2px solid rgba(181,212,168,0.72)`,borderRadius:'20px',padding:'36px 30px',position:'relative',boxShadow:'0 0 0 4px rgba(181,212,168,0.06)'}}>
             <div style={{position:'absolute',top:'-14px',left:'50%',transform:'translateX(-50%)',background:C.sage,color:C.bg,fontSize:'11px',fontWeight:700,padding:'5px 18px',borderRadius:'999px',letterSpacing:'0.07em',whiteSpace:'nowrap',textTransform:'uppercase'}}>Best value</div>
@@ -123,9 +126,10 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
                 </li>
               ))}
             </ul>
-            <button onClick={onGetStarted} style={{width:'100%',background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'13px',fontFamily:fb,fontSize:'14px',fontWeight:600,cursor:'pointer'}}>Save and keep it simple</button>
+            <button onClick={()=>onCheckoutAnnual?onCheckoutAnnual():onGetStarted()} disabled={checkoutLoading} style={{width:'100%',background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'13px',fontFamily:fb,fontSize:'14px',fontWeight:600,cursor:checkoutLoading?'not-allowed':'pointer',opacity:checkoutLoading?0.7:1}}>{checkoutLoading?'Redirecting…':'Save and keep it simple'}</button>
           </div>
         </div>
+        {checkoutMsg&&<p style={{fontSize:'14px',color:C.sage,marginTop:'20px',marginBottom:'0',fontWeight:500,textAlign:'center'}}>{checkoutMsg}</p>}
         <p style={{fontSize:'14px',color:C.muted,marginTop:'28px',marginBottom:'0',fontWeight:400,fontStyle:'italic'}}>Most people start small. You can too.</p>
         <div style={{maxWidth:'720px',margin:'36px auto 0',background:'rgba(181,212,168,0.08)',border:`1px solid ${C.border}`,borderRadius:'14px',padding:'22px 28px',display:'flex',alignItems:'center',gap:'16px',textAlign:'left'}}>
           <div style={{width:'42px',height:'42px',borderRadius:'10px',background:'rgba(181,212,168,0.2)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:'18px'}}>⏱</div>
@@ -543,6 +547,11 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isBetaTester, setIsBetaTester] = useState(false);
   const [feedbackModal, setFeedbackModal] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutMsg, setCheckoutMsg] = useState('');
+  const [checkoutSuccess, setCheckoutSuccess] = useState(false);
+  const [subscriptionData, setSubscriptionData] = useState({ status: null, tier: null, startedAt: null });
+  const [portalLoading, setPortalLoading] = useState(false);
   const toastTimer = useRef(null);
   const advTimer = useRef(null);
 
@@ -560,6 +569,12 @@ export default function App() {
         setScreen('landing');
         setS(DEFAULT_STATE);
         return;
+      }
+
+      // Stripe checkout success return
+      if (searchParams.get('session_id')) {
+        setCheckoutSuccess(true);
+        window.history.replaceState(null, '', window.location.pathname);
       }
 
       // Hub-driven SSO handoff: consume access_token/refresh_token from URL if present
@@ -585,8 +600,8 @@ export default function App() {
       if(session){
         setAuthSession(session);
         setHasFullAccess(await checkFullAccess(session.user.id));
-        supabase.from('profiles').select('is_admin, is_beta_tester').eq('id', session.user.id).maybeSingle()
-          .then(({ data }) => { if (data?.is_admin) setIsAdmin(true); if (data?.is_beta_tester) setIsBetaTester(true); });
+        supabase.from('profiles').select('is_admin, is_beta_tester, subscription_status, subscription_tier, subscription_started_at').eq('id', session.user.id).maybeSingle()
+          .then(({ data }) => { if (data?.is_admin) setIsAdmin(true); if (data?.is_beta_tester) setIsBetaTester(true); if (data) setSubscriptionData({ status: data.subscription_status, tier: data.subscription_tier, startedAt: data.subscription_started_at }); });
         const saved = loadState();
         if(saved && saved.ready){
           setS(saved);
@@ -627,6 +642,14 @@ export default function App() {
     if(S.ready) saveState(S);
   },[S]);
 
+  // Refetch subscription data whenever Settings view opens (picks up portal returns)
+  useEffect(()=>{
+    if(view==='settings' && authSession){
+      supabase.from('profiles').select('subscription_status, subscription_tier, subscription_started_at').eq('id', authSession.user.id).single()
+        .then(({ data })=>{ if(data) setSubscriptionData({ status: data.subscription_status, tier: data.subscription_tier, startedAt: data.subscription_started_at }); });
+    }
+  },[view, authSession]);
+
   // ── Helpers ──
   const pgById = useCallback((id)=> S.pages.find(p=>p.id===id), [S.pages]);
 
@@ -640,6 +663,50 @@ export default function App() {
     if(advTimer.current) clearTimeout(advTimer.current);
     setAdvMsg({msg,lvl,show:true,name:S.advisorName||'Floyd'});
     advTimer.current = setTimeout(()=>setAdvMsg(a=>({...a,show:false})),9000);
+  }
+
+  useEffect(()=>{
+    if(checkoutSuccess && screen==='app'){
+      showToast('Subscription activated! Welcome to DivvyDup.');
+      setCheckoutSuccess(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[checkoutSuccess, screen]);
+
+  async function handleCheckout(priceId){
+    if(!authSession){
+      setCheckoutMsg('Create a free account first to subscribe.');
+      setTimeout(()=>{ setAuthMode('signup'); setScreen('auth'); setCheckoutMsg(''); }, 1500);
+      return;
+    }
+    setCheckoutLoading(true);
+    setCheckoutMsg('');
+    try{
+      const { data, error } = await supabase.functions.invoke('create-checkout-session',{
+        body:{ priceId, userId:authSession.user.id, userEmail:authSession.user.email },
+      });
+      if(error) throw error;
+      if(!data?.url) throw new Error('No checkout URL returned.');
+      window.location.href = data.url;
+    }catch(err){
+      setCheckoutLoading(false);
+      setCheckoutMsg('Something went wrong. Please try again.');
+    }
+  }
+
+  async function handleManageSubscription(){
+    setPortalLoading(true);
+    try{
+      const { data, error } = await supabase.functions.invoke('create-portal-session',{
+        body:{ userId: authSession.user.id },
+      });
+      if(error) throw error;
+      if(!data?.url) throw new Error('No portal URL returned.');
+      window.location.href = data.url;
+    }catch(err){
+      setPortalLoading(false);
+      showToast('Could not open billing portal. Please try again.');
+    }
   }
 
   function toggleAdvisor(){
@@ -674,7 +741,14 @@ export default function App() {
   if(screen==='loading') return null;
   if(screen==='landing'||screen==='auth') return (
     <>
-      <LandingPage onGetStarted={()=>{setAuthMode('signup');setScreen('auth');}} onSignIn={()=>{setAuthMode('signin');setScreen('auth');}}/>
+      <LandingPage
+        onGetStarted={()=>{setAuthMode('signup');setScreen('auth');}}
+        onSignIn={()=>{setAuthMode('signin');setScreen('auth');}}
+        onCheckoutMonthly={()=>handleCheckout(import.meta.env.VITE_STRIPE_PRICE_MONTHLY)}
+        onCheckoutAnnual={()=>handleCheckout(import.meta.env.VITE_STRIPE_PRICE_ANNUAL)}
+        checkoutMsg={checkoutMsg}
+        checkoutLoading={checkoutLoading}
+      />
       {screen==='auth'&&<AuthScreen onAuth={async (session)=>{setAuthSession(session);setHasFullAccess(await checkFullAccess(session.user.id));const saved=loadState();if(saved&&saved.ready){setS(saved);setScreen('app');}else{setScreen('setup');}}} onBack={()=>{setAuthError('');setScreen('landing');}} initialError={authError} initialMode={authMode}/>}
     </>
   );
@@ -782,7 +856,7 @@ export default function App() {
           {view==='dashboard' && <DashboardView S={S} updateS={updateS} setModal={setModal} onSelectPage={(id)=>{updateS(s=>({...s,activePage:id}));setView('ledger');}} advSay={advSay}/>}
           {view==='ledger' && <LedgerView S={S} updateS={updateS} activePage={activePage} pgById={pgById} showToast={showToast} advSay={advSay} setModal={setModal} trial={trial}/>}
           {view==='charts' && <ChartsView S={S}/>}
-          {view==='settings' && <SettingsView session={authSession} onSignOut={()=>{setScreen('landing');setAuthSession(null);}} S={S}/>}
+          {view==='settings' && <SettingsView session={authSession} onSignOut={()=>{setScreen('landing');setAuthSession(null);}} S={S} subscriptionStatus={subscriptionData.status} subscriptionTier={subscriptionData.tier} subscriptionStartedAt={subscriptionData.startedAt} onCheckout={handleCheckout} checkoutLoading={checkoutLoading} onManageSubscription={handleManageSubscription} portalLoading={portalLoading}/>}
         </div>
       </div>
 
