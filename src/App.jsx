@@ -700,6 +700,17 @@ export default function App() {
 
       // Listen for auth state changes (e.g. after email confirmation) — only once we've settled
       const sub = supabase.auth.onAuthStateChange(async (_event,session)=>{
+        if(_event==='SIGNED_OUT'){
+          setAuthSession(null);
+          setScreen('landing');
+          setS(DEFAULT_STATE);
+          setHasFullAccess(false);
+          setIsAdmin(false);
+          setIsBetaTester(false);
+          setSubscriptionData({status:null,tier:null,startedAt:null});
+          clearSupabaseAuth();
+          return;
+        }
         if(session&&!authSession){
           setAuthSession(session);
           const [hasAccess, {data: profileData}] = await Promise.all([
@@ -992,7 +1003,7 @@ export default function App() {
           {view==='dashboard' && <DashboardView S={S} updateS={updateS} setModal={setModal} onSelectPage={(id)=>{updateS(s=>({...s,activePage:id}));setView('ledger');}} advSay={advSay}/>}
           {view==='ledger' && <LedgerView S={S} updateS={updateS} activePage={activePage} pgById={pgById} showToast={showToast} advSay={advSay} setModal={setModal} trial={trial}/>}
           {view==='charts' && <ChartsView S={S}/>}
-          {view==='settings' && <SettingsView session={authSession} onSignOut={()=>{setScreen('landing');setAuthSession(null);}} S={S} subscriptionStatus={subscriptionData.status} subscriptionTier={subscriptionData.tier} subscriptionStartedAt={subscriptionData.startedAt} onCheckout={handleCheckout} checkoutLoading={checkoutLoading} onManageSubscription={handleManageSubscription} portalLoading={portalLoading}/>}
+          {view==='settings' && <SettingsView session={authSession} onSignOut={()=>{}} S={S} subscriptionStatus={subscriptionData.status} subscriptionTier={subscriptionData.tier} subscriptionStartedAt={subscriptionData.startedAt} onCheckout={handleCheckout} checkoutLoading={checkoutLoading} onManageSubscription={handleManageSubscription} portalLoading={portalLoading}/>}
         </div>
       </div>
 
