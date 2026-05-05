@@ -899,7 +899,7 @@ export default function App() {
     </>
   );
   if(screen==='paywall') return <PaywallScreen onCheckout={handleCheckout} checkoutLoading={checkoutLoading} checkoutMsg={checkoutMsg} checkoutPending={checkoutSuccess} onSignOut={async()=>{await supabase.auth.signOut();setAuthSession(null);setScreen('landing');setS(DEFAULT_STATE);}}/>;
-  if(screen==='setup') return <SetupScreen onLaunch={launch} showToast={showToast} hasFullAccess={hasFullAccess}/>;
+  if(screen==='setup') return <SetupScreen onLaunch={launch} hasFullAccess={hasFullAccess}/>;
 
   // Trial enforcement — bypassed entirely for admins and users with product access.
   const trial = hasFullAccess ? {active:false,expired:false,daysLeft:null} : getTrialInfo(authSession);
@@ -1044,7 +1044,7 @@ export default function App() {
 // ═══════════════════════════════════════════════════════════
 // SETUP SCREEN
 // ═══════════════════════════════════════════════════════════
-function SetupScreen({onLaunch,showToast,hasFullAccess}){
+function SetupScreen({onLaunch,hasFullAccess}){
   const [step,setStep]=useState(1);
   const [name,setName]=useState('');
   const [freq,setFreq]=useState(26);
@@ -1056,6 +1056,13 @@ function SetupScreen({onLaunch,showToast,hasFullAccess}){
   const [cushions,setCushions]=useState({});
   const [setupDonors,setSetupDonors]=useState([]);
   const [donorPick,setDonorPick]=useState('');
+  const [localToast,setLocalToast]=useState({msg:'',cls:'',show:false});
+  const localToastTimer=useRef(null);
+  function showToast(msg,cls=''){
+    if(localToastTimer.current)clearTimeout(localToastTimer.current);
+    setLocalToast({msg,cls,show:true});
+    localToastTimer.current=setTimeout(()=>setLocalToast(t=>({...t,show:false})),3500);
+  }
 
   const selectedList = CATALOG.filter(p=>selected.has(p.id));
 
@@ -1108,6 +1115,7 @@ function SetupScreen({onLaunch,showToast,hasFullAccess}){
 
   return(
     <div className="setup-screen">
+      <div className={`toast${localToast.show?' show':''} ${localToast.cls}`}>{localToast.msg}</div>
       <div className="setup-book">
         <div className="setup-cover">
           <h1>📒 DivvyDup</h1>

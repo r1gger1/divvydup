@@ -100,6 +100,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .fl:first-child{margin-top:0;}
 .setup-input,.setup-select{width:100%;background:#fff;border:1.5px solid var(--paper3);border-radius:2px;padding:10px 12px;font-family:'Courier Prime',monospace;font-size:.9rem;color:var(--ink);transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;}
 .setup-input:focus,.setup-select:focus{outline:none;border-color:var(--g4);box-shadow:0 0 0 3px rgba(42,71,42,.1);}
+/* Override suite-wide inputs.css which has higher specificity (input[type=*] beats .class) */
+.setup-body input[type="text"],.setup-body input[type="number"],.setup-body input[type="email"],.setup-body select{background:#fff;color:var(--ink);border:1.5px solid var(--paper3);border-radius:2px;font-family:'Courier Prime',monospace;font-size:.9rem;}
+.setup-body input::placeholder{color:var(--ink3);opacity:1;}
+.setup-body label{color:var(--g4);font-family:'Courier Prime',monospace;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;}
 .setup-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%232a472a'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;cursor:pointer;}
 .pages-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;max-height:340px;overflow-y:auto;padding:2px;}
 .po{display:flex;align-items:center;gap:9px;background:#fff;border:1.5px solid var(--paper3);border-radius:2px;padding:9px 11px;cursor:pointer;transition:all .15s;user-select:none;}
@@ -419,4 +423,17 @@ table.lt td:last-child{border-right:none;}
   .lstats{grid-template-columns:1fr 1fr 1fr;}
   .lsc:nth-child(4),.lsc:nth-child(5){display:none;}
   .sidebar{display:none;}
+
+  /* Center-align headings and dashboard hero */
+  .dash-hero{flex-direction:column;align-items:center;text-align:center;}
+  .dash-stats{justify-content:center;}
+  .dst{text-align:center;}
+  .dash-cards{justify-content:center;}
+  .dc{text-align:center;}
+
+  /* Ledger page header */
+  .lph{flex-direction:column;align-items:center;text-align:center;}
+  .lph-right{text-align:center;}
+  .lph-left h2{justify-content:center;}
+  .lsc{text-align:center;}
 }
