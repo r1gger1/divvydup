@@ -177,6 +177,8 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
 // ─── AUTH SCREEN ───────────────────────────────────────────
 function AuthScreen({onAuth,onBack,initialError,initialMode}){
   const [mode,setMode]=useState(initialMode==='signin'?'signin':'signup');
+  const [firstName,setFirstName]=useState('');
+  const [lastName,setLastName]=useState('');
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
   const [confirm,setConfirm]=useState('');
@@ -188,16 +190,17 @@ function AuthScreen({onAuth,onBack,initialError,initialMode}){
 
   async function handleSignUp(e){
     e?.preventDefault?.();
+    if(!firstName.trim()||!lastName.trim())return setError('Please enter your first and last name.');
     if(!email.trim()||!password)return setError('Email and password are required.');
     if(password.length<6)return setError('Password must be at least 6 characters.');
     if(password!==confirm)return setError('Passwords do not match.');
     setError('');setLoading(true);
-    const{data,error:err}=await supabase.auth.signUp({email:email.trim(),password});
-    setLoading(false);
-    if(err)return setError(err.message);
+    const{data,error:err}=await supabase.auth.signUp({email:email.trim(),password,options:{data:{first_name:firstName.trim(),last_name:lastName.trim(),full_name:`${firstName} ${lastName}`.trim()}}});
+    if(err){setLoading(false);return setError(err.message);}
     if(data?.user){
-      await supabase.from('profiles').update({has_divvydup:true}).eq('id',data.user.id);
+      await supabase.from('profiles').upsert({id:data.user.id,first_name:firstName.trim(),last_name:lastName.trim(),has_divvydup:true});
     }
+    setLoading(false);
     setDone(true);
   }
 
@@ -266,8 +269,18 @@ function AuthScreen({onAuth,onBack,initialError,initialMode}){
           <>
             {error&&<div className="standard-modal-error">{error}</div>}
             <form onSubmit={handleSignUp}>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+                <div>
+                  <label>First name</label>
+                  <input type="text" placeholder="Jane" value={firstName} onChange={e=>setFirstName(e.target.value)} required autoFocus autoComplete="given-name"/>
+                </div>
+                <div>
+                  <label>Last name</label>
+                  <input type="text" placeholder="Smith" value={lastName} onChange={e=>setLastName(e.target.value)} required autoComplete="family-name"/>
+                </div>
+              </div>
               <label>Email address</label>
-              <input type="email" placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus autoComplete="email"/>
+              <input type="email" placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)} required autoComplete="email"/>
 
               <label>Password</label>
               <div style={{position:'relative',display:'flex',alignItems:'center'}}>
