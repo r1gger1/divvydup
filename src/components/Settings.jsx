@@ -185,8 +185,24 @@ export default function Settings({ session, onSignOut, S, subscriptionStatus, su
       <section style={cardSt}>
         <h2 style={sectionTitle}>💳 Subscription</h2>
 
-        {/* State A — no subscription or canceled */}
-        {(!subscriptionStatus || subscriptionStatus === 'canceled') && (
+        {/* Complimentary access — admin or beta tester with no Stripe subscription */}
+        {(isAdmin || isBetaTester) && !subscriptionStatus && (
+          <>
+            <div style={rowSt}>
+              <div>
+                <p style={{ fontSize:11, fontWeight:600, color:C.textMuted, textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:3 }}>Plan</p>
+                <p style={{ fontSize:14, color:C.text, fontWeight:500 }}>Complimentary access</p>
+              </div>
+              <span style={{ fontSize:11, fontWeight:700, padding:'3px 10px', borderRadius:999, background:C.greenBg, color:C.green, border:`1px solid ${C.green}` }}>Active</span>
+            </div>
+            <div style={rowLast}>
+              <p style={{ fontSize:13, color:C.textMuted, lineHeight:1.6 }}>Your account has full access to all features. No subscription required.</p>
+            </div>
+          </>
+        )}
+
+        {/* No subscription / canceled — non-admin users only */}
+        {(!isAdmin && !isBetaTester) && (!subscriptionStatus || subscriptionStatus === 'canceled') && (
           <>
             <p style={{ fontSize:14, color:C.textMuted, marginBottom:20, lineHeight:1.6 }}>
               {subscriptionStatus === 'canceled' ? 'Your subscription has been canceled. Resubscribe to restore full access.' : 'Choose a plan to unlock full access.'}
@@ -213,13 +229,15 @@ export default function Settings({ session, onSignOut, S, subscriptionStatus, su
           </>
         )}
 
-        {/* State B — active */}
+        {/* Active subscription */}
         {subscriptionStatus === 'active' && (
           <>
             <div style={rowSt}>
               <div>
-                <p style={{ fontSize:11, fontWeight:600, color:C.textMuted, textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:3 }}>Plan</p>
-                <p style={{ fontSize:14, color:C.text, fontWeight:500 }}>You're on the {subscriptionTier === 'annual' ? 'Annual' : 'Monthly'} plan</p>
+                <p style={{ fontSize:11, fontWeight:600, color:C.textMuted, textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:3 }}>Current Plan</p>
+                <p style={{ fontSize:14, color:C.text, fontWeight:500 }}>
+                  {subscriptionTier === 'annual' ? 'Annual — $50/yr' : 'Monthly — $5/mo'}
+                </p>
               </div>
               <span style={{ fontSize:11, fontWeight:700, padding:'3px 10px', borderRadius:999, background:C.greenBg, color:C.green, border:`1px solid ${C.green}` }}>Active</span>
             </div>
@@ -229,6 +247,17 @@ export default function Settings({ session, onSignOut, S, subscriptionStatus, su
                   <p style={{ fontSize:11, fontWeight:600, color:C.textMuted, textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:3 }}>Member since</p>
                   <p style={{ fontSize:14, color:C.text }}>{formatDate(subscriptionStartedAt)}</p>
                 </div>
+              </div>
+            )}
+            {subscriptionTier !== 'annual' && (
+              <div style={rowSt}>
+                <div>
+                  <p style={{ fontSize:14, fontWeight:600, color:C.text }}>Upgrade to Annual</p>
+                  <p style={{ fontSize:13, color:C.textMuted }}>Save $10 a year — $50/yr instead of $60</p>
+                </div>
+                <button onClick={() => onCheckout(ANNUAL_PRICE_ID)} disabled={checkoutLoading} style={{ background:C.accent, color:C.bg, border:'none', borderRadius:999, padding:'8px 20px', fontSize:13, fontWeight:600, cursor:checkoutLoading?'not-allowed':'pointer', fontFamily:F.b, opacity:checkoutLoading?0.7:1, whiteSpace:'nowrap' }}>
+                  {checkoutLoading ? 'Redirecting…' : 'Upgrade'}
+                </button>
               </div>
             )}
             <div style={rowLast}>
@@ -243,7 +272,7 @@ export default function Settings({ session, onSignOut, S, subscriptionStatus, su
           </>
         )}
 
-        {/* State C — past due */}
+        {/* Past due */}
         {subscriptionStatus === 'past_due' && (
           <>
             <div style={{ background:C.redBg, border:`1px solid rgba(244,161,153,0.3)`, borderRadius:12, padding:'16px 20px', marginBottom:20 }}>
