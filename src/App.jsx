@@ -19,19 +19,11 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
   return(
     <div style={{fontFamily:fb,background:C.bg,color:C.white,minHeight:'100vh',WebkitFontSmoothing:'antialiased'}}>
 
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap');
-        .dd-nav-links { display:flex; align-items:center; gap:28px; }
-        .dd-hamburger { display:none; background:none; border:none; cursor:pointer; color:#E8E2C8; padding:10px; min-width:44px; min-height:44px; align-items:center; justify-content:center; border-radius:8px; flex-shrink:0; }
-        .dd-mobile-menu { background:#0D1C18; border-top:1px solid rgba(255,255,255,0.08); padding:8px 24px 24px; }
-        .dd-mobile-menu-link { display:flex; align-items:center; font-family:'Inter','Helvetica Neue',sans-serif; font-size:17px; color:#E8E2C8; text-decoration:none; background:none; border:none; cursor:pointer; padding:14px 8px; width:100%; text-align:left; border-bottom:1px solid rgba(255,255,255,0.08); }
-        .dd-mobile-menu-cta { display:block; width:100%; margin-top:16px; border-radius:999px; padding:14px; background:#B5D4A8; color:#1E3530; border:none; cursor:pointer; font-size:15px; font-weight:600; font-family:'Inter','Helvetica Neue',sans-serif; }
-        @media (max-width:768px) { .dd-nav-links { display:none; } .dd-hamburger { display:flex; } }
-      `}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap');`}</style>
 
       {/* NAV */}
       <nav style={{background:C.black,position:'sticky',top:0,zIndex:100,borderBottom:`1px solid ${C.border}`}}>
-        <div style={{maxWidth:'1200px',margin:'0 auto',padding:'0 40px',minHeight:'80px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+        <div className="dd-lp-nav-inner" style={{maxWidth:'1200px',margin:'0 auto',minHeight:'80px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
           <div style={{display:'flex',alignItems:'center',gap:12}}>
       <a href="https://startinglinehq.com" style={{display:'inline-flex',alignItems:'center'}}>
         <img src="/slhq-logo.png" alt="StartingLine HQ" style={{height:'clamp(52px, 6vw, 72px)',width:'auto',display:'block'}} />
@@ -88,7 +80,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
 
       {/* ORIGIN */}
       <section style={{background:C.bgAlt,padding:'44px 32px',borderTop:`1px solid ${C.border}`,borderBottom:`1px solid ${C.border}`}}>
-        <div style={{maxWidth:'780px',margin:'0 auto',display:'grid',gridTemplateColumns:'auto 1fr',gap:'48px',alignItems:'center'}}>
+        <div className="dd-origin-grid" style={{maxWidth:'780px',margin:'0 auto',display:'grid',alignItems:'center'}}>
           <div style={{width:'100px',height:'130px',background:C.black,borderRadius:'4px 16px 16px 4px',borderLeft:`8px solid ${C.sage}`,display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'12px 12px 14px',flexShrink:0}}>
             {[1,2,3,4,5].map(i=><div key={i} style={{height:'2px',background:'rgba(255,255,255,0.12)',marginBottom:'8px',borderRadius:'1px',width:i%2===0?'55%':'100%'}}></div>)}
           </div>
@@ -129,7 +121,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
         <h2 style={{fontFamily:fh,fontSize:'clamp(42px,5.5vw,68px)',fontWeight:700,color:C.cream,marginBottom:'14px',letterSpacing:'-0.015em'}}>Simple. No tricks.</h2>
         <p style={{fontSize:'16px',color:C.white,marginBottom:'32px',fontWeight:400}}>Card required. Cancel anytime.</p>
         <p style={{fontSize:'14px',color:C.white,marginBottom:'40px',fontWeight:500}}>Try it. If it doesn't click, you can stop anytime.</p>
-        <div style={{maxWidth:'720px',margin:'0 auto',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'20px',textAlign:'left'}}>
+        <div className="dd-pricing-grid">
           <div style={{background:C.bg,border:`1px solid ${C.border}`,borderRadius:'20px',padding:'36px 30px'}}>
             <p style={{fontSize:'12px',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:C.muted,marginBottom:'10px'}}>Monthly</p>
             <p style={{fontFamily:fh,fontSize:'48px',fontWeight:700,color:C.cream,lineHeight:1,marginBottom:'4px',letterSpacing:'-0.02em'}}><sup style={{fontSize:'24px',fontWeight:500,verticalAlign:'super'}}>$</sup>5<sub style={{fontSize:'16px',fontWeight:400,verticalAlign:'baseline',color:C.muted}}>/mo</sub></p>

@@ -437,3 +437,23 @@ table.lt td:last-child{border-right:none;}
   .lph-left h2{justify-content:center;}
   .lsc{text-align:center;}
 }
+
+/* ── LANDING PAGE: mobile nav ── */
+.dd-nav-links{display:flex;align-items:center;gap:28px}
+.dd-hamburger{display:none;background:none;border:none;cursor:pointer;color:#E8E2C8;padding:10px;min-width:44px;min-height:44px;align-items:center;justify-content:center;border-radius:8px;flex-shrink:0}
+.dd-hamburger:hover{background:rgba(255,255,255,0.08)}
+.dd-mobile-menu{background:#0D1C18;border-top:1px solid rgba(255,255,255,0.08);padding:8px 24px 24px}
+.dd-mobile-menu-link{display:flex;align-items:center;font-family:'Inter','Helvetica Neue',sans-serif;font-size:17px;color:#E8E2C8;text-decoration:none;background:none;border:none;cursor:pointer;padding:14px 8px;width:100%;text-align:left;border-bottom:1px solid rgba(255,255,255,0.08)}
+.dd-mobile-menu-link:last-of-type{border-bottom:none}
+.dd-mobile-menu-cta{display:block;width:100%;margin-top:16px;border-radius:999px;padding:14px;background:#B5D4A8;color:#1E3530;border:none;cursor:pointer;font-size:15px;font-weight:600;font-family:'Inter','Helvetica Neue',sans-serif}
+/* ── LANDING PAGE: responsive layout ── */
+.dd-lp-nav-inner{padding:0 40px}
+.dd-origin-grid{display:grid;grid-template-columns:auto 1fr;gap:48px;align-items:center}
+.dd-pricing-grid{max-width:720px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:20px;text-align:left}
+@media(max-width:768px){
+  .dd-nav-links{display:none}
+  .dd-hamburger{display:flex}
+  .dd-lp-nav-inner{padding:0 20px}
+  .dd-origin-grid{grid-template-columns:1fr;gap:24px}
+  .dd-pricing-grid{grid-template-columns:1fr}
+}
