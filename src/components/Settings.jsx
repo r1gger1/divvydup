@@ -46,7 +46,7 @@ function formatDate(iso) {
 const MONTHLY_PRICE_ID = import.meta.env.VITE_STRIPE_PRICE_MONTHLY;
 const ANNUAL_PRICE_ID  = import.meta.env.VITE_STRIPE_PRICE_ANNUAL;
 
-export default function Settings({ session, onSignOut, S, subscriptionStatus, subscriptionTier, subscriptionStartedAt, onCheckout, checkoutLoading, onManageSubscription, portalLoading }) {
+export default function Settings({ session, onSignOut, S, subscriptionStatus, subscriptionTier, subscriptionStartedAt, onCheckout, checkoutLoading, onManageSubscription, portalLoading, onReset }) {
   const [prefs, setPrefs] = useState({ all_enabled: true, renewal_alerts: true });
   const [modal, setModal] = useState(null);
   const [toast, setToast] = useState(null);
@@ -291,6 +291,22 @@ export default function Settings({ session, onSignOut, S, subscriptionStatus, su
             </div>
           </form>
         </StandardModal>
+      )}
+
+      {/* Reset Ledger */}
+      {onReset && (
+        <section style={{ ...cardSt, borderColor:'rgba(244,161,153,0.2)' }}>
+          <h2 style={{ ...sectionTitle, color:C.red }}>⚠️ Reset Ledger</h2>
+          <p style={{ fontSize:14, color:C.textMuted, lineHeight:1.65, marginBottom:20 }}>
+            Permanently delete all pages, balances, and transaction history for this ledger. Your account will not be deleted. This action cannot be undone.
+          </p>
+          <button
+            onClick={onReset}
+            style={{ background:'transparent', border:`1.5px solid ${C.red}`, borderRadius:999, padding:'10px 24px', fontSize:14, fontWeight:600, cursor:'pointer', fontFamily:F.b, color:C.red }}
+          >
+            Reset Ledger
+          </button>
+        </section>
       )}
 
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}

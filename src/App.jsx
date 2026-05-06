@@ -1052,8 +1052,6 @@ export default function App() {
           <button className="btn-xfr" onClick={()=>setModal('recon')}>⚖ Reconcile</button>
           <button className="btn-xfr" onClick={()=>setModal('overflow')}>🌊 Overflow</button>
           <button className="btn-xfr" onClick={()=>setModal('xfr')}>⇄ Move Money</button>
-          <button className="btn-xfr" style={{fontSize:'.68rem',color:'var(--red-light)',borderColor:'rgba(200,64,64,.3)'}} onClick={()=>setModal('reset')}>↺ Reset</button>
-          {authSession&&<button className="btn-xfr" style={{fontSize:'.68rem',color:'var(--g7)',borderColor:'rgba(157,196,157,.35)'}} onClick={async()=>{await supabase.auth.signOut();clearSupabaseAuth();window.location.href='https://startinglinehq.com/?signout=true';}}>⎋ Sign Out</button>}
           <button className="btn-dep" onClick={()=>setModal('dep')}>+ Deposit Paycheck</button>
         </div>
       </header>
@@ -1083,7 +1081,7 @@ export default function App() {
           {view==='dashboard' && <DashboardView S={S} updateS={updateS} setModal={setModal} onSelectPage={(id)=>{updateS(s=>({...s,activePage:id}));setView('ledger');}} advSay={advSay}/>}
           {view==='ledger' && <LedgerView S={S} updateS={updateS} activePage={activePage} pgById={pgById} showToast={showToast} advSay={advSay} setModal={setModal} trial={trial}/>}
           {view==='charts' && <ChartsView S={S}/>}
-          {view==='settings' && <SettingsView session={authSession} onSignOut={()=>{}} S={S} subscriptionStatus={subscriptionData.status} subscriptionTier={subscriptionData.tier} subscriptionStartedAt={subscriptionData.startedAt} onCheckout={handleCheckout} checkoutLoading={checkoutLoading} onManageSubscription={handleManageSubscription} portalLoading={portalLoading}/>}
+          {view==='settings' && <SettingsView session={authSession} onSignOut={()=>{}} S={S} subscriptionStatus={subscriptionData.status} subscriptionTier={subscriptionData.tier} subscriptionStartedAt={subscriptionData.startedAt} onCheckout={handleCheckout} checkoutLoading={checkoutLoading} onManageSubscription={handleManageSubscription} portalLoading={portalLoading} onReset={()=>setModal('reset')}/>}
         </div>
       </div>
 
