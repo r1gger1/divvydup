@@ -129,7 +129,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 /* ── MAIN APP ── */
 .main-app{min-height:100vh;padding-top:36px;}
-.app-header{background:var(--g1);border-bottom:3px double var(--g4);padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:36px;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,.2);}
+.app-header{background:var(--g1);border-bottom:3px double var(--g4);padding:0 20px;height:88px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:36px;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,.2);}
 .hdr-brand{font-family:var(--slhq-fh);font-weight:600;font-size:1.15rem;letter-spacing:-0.01em;display:flex;align-items:center;gap:8px;}
 .hdr-product{background:linear-gradient(to right,#E8D8C0 65%,#C4820F 65%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .hdr-divider{color:rgba(255,255,255,.25);font-weight:300;-webkit-text-fill-color:rgba(255,255,255,.25);}

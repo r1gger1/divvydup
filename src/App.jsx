@@ -982,9 +982,8 @@ export default function App() {
             }}
             title="StartingLine HQ"
           >
-            <img src="/slhq-logo.png" alt="StartingLine HQ" style={{height:'clamp(36px, 5vw, 48px)',width:'auto',display:'block'}}/>
+            <img src="/slhq-logo.png" alt="StartingLine HQ" style={{height:'clamp(52px, 6vw, 72px)',width:'auto',display:'block'}}/>
           </button>
-          <div className="hdr-mark">{displayName.charAt(0)}</div>
           <span className="hdr-product">DivvyDup</span>
           <span className="hdr-divider">·</span>
           <span className="hdr-ledger-name">{displayName}</span>
