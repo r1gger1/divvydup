@@ -22,8 +22,13 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
 
       {/* NAV */}
       <nav style={{background:C.black,position:'sticky',top:0,zIndex:100,borderBottom:`1px solid ${C.border}`}}>
-        <div style={{maxWidth:'1200px',margin:'0 auto',padding:'0 40px',height:'64px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-          <span style={{fontFamily:fh,fontSize:'22px',fontWeight:700,color:C.cream,letterSpacing:'-0.01em'}}>DivvyDup</span>
+        <div style={{maxWidth:'1200px',margin:'0 auto',padding:'0 40px',minHeight:'80px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+          <div style={{display:'flex',alignItems:'center',gap:12}}>
+      <a href="https://startinglinehq.com" style={{display:'inline-flex',alignItems:'center'}}>
+        <img src="/slhq-logo.png" alt="StartingLine HQ" style={{height:'clamp(52px, 6vw, 72px)',width:'auto',display:'block'}} />
+      </a>
+      <span style={{fontFamily:fh,fontSize:'22px',fontWeight:700,color:C.cream,letterSpacing:'-0.01em'}}>DivvyDup</span>
+    </div>
           <div style={{display:'flex',alignItems:'center',gap:'28px'}}>
             <a href="#features" style={{color:C.cream,fontSize:'14px',textDecoration:'none'}}>Features</a>
             <a href="#pricing" style={{color:C.cream,fontSize:'14px',textDecoration:'none'}}>Pricing</a>
@@ -968,6 +973,17 @@ export default function App() {
       {/* HEADER */}
       <header className="app-header">
         <div className="hdr-brand">
+          <button
+            style={{background:'none',border:'none',cursor:'pointer',padding:0,display:'inline-flex',alignItems:'center',flexShrink:0}}
+            onClick={async()=>{
+              const{data:{session}}=await supabase.auth.getSession();
+              if(session){window.location.href=`https://startinglinehq.com?access_token=${session.access_token}&refresh_token=${session.refresh_token}`;}
+              else{window.location.href='https://startinglinehq.com';}
+            }}
+            title="StartingLine HQ"
+          >
+            <img src="/slhq-logo.png" alt="StartingLine HQ" style={{height:'clamp(36px, 5vw, 48px)',width:'auto',display:'block'}}/>
+          </button>
           <div className="hdr-mark">{displayName.charAt(0)}</div>
           <span className="hdr-product">DivvyDup</span>
           <span className="hdr-divider">·</span>
