@@ -1053,7 +1053,7 @@ export default function App() {
           <button className="btn-xfr" onClick={()=>setModal('overflow')}>🌊 Overflow</button>
           <button className="btn-xfr" onClick={()=>setModal('xfr')}>⇄ Move Money</button>
           <button className="btn-xfr" style={{fontSize:'.68rem',color:'var(--red-light)',borderColor:'rgba(200,64,64,.3)'}} onClick={()=>setModal('reset')}>↺ Reset</button>
-          {authSession&&<button className="btn-xfr" style={{fontSize:'.68rem',color:'var(--inkl)',borderColor:'rgba(160,128,96,.3)'}} onClick={async()=>{await supabase.auth.signOut();clearSupabaseAuth();window.location.href='https://startinglinehq.com/?signout=true';}}>Sign Out</button>}
+          {authSession&&<button className="btn-xfr" style={{fontSize:'.68rem',color:'var(--g7)',borderColor:'rgba(157,196,157,.35)'}} onClick={async()=>{await supabase.auth.signOut();clearSupabaseAuth();window.location.href='https://startinglinehq.com/?signout=true';}}>⎋ Sign Out</button>}
           <button className="btn-dep" onClick={()=>setModal('dep')}>+ Deposit Paycheck</button>
         </div>
       </header>
