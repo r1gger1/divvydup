@@ -457,3 +457,11 @@ table.lt td:last-child{border-right:none;}
   .dd-origin-grid{grid-template-columns:1fr;gap:24px}
   .dd-pricing-grid{grid-template-columns:1fr}
 }
+
+/* ── LANDING PAGE FOOTER GRID ── */
+.lp-footer-grid{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:56px}
+.lp-footer-form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:768px){
+  .lp-footer-grid{grid-template-columns:1fr;gap:32px}
+  .lp-footer-form-row{grid-template-columns:1fr}
+}

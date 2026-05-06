@@ -183,11 +183,46 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
       </section>
 
       {/* FOOTER */}
-      <footer style={{background:C.black,padding:'48px 32px 32px',textAlign:'center',borderTop:`1px solid ${C.border}`}}>
-        <p style={{fontFamily:fh,fontSize:'20px',fontWeight:700,color:C.cream,marginBottom:'6px',letterSpacing:'-0.01em'}}>DivvyDup</p>
-        <p style={{fontFamily:fh,fontSize:'13px',color:C.sage,marginBottom:'20px',fontWeight:500}}>The Book, reimagined.</p>
-        <p style={{fontSize:'13px',color:C.muted}}><a href="https://startinglinehq.com" style={{color:C.muted,textDecoration:'none'}}>StartinglineHQ</a>{' · '}<a href="/privacy" style={{color:C.muted,textDecoration:'none'}}>Privacy</a>{' · '}<a href="/terms" style={{color:C.muted,textDecoration:'none'}}>Terms</a></p>
-        <p style={{fontSize:'12px',color:C.muted,marginTop:'10px',opacity:0.7}}>© 2026 StartingLine HQ, LLC. All rights reserved.</p>
+      <footer style={{background:C.black,padding:'72px 32px 28px'}}>
+        <div className="lp-footer-grid" style={{maxWidth:'1200px',margin:'0 auto'}}>
+          <div style={{display:'flex',flexDirection:'column',gap:'14px'}}>
+            <div style={{fontFamily:fh,fontWeight:700,fontSize:'22px',color:C.cream,letterSpacing:'-0.01em'}}>DivvyDup</div>
+            <p style={{fontSize:'13px',color:C.muted,lineHeight:1.65,maxWidth:'280px'}}>A paycheck budgeting system for people who want to stop guessing.</p>
+          </div>
+          <div>
+            <h3 style={{fontFamily:fh,fontWeight:700,fontSize:'22px',color:C.white,marginBottom:'18px',letterSpacing:'-0.01em'}}>Contact Us</h3>
+            <p style={{fontSize:'13.5px',color:C.white,lineHeight:1.85}}>
+              <a href="mailto:hello@startinglinehq.com" style={{color:'inherit',textDecoration:'none'}}>hello@startinglinehq.com</a>
+            </p>
+          </div>
+          <div>
+            <h3 style={{fontFamily:fh,fontWeight:700,fontSize:'22px',color:C.white,marginBottom:'18px',letterSpacing:'-0.01em'}}>Get in Touch</h3>
+            <form onSubmit={e=>e.preventDefault()} style={{display:'flex',flexDirection:'column',gap:'14px'}}>
+              <div className="lp-footer-form-row">
+                <div>
+                  <label style={{fontFamily:fb,fontSize:'13px',color:C.white,marginBottom:'6px',display:'block'}}>First Name *</label>
+                  <input type="text" required style={{width:'100%',background:'transparent',border:'1px solid rgba(255,255,255,0.2)',borderRadius:'4px',padding:'10px 12px',fontFamily:fb,fontSize:'14px',color:C.white,colorScheme:'dark'}} />
+                </div>
+                <div>
+                  <label style={{fontFamily:fb,fontSize:'13px',color:C.white,marginBottom:'6px',display:'block'}}>Last Name *</label>
+                  <input type="text" required style={{width:'100%',background:'transparent',border:'1px solid rgba(255,255,255,0.2)',borderRadius:'4px',padding:'10px 12px',fontFamily:fb,fontSize:'14px',color:C.white,colorScheme:'dark'}} />
+                </div>
+              </div>
+              <div>
+                <label style={{fontFamily:fb,fontSize:'13px',color:C.white,marginBottom:'6px',display:'block'}}>Email *</label>
+                <input type="email" required style={{width:'100%',background:'transparent',border:'1px solid rgba(255,255,255,0.2)',borderRadius:'4px',padding:'10px 12px',fontFamily:fb,fontSize:'14px',color:C.white,colorScheme:'dark'}} />
+              </div>
+              <div>
+                <label style={{fontFamily:fb,fontSize:'13px',color:C.white,marginBottom:'6px',display:'block'}}>Message *</label>
+                <textarea required style={{width:'100%',background:'transparent',border:'1px solid rgba(255,255,255,0.2)',borderRadius:'4px',padding:'10px 12px',fontFamily:fb,fontSize:'14px',color:C.white,resize:'vertical',minHeight:'110px',colorScheme:'dark'}} />
+              </div>
+              <button type="submit" style={{width:'100%',background:C.sage,color:C.bg,border:'none',borderRadius:'999px',padding:'14px',fontFamily:fb,fontSize:'14px',fontWeight:600,cursor:'pointer',marginTop:'6px'}}>Send Inquiry</button>
+            </form>
+          </div>
+        </div>
+        <div style={{maxWidth:'1200px',margin:'48px auto 0',paddingTop:'24px',borderTop:`1px solid ${C.border}`,textAlign:'center',fontSize:'12px',color:C.muted}}>
+          © 2026 StartingLine HQ, LLC. All rights reserved.
+        </div>
       </footer>
 
     </div>
