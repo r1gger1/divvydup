@@ -244,6 +244,9 @@ function AuthScreen({onAuth,onBack,initialError,initialMode}){
   const [done,setDone]=useState(false);
   const [showPassword,setShowPassword]=useState(false);
   const [showConfirm,setShowConfirm]=useState(false);
+  const [showReset,setShowReset]=useState(false);
+  const [resetSent,setResetSent]=useState(false);
+  const [resetEmail,setResetEmail]=useState('');
 
   async function handleSignUp(e){
     e?.preventDefault?.();
@@ -269,6 +272,15 @@ function AuthScreen({onAuth,onBack,initialError,initialMode}){
     setLoading(false);
     if(err)return setError(err.message);
     if(data?.session)onAuth(data.session);
+  }
+
+  async function handleReset(e){
+    e?.preventDefault?.();
+    setError('');setLoading(true);
+    const{error:err}=await supabase.auth.resetPasswordForEmail(resetEmail,{redirectTo:'https://startinglinehq.com/reset-password'});
+    setLoading(false);
+    if(err)return setError(err.message);
+    setResetSent(true);
   }
 
   const FH="'Fraunces','Playfair Display',Georgia,serif";
@@ -298,7 +310,7 @@ function AuthScreen({onAuth,onBack,initialError,initialMode}){
     footerNote:{fontSize:'12px',color:'#9FB5A8',marginTop:'8px'}
   };
 
-  const title = done ? 'Check your email' : mode==='signup' ? 'Create your account' : 'Welcome back';
+  const title = done ? 'Check your email' : showReset ? 'Reset your password' : mode==='signup' ? 'Create your account' : 'Welcome back';
   return(
     <StandardModal isOpen={true} onClose={onBack} title={title} maxWidth="460px">
         {initialError&&(
@@ -365,6 +377,25 @@ function AuthScreen({onAuth,onBack,initialError,initialMode}){
             </p>
             <p style={{textAlign:'center',fontSize:11,color:'rgba(255,255,255,0.4)',marginTop:8}}>Credit card required · Cancel anytime</p>
           </>
+        ):showReset?(
+          <>
+            {error&&<div className="standard-modal-error">{error}</div>}
+            <p style={{fontSize:14,color:'#9FB5A8',marginBottom:16,lineHeight:1.6}}>Enter your email and we'll send you a link to reset your password.</p>
+            {resetSent?(
+              <div className="standard-modal-info">Check your inbox — a password reset link is on its way.</div>
+            ):(
+              <form onSubmit={handleReset}>
+                <label>Email address</label>
+                <input type="email" placeholder="you@example.com" value={resetEmail} onChange={e=>setResetEmail(e.target.value)} required autoFocus autoComplete="email"/>
+                <button type="submit" className="btn-primary" disabled={loading}>
+                  {loading?'Sending…':'Send reset link'}
+                </button>
+              </form>
+            )}
+            <p style={{textAlign:'center',marginTop:16}}>
+              <a href="#" onClick={e=>{e.preventDefault();setShowReset(false);setResetSent(false);setError('');}}>← Back to sign in</a>
+            </p>
+          </>
         ):(
           <>
             {error&&<div className="standard-modal-error">{error}</div>}
@@ -379,6 +410,10 @@ function AuthScreen({onAuth,onBack,initialError,initialMode}){
                   {showPassword?'🙈':'👁️'}
                 </button>
               </div>
+
+              <button type="button" onClick={()=>{setShowReset(true);setResetEmail(email);setError('');}} style={{background:'none',border:'none',cursor:'pointer',fontSize:12,color:'#B5D4A8',textAlign:'right',padding:'6px 0',marginTop:4,fontWeight:500,display:'block',width:'100%'}}>
+                Forgot your password?
+              </button>
 
               <button type="submit" className="btn-primary" disabled={loading}>
                 {loading?'Signing in…':'Sign in'}
@@ -1017,8 +1052,8 @@ export default function App() {
       <div className="main-app">
       {/* TRIAL BANNER */}
       {trial.active&&!trial.expired&&!hasFullAccess&&(
-        <div style={{background:'#1C1208',borderBottom:'1px solid rgba(196,130,15,0.3)',padding:'8px 24px',display:'flex',alignItems:'center',justifyContent:'center',gap:'12px',fontSize:'13px',color:'#B8A48C',fontFamily:"'Instrument Sans',sans-serif"}}>
-          <span style={{color:'#C4820F',fontWeight:600}}>⏱ Free trial</span>
+        <div style={{background:'#0D1C18',borderBottom:'1px solid rgba(181,212,168,0.2)',padding:'8px 24px',display:'flex',alignItems:'center',justifyContent:'center',gap:'12px',fontSize:'13px',color:'#9FB5A8',fontFamily:"'Instrument Sans',sans-serif"}}>
+          <span style={{color:'#B5D4A8',fontWeight:600}}>⏱ Free trial</span>
           <span>{trial.daysLeft===1?'1 day left':trial.daysLeft===0?'Last day':`${trial.daysLeft} days left`} · {TRIAL_MAX_PAGES} pages · {TRIAL_MAX_ENTRIES} entries per page</span>
         </div>
       )}
@@ -1444,7 +1479,7 @@ function DashBar({pages}){
     const labels=pages.map(p=>p.name);
     const bals=pages.map(p=>p.balance);
     const f={family:'Courier Prime',size:10};
-    chart.current=new Chart(ref.current,{type:'bar',data:{labels,datasets:[{label:'Balance',data:bals,backgroundColor:bals.map(v=>v<0?'rgba(122,21,21,.7)':'rgba(42,71,42,.7)'),borderColor:bals.map(v=>v<0?'#7a1515':'#2a472a'),borderWidth:1.5,borderRadius:2}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{font:f}},y:{ticks:{font:f,callback:v=>'$'+v.toLocaleString()}}}}});
+    chart.current=new Chart(ref.current,{type:'bar',data:{labels,datasets:[{label:'Balance',data:bals,backgroundColor:bals.map(v=>v<0?'rgba(122,21,21,.7)':'rgba(58,82,72,.7)'),borderColor:bals.map(v=>v<0?'#7a1515':'#3A5248'),borderWidth:1.5,borderRadius:2}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{font:f}},y:{ticks:{font:f,callback:v=>'$'+v.toLocaleString()}}}}});
     return()=>{if(chart.current)chart.current.destroy();};
   },[pages]);
   return <canvas ref={ref} style={{maxHeight:'255px'}}/>;
@@ -1777,7 +1812,7 @@ function ChartCompare({pages}){
   useEffect(()=>{
     if(chart.current)chart.current.destroy();
     const f={family:'Courier Prime',size:10};
-    chart.current=new Chart(ref.current,{type:'bar',data:{labels:pages.map(p=>p.name),datasets:[{label:'Balance',data:pages.map(p=>p.balance),backgroundColor:'rgba(42,71,42,.7)',borderColor:'#2a472a',borderWidth:1.5,borderRadius:2},{label:'Monthly Bill',data:pages.map(p=>p.monthly),backgroundColor:'rgba(184,146,10,.4)',borderColor:'#b8920a',borderWidth:1.5,borderRadius:2}]},options:{responsive:true,plugins:{legend:{labels:{font:f}}},scales:{x:{ticks:{font:f}},y:{ticks:{font:f,callback:v=>'$'+v.toLocaleString()}}}}});
+    chart.current=new Chart(ref.current,{type:'bar',data:{labels:pages.map(p=>p.name),datasets:[{label:'Balance',data:pages.map(p=>p.balance),backgroundColor:'rgba(58,82,72,.7)',borderColor:'#3A5248',borderWidth:1.5,borderRadius:2},{label:'Monthly Bill',data:pages.map(p=>p.monthly),backgroundColor:'rgba(181,212,168,.4)',borderColor:'#B5D4A8',borderWidth:1.5,borderRadius:2}]},options:{responsive:true,plugins:{legend:{labels:{font:f}}},scales:{x:{ticks:{font:f}},y:{ticks:{font:f,callback:v=>'$'+v.toLocaleString()}}}}});
     return()=>{if(chart.current)chart.current.destroy();};
   },[pages]);
   return <canvas ref={ref}/>;
@@ -2107,7 +2142,7 @@ function BailoutModal({S,updateS,onClose,showToast,advSay}){
               </div>
             );})}
           </div>
-          {totalDonorFunds<totalShortfall&&<div style={{background:'#fffae6',border:'1.5px solid var(--amber-light)',borderRadius:'2px',padding:'10px 12px',fontFamily:"'Lora',serif",fontSize:'.8rem',color:'var(--amber)',lineHeight:1.5}}>⚠ Donor pages only have {fmt(totalDonorFunds)} available — {fmt(totalShortfall-totalDonorFunds)} short of covering everything.</div>}
+          {totalDonorFunds<totalShortfall&&<div style={{background:'rgba(200,64,64,.06)',border:'1.5px solid var(--amber-light)',borderRadius:'2px',padding:'10px 12px',fontFamily:"'Lora',serif",fontSize:'.8rem',color:'var(--amber)',lineHeight:1.5}}>⚠ Donor pages only have {fmt(totalDonorFunds)} available — {fmt(totalShortfall-totalDonorFunds)} short of covering everything.</div>}
         </div>
         <div className="mfooter">
           <button className="btn-cancel" onClick={onClose}>Cancel</button>
@@ -2278,7 +2313,7 @@ function EditModal({S,updateS,onClose,showToast,advSay,trial}){
         <div style={{background:'var(--g1)',padding:'8px 28px',display:'flex',alignItems:'center',gap:'10px',borderBottom:'1px solid var(--g3)'}}>
           <span style={{fontSize:'.65rem',letterSpacing:'1.5px',textTransform:'uppercase',color:'var(--g6)',whiteSpace:'nowrap'}}>Advisor Name</span>
           <input type="text" value={advisorInput} onChange={e=>setAdvisorInput(e.target.value)} placeholder="Floyd" style={{background:'rgba(255,255,255,.08)',border:'1px solid var(--g3)',borderRadius:'2px',padding:'4px 9px',fontFamily:'var(--slhq-fh)',fontSize:'.85rem',color:'var(--paper)',width:'120px'}}/>
-          <button onClick={saveAdvisorName} style={{background:'var(--slhq-amber)',color:'#fff',border:'none',padding:'4px 12px',borderRadius:'2px',fontFamily:"'Courier Prime',monospace",fontSize:'.72rem',fontWeight:700,cursor:'pointer'}}>Save</button>
+          <button onClick={saveAdvisorName} style={{background:'var(--slhq-amber)',color:'var(--g1)',border:'none',padding:'4px 12px',borderRadius:'2px',fontFamily:"'Courier Prime',monospace",fontSize:'.72rem',fontWeight:700,cursor:'pointer'}}>Save</button>
           <span style={{fontSize:'.68rem',color:'var(--g6)',fontFamily:"'Lora',serif",fontStyle:'italic'}}>Currently: {S.advisorName||'Floyd'}</span>
         </div>
         <div className="mbody">
