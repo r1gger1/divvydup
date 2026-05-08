@@ -719,6 +719,7 @@ function TrialExpiredScreen({onSignOut}){
 export default function App() {
   const [S, setS] = useState(DEFAULT_STATE);
   const [view, setView] = useState('dashboard');
+  useEffect(()=>{ window.scrollTo(0,0); },[view]);
   const [toast, setToast] = useState({msg:'',cls:'',show:false});
   const [advMsg, setAdvMsg] = useState({msg:'',lvl:'normal',show:false,name:''});
   const [modal, setModal] = useState(null); // 'dep'|'xfr'|'edit'|'recon'|'overflow'|'bailout'|'customize'|'reset'
