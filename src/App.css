@@ -34,6 +34,16 @@
 }
 .snav-link:hover{color:#fff;}
 .snav-link--signout{color:rgba(255,255,255,.65);}
+@media(max-width:640px){
+  #suite-nav{padding:0 12px;}
+  .snav-link{padding:4px 6px;font-size:.70rem;}
+  .snav-sep{margin:0 4px;}
+  .snav-hide-mobile{display:none;}
+  .snav-show-mobile{display:inline;}
+}
+@media(min-width:641px){
+  .snav-show-mobile{display:none;}
+}
 
 /* Add top padding to main-app to account for fixed nav */
 .main-app{

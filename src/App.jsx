@@ -1019,7 +1019,7 @@ export default function App() {
       {/* SUITE NAV */}
       <nav id="suite-nav">
         <div className="snav-group">
-          {(isAdmin || isBetaTester) && <button className="snav-link" onClick={() => setFeedbackModal(true)}>✏️ Beta Feedback</button>}
+          {(isAdmin || isBetaTester) && <button className="snav-link snav-hide-mobile" onClick={() => setFeedbackModal(true)}>✏️ Beta Feedback</button>}
           <button
             className="snav-link"
             onClick={async () => {
@@ -1031,7 +1031,8 @@ export default function App() {
               }
             }}
           >
-            ← StartingLine HQ Dashboard
+            <span className="snav-hide-mobile">← StartingLine HQ Dashboard</span>
+            <span className="snav-show-mobile">← SLHQ</span>
           </button>
           <button className="snav-link" onClick={() => setView('settings')}>⚙ Settings</button>
         </div>
