@@ -1059,6 +1059,17 @@ export default function App() {
           <span>{trial.daysLeft===1?'1 day left':trial.daysLeft===0?'Last day':`${trial.daysLeft} days left`} · {TRIAL_MAX_PAGES} pages · {TRIAL_MAX_ENTRIES} entries per page</span>
         </div>
       )}
+      {subscriptionData.status === 'past_due' && !isAdmin && (
+        <div style={{background:'rgba(244,161,153,0.1)',borderBottom:'1px solid rgba(244,161,153,0.28)',padding:'11px 24px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,fontFamily:"'Instrument Sans',sans-serif"}}>
+          <span style={{fontSize:14,color:'#E8E2C8'}}>
+            <span style={{color:'#F4A199',fontWeight:600}}>⚠ Payment issue — </span>
+            Your last payment didn't go through. Update your payment method to keep access.
+          </span>
+          <button onClick={handleManageSubscription} disabled={portalLoading} style={{background:'#F4A199',border:'none',color:'#1a0a08',borderRadius:999,padding:'8px 18px',fontSize:13,fontWeight:600,cursor:portalLoading?'wait':'pointer',fontFamily:"'Instrument Sans',sans-serif",whiteSpace:'nowrap',flexShrink:0,opacity:portalLoading?0.7:1}}>
+            {portalLoading ? 'Loading…' : 'Update Payment →'}
+          </button>
+        </div>
+      )}
       {/* HEADER */}
       <header className="app-header">
         <div className="hdr-brand">
