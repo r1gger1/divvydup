@@ -769,7 +769,7 @@ export default function App() {
         window.history.replaceState(null,'',window.location.pathname);
       }
 
-      // Check for Supabase error params in URL (e.g. expired confirmation link)
+      // Check for Supabase params in URL hash (errors or magic link tokens)
       const hash = window.location.hash;
       const params = new URLSearchParams(hash.replace('#',''));
       const urlError = params.get('error_description') || params.get('error');
@@ -778,6 +778,12 @@ export default function App() {
         setScreen('auth');
         window.history.replaceState(null,'',window.location.pathname);
         return;
+      }
+      const hashAccessToken = params.get('access_token');
+      const hashRefreshToken = params.get('refresh_token');
+      if(hashAccessToken){
+        await supabase.auth.setSession({access_token:hashAccessToken,refresh_token:hashRefreshToken??''});
+        window.history.replaceState(null,'',window.location.pathname);
       }
 
       const {data:{session}} = await supabase.auth.getSession();
