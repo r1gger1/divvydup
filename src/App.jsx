@@ -764,9 +764,12 @@ export default function App() {
       // Hub-driven SSO handoff: consume access_token/refresh_token from URL if present
       const accessToken = searchParams.get('access_token');
       const refreshToken = searchParams.get('refresh_token');
+      let querySsoSession = null;
       if(accessToken && refreshToken){
-        await supabase.auth.setSession({access_token:accessToken,refresh_token:refreshToken});
         window.history.replaceState(null,'',window.location.pathname);
+        const { data, error } = await supabase.auth.setSession({access_token:accessToken,refresh_token:refreshToken});
+        if (error) console.error('[SSO] setSession error:', error);
+        querySsoSession = data?.session ?? null;
       }
 
       // Check for Supabase params in URL hash (errors or magic link tokens)
@@ -786,7 +789,7 @@ export default function App() {
         window.history.replaceState(null,'',window.location.pathname);
       }
 
-      const {data:{session}} = await supabase.auth.getSession();
+      const session = querySsoSession ?? (await supabase.auth.getSession()).data.session;
       if(session){
         setAuthSession(session);
         const [hasAccess, {data: profileData}] = await Promise.all([
