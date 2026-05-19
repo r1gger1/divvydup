@@ -25,7 +25,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
       <nav style={{background:C.black,position:'sticky',top:0,zIndex:100,borderBottom:`1px solid ${C.border}`}}>
         <div className="dd-lp-nav-inner" style={{maxWidth:'1200px',margin:'0 auto',minHeight:'80px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
           <div style={{display:'flex',alignItems:'center',gap:12}}>
-      <a href="https://startinglinehq.com" style={{display:'inline-flex',alignItems:'center'}}>
+      <a href="https://startinglinehq.com" target="_blank" rel="noopener noreferrer" style={{display:'inline-flex',alignItems:'center'}}>
         <img src="/slhq-logo.png" alt="StartingLine HQ" style={{height:'clamp(52px, 6vw, 72px)',width:'auto',display:'block'}} />
       </a>
       <span style={{fontFamily:fh,fontSize:'22px',fontWeight:700,color:C.cream,letterSpacing:'-0.01em'}}>DivvyDup</span>
@@ -1028,13 +1028,11 @@ export default function App() {
           {(isAdmin || isBetaTester) && <button className="snav-link snav-hide-mobile" onClick={() => setFeedbackModal(true)}>✏️ Beta Feedback</button>}
           <button
             className="snav-link"
-            onClick={async () => {
-              const { data: { session } } = await supabase.auth.getSession();
-              if (session) {
-                window.location.href = `https://startinglinehq.com?access_token=${session.access_token}&refresh_token=${session.refresh_token}`;
-              } else {
-                window.location.href = 'https://startinglinehq.com';
-              }
+            onClick={() => {
+              const url = authSession
+                ? `https://startinglinehq.com?access_token=${authSession.access_token}&refresh_token=${authSession.refresh_token}`
+                : 'https://startinglinehq.com';
+              window.open(url, '_blank');
             }}
           >
             <span className="snav-hide-mobile">← StartingLine HQ Dashboard</span>
@@ -1048,7 +1046,9 @@ export default function App() {
             className="snav-link snav-link--signout"
             onClick={async () => {
               await supabase.auth.signOut();
-              clearSupabaseAuth();
+              setAuthSession(null);
+              setScreen('landing');
+              setS(DEFAULT_STATE);
               window.location.href = 'https://startinglinehq.com/?signout=true';
             }}
           >
