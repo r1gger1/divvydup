@@ -3,6 +3,7 @@ import { Compass, CalendarCheck, ArrowLeftRight, PiggyBank, MessageCircle, BarCh
 import { Chart, registerables } from 'chart.js';
 import { loadStripe } from '@stripe/stripe-js';
 import { supabase } from './supabase';
+import { getRemainingBudget } from './utils/budget';
 import StandardModal from './components/StandardModal';
 import SettingsView from './components/Settings';
 import FeedbackModal from './components/FeedbackModal';
@@ -1406,6 +1407,7 @@ function DashboardView({S,updateS,setModal,onSelectPage,advSay}){
   const total=S.pages.reduce((s,p)=>s+p.balance,0);
   const monthly=S.pages.reduce((s,p)=>s+p.monthly,0);
   const pc=S.pages.reduce((s,p)=>s+p.perCheck,0);
+  const budget=getRemainingBudget(S);
   const sub=total<0?"We're in the red — something needs attention.":total<monthly?"Running lean. Watch those pages carefully.":"Looking good. Keep it up!";
   const visiblePages=S.pages.filter(p=>(S.dashCards||[]).includes(p.id));
   const donors=(S.donorPages||[]).map(id=>S.pages.find(p=>p.id===id)).filter(p=>p&&p.balance>0);
@@ -1424,6 +1426,7 @@ function DashboardView({S,updateS,setModal,onSelectPage,advSay}){
         <div className="dash-stats">
           <div className="dst"><div className="dst-label">Monthly Bills</div><div className="dst-val amber">{fmt(monthly)}</div></div>
           <div className="dst"><div className="dst-label">Per Paycheck</div><div className="dst-val green">{fmt(pc)}</div></div>
+          {S.paycheck>0&&<div className="dst"><div className="dst-label">Remaining / Check</div><div className={`dst-val${budget.isOverAllocated?' danger':' green'}`}>{fmt(budget.remaining)}</div></div>}
           <div className="dst"><div className="dst-label">Active Pages</div><div className="dst-val">{S.pages.length}</div></div>
           <div className="dst"><div className="dst-label">Last Balanced</div><div className="dst-val" style={{fontSize:'.85rem'}}>{S.lastBalanced?fmtD(S.lastBalanced.split('T')[0]):'—'}</div></div>
         </div>

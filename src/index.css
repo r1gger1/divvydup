@@ -179,6 +179,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .dst-val{font-size:1.5rem;font-weight:700;color:var(--paper);}
 .dst-val.amber{color:var(--gold-light);}
 .dst-val.green{color:var(--g8);}
+.dst-val.danger{color:var(--red-light);}
 .dash-cards-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}
 .dash-cards-label{font-size:.7rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--g6);}
 .btn-customize{background:transparent;border:1px solid var(--g4);color:var(--g6);padding:4px 10px;border-radius:2px;font-family:'Courier Prime',monospace;font-size:.74rem;cursor:pointer;transition:all .2s;}
