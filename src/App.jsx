@@ -6,6 +6,7 @@ import { supabase } from './supabase';
 import StandardModal from './components/StandardModal';
 import SettingsView from './components/Settings';
 import FeedbackModal from './components/FeedbackModal';
+import PaidWelcomeSplash from './components/PaidWelcomeSplash';
 Chart.register(...registerables);
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
@@ -736,6 +737,7 @@ export default function App() {
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
   const [subscriptionData, setSubscriptionData] = useState({ status: null, tier: null, startedAt: null });
   const [portalLoading, setPortalLoading] = useState(false);
+  const [showPaidWelcome, setShowPaidWelcome] = useState(false);
   const toastTimer = useRef(null);
   const advTimer = useRef(null);
 
@@ -794,13 +796,14 @@ export default function App() {
         setAuthSession(session);
         const [hasAccess, {data: profileData}] = await Promise.all([
           checkFullAccess(session.user.id),
-          supabase.from('profiles').select('is_admin, is_beta_tester, subscription_status, subscription_tier, subscription_started_at').eq('id', session.user.id).maybeSingle(),
+          supabase.from('profiles').select('is_admin, is_beta_tester, subscription_status, subscription_tier, subscription_started_at, dd_welcome_shown').eq('id', session.user.id).maybeSingle(),
         ]);
         if (profileData?.is_admin) setIsAdmin(true);
         if (profileData?.is_beta_tester) setIsBetaTester(true);
         if (profileData) setSubscriptionData({ status: profileData.subscription_status, tier: profileData.subscription_tier, startedAt: profileData.subscription_started_at });
         const isSubscribed = profileData?.is_admin || profileData?.subscription_status === 'active';
         setHasFullAccess(isSubscribed || hasAccess);
+        if (isSubscribed && !profileData?.dd_welcome_shown) setShowPaidWelcome(true);
         const saved = loadState();
         if (isSubscribed) {
           if(saved && saved.ready){ setS(saved); setScreen('app'); }
@@ -830,13 +833,14 @@ export default function App() {
           setAuthSession(session);
           const [hasAccess, {data: profileData}] = await Promise.all([
             checkFullAccess(session.user.id),
-            supabase.from('profiles').select('is_admin, is_beta_tester, subscription_status, subscription_tier, subscription_started_at').eq('id', session.user.id).maybeSingle(),
+            supabase.from('profiles').select('is_admin, is_beta_tester, subscription_status, subscription_tier, subscription_started_at, dd_welcome_shown').eq('id', session.user.id).maybeSingle(),
           ]);
           if (profileData?.is_admin) setIsAdmin(true);
           if (profileData?.is_beta_tester) setIsBetaTester(true);
           if (profileData) setSubscriptionData({ status: profileData.subscription_status, tier: profileData.subscription_tier, startedAt: profileData.subscription_started_at });
           const isSubscribed = profileData?.is_admin || profileData?.subscription_status === 'active';
           setHasFullAccess(isSubscribed || hasAccess);
+          if (isSubscribed && !profileData?.dd_welcome_shown) setShowPaidWelcome(true);
           const saved = loadState();
           if (isSubscribed) {
             if(saved && saved.ready){ setS(saved); setScreen('app'); }
@@ -953,6 +957,11 @@ export default function App() {
     }
   }
 
+  async function dismissPaidWelcome() {
+    await supabase.from('profiles').update({ dd_welcome_shown: true }).eq('id', authSession.user.id);
+    setShowPaidWelcome(false);
+  }
+
   function toggleAdvisor(){
     if(advMsg.show){
       setAdvMsg(a=>({...a,show:false}));
@@ -997,13 +1006,14 @@ export default function App() {
         setAuthSession(session);
         const [hasAccess, {data: profileData}] = await Promise.all([
           checkFullAccess(session.user.id),
-          supabase.from('profiles').select('is_admin, is_beta_tester, subscription_status, subscription_tier, subscription_started_at').eq('id', session.user.id).maybeSingle(),
+          supabase.from('profiles').select('is_admin, is_beta_tester, subscription_status, subscription_tier, subscription_started_at, dd_welcome_shown').eq('id', session.user.id).maybeSingle(),
         ]);
         if (profileData?.is_admin) setIsAdmin(true);
         if (profileData?.is_beta_tester) setIsBetaTester(true);
         if (profileData) setSubscriptionData({ status: profileData.subscription_status, tier: profileData.subscription_tier, startedAt: profileData.subscription_started_at });
         const isSubscribed = profileData?.is_admin || profileData?.subscription_status === 'active';
         setHasFullAccess(isSubscribed || hasAccess);
+        if (isSubscribed && !profileData?.dd_welcome_shown) setShowPaidWelcome(true);
         const saved = loadState();
         if (isSubscribed) {
           if(saved && saved.ready){ setS(saved); setScreen('app'); } else { setScreen('setup'); }
@@ -1172,6 +1182,12 @@ export default function App() {
       <div className={`toast${toast.show?' show':''} ${toast.cls}`}>{toast.msg}</div>
     </div>
 
+    {showPaidWelcome && (
+      <PaidWelcomeSplash
+        userName={null}
+        onContinue={dismissPaidWelcome}
+      />
+    )}
     </>
   );
 }
