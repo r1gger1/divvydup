@@ -992,7 +992,11 @@ export default function App() {
     },400);
   }
 
-  if(screen==='loading') return null;
+  if(screen==='loading') return (
+    <div style={{minHeight:'100vh',background:'#1E3530',display:'flex',alignItems:'center',justifyContent:'center'}}>
+      <span style={{fontFamily:"'Fraunces','Playfair Display',Georgia,serif",fontSize:'22px',fontStyle:'italic',color:'#9FB5A8'}}>DivvyDup</span>
+    </div>
+  );
   if(screen==='landing'||screen==='auth') return (
     <>
       <LandingPage
