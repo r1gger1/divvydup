@@ -589,22 +589,32 @@ function getTrialInfo(session){
 }
 
 // ─── SUBSCRIPTION PAYWALL ────────────────────────────────────
-function PaywallScreen({ onCheckout, checkoutLoading, checkoutMsg, checkoutPending, onSignOut, session }) {
+function PaywallScreen({ onCheckout, checkoutLoading, checkoutMsg, checkoutPending, onSignOut }) {
   const FH = "'Fraunces','Playfair Display',Georgia,serif";
   const FB = "'Inter','Helvetica Neue',sans-serif";
   const C = { bg: '#1E3530', card: '#243D37', accent: '#B5D4A8', muted: '#9FB5A8', text: '#E8E2C8', border: 'rgba(255,255,255,0.08)' };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 16px', fontFamily: FB, gap: '32px' }}>
+    <div style={{ minHeight: '100vh', position: 'relative', background: C.bg, fontFamily: FB, display: 'flex', flexDirection: 'column' }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap');`}</style>
 
-      {/* SLHQ logo */}
-      <img
-        src="/slhq-logo.png"
-        alt="StartingLine HQ"
-        style={{ width: 160, maxWidth: '60%', height: 'auto', display: 'block' }}
-      />
+      {/* Background image + dark green overlay */}
+      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(/hero-background.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(30,53,48,0.93)', zIndex: 0 }} />
 
+      {/* Top navbar */}
+      <nav style={{ position: 'relative', zIndex: 2, width: '100%', boxSizing: 'border-box', background: '#152822', borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 24px' }}>
+        <img src="/slhq-logo.png" alt="StartingLine HQ" style={{ height: 34, width: 'auto', display: 'block' }} />
+        <button
+          onClick={onSignOut}
+          style={{ background: 'none', border: `1px solid ${C.border}`, color: C.text, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: FB, borderRadius: 999, padding: '8px 18px' }}
+        >
+          Sign out
+        </button>
+      </nav>
+
+      {/* Centered content */}
+      <div style={{ position: 'relative', zIndex: 1, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 16px', gap: '32px' }}>
       <div style={{ textAlign: 'center' }}>
         <h1 style={{ fontFamily: FH, fontWeight: 800, fontSize: 'clamp(42px, 8vw, 64px)', color: C.text, lineHeight: 1, letterSpacing: '-0.015em', marginBottom: 10 }}>DivvyDup</h1>
         <p style={{ fontSize: 15, color: C.muted, fontStyle: 'italic', fontWeight: 500 }}>The Book, reimagined.</p>
@@ -667,18 +677,7 @@ function PaywallScreen({ onCheckout, checkoutLoading, checkoutMsg, checkoutPendi
       )}
 
       <div style={{ textAlign: 'center', fontSize: 12, color: C.muted, lineHeight: 1.6 }}>
-        <div>
-          Signed in as {session?.user?.email} &nbsp;·&nbsp;
-          <button
-            onClick={onSignOut}
-            style={{ background: 'none', border: 'none', color: C.accent, cursor: 'pointer', fontSize: 12, padding: 0, fontFamily: FB }}
-          >
-            Sign out
-          </button>
-        </div>
-        <div style={{ marginTop: 8 }}>
-          Questions? <a href="mailto:hello@divvydup.com" style={{ color: C.accent }}>hello@divvydup.com</a>
-        </div>
+        Questions? <a href="mailto:hello@divvydup.com" style={{ color: C.accent }}>hello@divvydup.com</a>
       </div>
 
       {/* Footer */}
@@ -687,6 +686,7 @@ function PaywallScreen({ onCheckout, checkoutLoading, checkoutMsg, checkoutPendi
         <a href="https://startinglinehq.com/privacy" style={{ color: C.accent }}>Privacy Policy</a> ·{' '}
         <a href="https://startinglinehq.com/terms-of-service.html" style={{ color: C.accent }}>Terms of Service</a>
       </p>
+      </div>
     </div>
   );
 }
