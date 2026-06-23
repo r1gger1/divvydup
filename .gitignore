@@ -28,3 +28,10 @@ dist-ssr
 .env
 .env.local
 .env*.local
+
+# Local editor / tooling junk
+*.code-workspace
+.claude/settings.local.json
+supabase/.temp/
+Daily Hand offs/
+Daily Hand Offs/
