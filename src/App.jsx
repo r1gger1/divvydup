@@ -828,10 +828,11 @@ export default function App() {
         if (profileData?.is_beta_tester) setIsBetaTester(true);
         if (profileData) setSubscriptionData({ status: profileData.subscription_status, tier: profileData.subscription_tier, startedAt: profileData.subscription_started_at });
         const isSubscribed = profileData?.is_admin || profileData?.subscription_status === 'active';
-        setHasFullAccess(isSubscribed || hasAccess);
+        const fullAccess = isSubscribed || hasAccess;
+        setHasFullAccess(fullAccess);
         if (isSubscribed && !profileData?.dd_welcome_shown) setShowPaidWelcome(true);
         const saved = loadState();
-        if (isSubscribed) {
+        if (fullAccess) {
           if(saved && saved.ready){ setS(saved); setScreen('app'); }
           else { setScreen('setup'); }
         } else {
@@ -865,10 +866,11 @@ export default function App() {
           if (profileData?.is_beta_tester) setIsBetaTester(true);
           if (profileData) setSubscriptionData({ status: profileData.subscription_status, tier: profileData.subscription_tier, startedAt: profileData.subscription_started_at });
           const isSubscribed = profileData?.is_admin || profileData?.subscription_status === 'active';
-          setHasFullAccess(isSubscribed || hasAccess);
+          const fullAccess = isSubscribed || hasAccess;
+          setHasFullAccess(fullAccess);
           if (isSubscribed && !profileData?.dd_welcome_shown) setShowPaidWelcome(true);
           const saved = loadState();
-          if (isSubscribed) {
+          if (fullAccess) {
             if(saved && saved.ready){ setS(saved); setScreen('app'); }
             else { setScreen('setup'); }
           } else {
@@ -1042,10 +1044,11 @@ export default function App() {
         if (profileData?.is_beta_tester) setIsBetaTester(true);
         if (profileData) setSubscriptionData({ status: profileData.subscription_status, tier: profileData.subscription_tier, startedAt: profileData.subscription_started_at });
         const isSubscribed = profileData?.is_admin || profileData?.subscription_status === 'active';
-        setHasFullAccess(isSubscribed || hasAccess);
+        const fullAccess = isSubscribed || hasAccess;
+        setHasFullAccess(fullAccess);
         if (isSubscribed && !profileData?.dd_welcome_shown) setShowPaidWelcome(true);
         const saved = loadState();
-        if (isSubscribed) {
+        if (fullAccess) {
           if(saved && saved.ready){ setS(saved); setScreen('app'); } else { setScreen('setup'); }
         } else {
           setScreen('paywall');
