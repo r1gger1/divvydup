@@ -5,7 +5,13 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  // supabase/functions is Deno TypeScript — remote URL imports and a Deno global —
+  // which this browser/React config cannot meaningfully parse. Ignoring it is
+  // STATED INTENT, not a gap: those files already matched no config block, so
+  // `eslint .` walked past them and exited 0 having never opened them. They are
+  // covered by `deno check` and `deno lint` instead (see the lint and
+  // check:functions scripts in package.json).
+  globalIgnores(['dist', 'supabase/functions']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [

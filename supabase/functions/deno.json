@@ -1,0 +1,11 @@
+{
+  // no-import-prefix is off on purpose. URL imports are the DOCUMENTED dependency
+  // mechanism for Supabase edge functions, and every function in the suite is
+  // written that way — the rule is asking for a package-manager layout these
+  // files deliberately do not use, so it does not apply here.
+  "lint": {
+    "rules": {
+      "exclude": ["no-import-prefix"]
+    }
+  }
+}

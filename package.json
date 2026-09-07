@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
+    "lint": "eslint . && deno lint --config supabase/functions/deno.json supabase/functions",
+    "check:functions": "deno check --config supabase/functions/deno.json supabase/functions/*/index.ts",
     "preview": "vite preview",
     "postinstall": "xattr -w com.apple.fileprovider.ignore#P 1 node_modules 2>/dev/null || true"
   },
