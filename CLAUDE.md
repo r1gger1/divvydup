@@ -62,7 +62,7 @@ The TODO system is an intentional audit trail. Items are never removed. Complete
 Your session log is what Cowork reconciles from. Make the completed, started, and new items in it accurate and specific so the consolidated handoff and TODO.md end up correct.
 
 ### Skill updates
-If you identify that a skill needs to be created or updated, note it in your log under a "Skill Updates Needed" section. You may also append it to `_Admin/META-SKILL-ISSUES.md` using the standard template — logging issues is allowed. Do not write or modify skills directly. All skill changes go through META.
+If you identify that a skill needs to be created or updated, write it into your session log under a `## Skill issue` heading. `/ho` converts it into a `#meta` item in TODO.md. Do not write or modify skills directly. All skill changes go through META. (`META-SKILL-ISSUES.md` was retired 2026-09-13; do not append to it.)
 
 ---
 
