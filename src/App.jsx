@@ -683,7 +683,7 @@ function PaywallScreen({ onCheckout, checkoutLoading, checkoutMsg, checkoutPendi
       {/* Footer */}
       <p style={{ fontSize: 12, color: C.muted, textAlign: 'center', lineHeight: 1.6, maxWidth: 480, marginTop: 0 }}>
         © 2026 StartingLine HQ, LLC. All rights reserved. StartingLine HQ is a product suite operated by StartingLine HQ, LLC.{' '}
-        <a href="/privacy" style={{ color: C.accent }}>Privacy Policy</a> ·{' '}
+        <a href="https://startinglinehq.com/privacy" style={{ color: C.accent }}>Privacy Policy</a> ·{' '}
         <a href="https://startinglinehq.com/terms-of-service.html" style={{ color: C.accent }}>Terms of Service</a>
       </p>
       </div>
