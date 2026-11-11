@@ -7,7 +7,46 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-XSC7C1HZ7Q');
+      (function(){
+        var KEYS=['access_token','refresh_token','id_token','session_id','code','token','type','error','error_description','error_code'];
+        var re=new RegExp('(?:^|[?#&])(?:'+KEYS.join('|')+')=','i');
+        function clean(raw){
+          try{
+            var u=new URL(raw,location.origin);
+            KEYS.forEach(function(k){u.searchParams.delete(k);});
+            if(u.hash&&re.test(u.hash))u.hash='';
+            return u.toString();
+          }catch(e){return raw;}
+        }
+        function loc(){return clean(location.href);}
+        function ref(){return document.referrer?clean(document.referrer):'';}
+        var last='';
+        function pageview(){
+          var l=loc(),r=ref();
+          if(l===last)return;
+          last=l;
+          var p={page_location:l};
+          if(r)p.page_referrer=r;
+          gtag('event','page_view',p);
+        }
+        var cfg={send_page_view:false,page_location:loc()};
+        var r0=ref();
+        if(r0)cfg.page_referrer=r0;
+        gtag('config','G-XSC7C1HZ7Q',cfg);
+        pageview();
+        function wrap(fn){
+          var orig=history[fn];
+          history[fn]=function(){
+            var ret=orig.apply(this,arguments);
+            pageview();
+            return ret;
+          };
+        }
+        wrap('pushState');
+        wrap('replaceState');
+        addEventListener('popstate',pageview);
+        addEventListener('hashchange',pageview);
+      })();
     </script>
     <meta charset="UTF-8" />
     <link rel="canonical" href="https://divvydup.com/" />
