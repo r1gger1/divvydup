@@ -223,7 +223,7 @@ function LandingPage({onGetStarted,onSignIn,showAddToAccount=false,onAddToAccoun
           </div>
         </div>
         <div style={{maxWidth:'1200px',margin:'48px auto 0',paddingTop:'24px',borderTop:`1px solid ${C.border}`,textAlign:'center',fontSize:'12px',color:C.muted}}>
-          © 2026 StartingLine HQ, LLC. All rights reserved.
+          © 2026 StartingLine HQ, LLC. All rights reserved. · <a href="/privacy" style={{color:'inherit',textDecoration:'underline'}}>Privacy</a>
         </div>
       </footer>
 

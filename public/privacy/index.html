@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy | DivvyDup</title>
+  <meta name="description" content="How DivvyDup uses Google Analytics, and where to read the StartingLine HQ Privacy Policy." />
+  <link rel="canonical" href="https://divvydup.com/privacy" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XSC7C1HZ7Q"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    (function(){
+      var KEYS=['access_token','refresh_token','id_token','session_id','code','token','type','error','error_description','error_code'];
+      var re=new RegExp('(?:^|[?#&])(?:'+KEYS.join('|')+')=','i');
+      function clean(raw){
+        try{
+          var u=new URL(raw,location.origin);
+          KEYS.forEach(function(k){u.searchParams.delete(k);});
+          if(u.hash&&re.test(u.hash))u.hash='';
+          return u.toString();
+        }catch(e){return raw;}
+      }
+      function loc(){return clean(location.href);}
+      function ref(){return document.referrer?clean(document.referrer):'';}
+      var last='';
+      function pageview(){
+        var l=loc(),r=ref();
+        if(l===last)return;
+        last=l;
+        var p={page_location:l};
+        if(r)p.page_referrer=r;
+        gtag('event','page_view',p);
+      }
+      var cfg={send_page_view:false,page_location:loc()};
+      var r0=ref();
+      if(r0)cfg.page_referrer=r0;
+      gtag('config','G-XSC7C1HZ7Q',cfg);
+      pageview();
+      function wrap(fn){
+        var orig=history[fn];
+        history[fn]=function(){
+          var ret=orig.apply(this,arguments);
+          pageview();
+          return ret;
+        };
+      }
+      wrap('pushState');
+      wrap('replaceState');
+      addEventListener('popstate',pageview);
+      addEventListener('hashchange',pageview);
+    })();
+  </script>
+  <style>
+    body { margin: 0; background: #1E3530; color: #E8E2C8; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; }
+    main { max-width: 720px; margin: 0 auto; padding: clamp(40px, 6vw, 72px) 24px; }
+    a { color: #B5D4A8; }
+    h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(28px, 5vw, 40px); margin: 0 0 8px; }
+    p { font-size: 16px; line-height: 1.75; margin: 0 0 16px; }
+    .muted { color: #9FB5A8; font-size: 13px; margin-bottom: 28px; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="muted"><a href="/" style="text-decoration:none">← DivvyDup</a></p>
+    <h1>Privacy Policy</h1>
+    <p class="muted">Last updated: November 11, 2026</p>
+    <p>DivvyDup is a product of Startingline HQ, LLC ("we," "us"). This page explains how we use analytics on divvydup.com. For account, payment, and all other information, see the <a href="https://startinglinehq.com/privacy">StartingLine HQ Privacy Policy</a>, which also applies to DivvyDup.</p>
+    <p><strong>Google Analytics.</strong> We use Google Analytics 4 (measurement ID G-XSC7C1HZ7Q) to count visits and see how people use divvydup.com, such as which pages are viewed, so we can improve the site. Google Analytics is not set up to receive the expenses or ledgers you enter.</p>
+    <p><strong>What it collects.</strong> Google Analytics uses first-party cookies (named <code>_ga</code> and <code>_ga_&lt;ID&gt;</code>, which by default expire after 2 years) to tell visitors apart and keep track of sessions. It also collects information about your device and browser, your IP address, and how you use the site. Google says that when collecting data, Google Analytics does not log or store IP addresses.</p>
+    <p><strong>Our settings.</strong> Google signals is turned off. Our Google Analytics data retention is set to 14 months. We do not run ads, we do not use Google Analytics for advertising, and we do not sell this data.</p>
+    <p><strong>How Google uses this data.</strong> See <a href="https://policies.google.com/technologies/partner-sites">How Google uses information from sites or apps that use our services</a> and <a href="https://policies.google.com/privacy">Google's Privacy Policy</a>.</p>
+    <p><strong>Your choices.</strong> You can block or delete cookies in your browser settings, or install the <a href="https://tools.google.com/dlpage/gaoptout">Google Analytics opt-out browser add-on</a>.</p>
+    <p><strong>Changes.</strong> If we change how we use analytics, we will update this page and the date above.</p>
+    <p>Questions: <a href="mailto:hello@startinglinehq.com">hello@startinglinehq.com</a>.</p>
+</main>
+</body>
+</html>
